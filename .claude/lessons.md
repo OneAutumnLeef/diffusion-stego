@@ -39,3 +39,23 @@
 ## Lesson 9: Ablation Process Stability
 **Problem**: Ablation study (PID 1468) died silently after completing 4/7 variants.
 **Lesson**: Long-running multi-variant training should checkpoint progress and be restartable. Always verify process is still alive before assuming it's computing.
+
+## Lesson 10: Fresh-Host Import Verification Catches Cleanup Regressions
+**Problem**: After legacy cleanup, `dscsp/models/__init__.py` still imported removed `controller.py`, which broke `train_v4.py` imports on the new RunPod host before training could start.
+**Lesson**: After deleting legacy modules, always run import smoke tests for `train_v4.py`, `train_v4_5090.py`, and `evaluate_v4.py` on a fresh environment. Package-level `__init__` files can fail even when direct module paths still look valid.
+
+## Lesson 11: First-Run Startup on RunPod Includes Expected Weight Downloads
+**Observation**: The first fresh-host launch downloaded both Hugging Face DDPM weights and LPIPS VGG16 weights before step 1. Startup looked idle for tens of seconds but was normal.
+**Lesson**: On new instances, use `train_v4_5090.log` to distinguish expected one-time weight downloads from an actual hang.
+
+## Lesson 12: Early RTX 5090 Throughput Changes at Step 1000
+**Observation**: The from-scratch 5090 config (`batch_size=16`, `base_channels=64`) ran at ~0.29s/step before adversarial training, then ~0.34-0.35s/step just after step 1000 when 3 discriminator updates kicked in. Early ETA was roughly 4.0-4.8 hours for 50K steps, excluding initial model downloads.
+**Lesson**: Use post-step-1000 speed, not warmup speed, when estimating wall-clock time and choosing checkpoint/monitoring cadence for the 5090 run.
+
+## Lesson 13: The Aggressive 5090 Override Can Stall Message Learning
+**Observation**: The from-scratch 5090 run with `batch_size=16`, `base_channels=64`, higher learning rates, and JPEG-heavy training never escaped the random-guess regime. By the saved step-6000 checkpoint and interrupted log at ~step 7200, BER was still ~0.49-0.51 and message BCE was still ~0.693.
+**Lesson**: More GPU headroom does not justify scaling model width, learning rate, and attack intensity simultaneously. For this project, preserve the proven optimization dynamics first and use extra VRAM primarily for safer batch-size increases or monitoring convenience.
+
+## Lesson 14: Interrupted Runs Only Preserve the Last Checkpoint
+**Observation**: The user-requested stop was sent during training, but only checkpoints at steps 2000, 4000, and 6000 were recoverable afterward. Later progress appeared in `train_v4_5090.log` up to ~step 7200 and preview images up to step 7000, but there was no checkpoint beyond 6000.
+**Lesson**: Without explicit signal handling, manual interruption preserves logs and images but loses in-memory optimization state after the last checkpoint. If frequent manual stopping is expected, add signal-triggered checkpoint saving or shorten checkpoint intervals.
