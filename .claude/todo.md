@@ -12,6 +12,7 @@
 - [x] Verify RTX 5090 + CUDA + v4 training/eval imports on RunPod
 - [x] Start from-scratch v4 5090 training run (`python -u train_v4_5090.py 2>&1 | tee train_v4_5090.log`)
 - [x] Stop 5090 training run on user request and preserve artifacts on disk
+- [x] Set up Git LFS tracking for `checkpoints_v4_5090/*.pt` and stage saved checkpoints for GitHub
 
 ## Pending (in order)
 1. [ ] Analyze stopped 5090 run artifacts (`train_v4_5090.log`, `checkpoints_v4_5090/`, `outputs_v4_5090/`) and decide on next config only if user wants to resume experimentation later
@@ -27,3 +28,4 @@
 - Stopped 5090 run artifacts preserved in `train_v4_5090.log`, `checkpoints_v4_5090/`, and `outputs_v4_5090/`
 - Saved checkpoints available at steps 2000, 4000, and 6000
 - Latest logged step before interruption: ~7200 (not checkpointed)
+- `checkpoints_v4_5090/*.pt` are now intended to be versioned via Git LFS rather than normal Git

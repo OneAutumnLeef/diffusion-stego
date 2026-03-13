@@ -8,7 +8,6 @@ build/
 
 # Model checkpoints (large binary files)
 checkpoints_v4/*.pt
-checkpoints_v4_5090/*.pt
 
 # Training outputs (generated images)
 outputs_v4/

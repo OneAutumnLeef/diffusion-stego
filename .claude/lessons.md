@@ -59,3 +59,7 @@
 ## Lesson 14: Interrupted Runs Only Preserve the Last Checkpoint
 **Observation**: The user-requested stop was sent during training, but only checkpoints at steps 2000, 4000, and 6000 were recoverable afterward. Later progress appeared in `train_v4_5090.log` up to ~step 7200 and preview images up to step 7000, but there was no checkpoint beyond 6000.
 **Lesson**: Without explicit signal handling, manual interruption preserves logs and images but loses in-memory optimization state after the last checkpoint. If frequent manual stopping is expected, add signal-triggered checkpoint saving or shorten checkpoint intervals.
+
+## Lesson 15: Run Artifacts Need Git LFS Before GitHub Push
+**Observation**: Each saved 5090 checkpoint was about 246 MB, which exceeds GitHub's normal 100 MB file limit. Regular Git push is unsuitable for these `.pt` artifacts.
+**Lesson**: Track checkpoint binaries with Git LFS from the start (`checkpoints_v4_5090/*.pt`) and keep ordinary Git for code, notes, and lightweight metadata only.
