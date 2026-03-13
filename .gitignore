@@ -27,7 +27,6 @@ Thumbs.db
 
 # Claude Code temp files
 tmpclaude-*
-.claude/
 
 # LaTeX build artifacts
 *.aux
