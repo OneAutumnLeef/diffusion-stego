@@ -63,3 +63,12 @@
 ## Lesson 15: Run Artifacts Need Git LFS Before GitHub Push
 **Observation**: Each saved 5090 checkpoint was about 246 MB, which exceeds GitHub's normal 100 MB file limit. Regular Git push is unsuitable for these `.pt` artifacts.
 **Lesson**: Track checkpoint binaries with Git LFS from the start (`checkpoints_v4_5090/*.pt`) and keep ordinary Git for code, notes, and lightweight metadata only.
+
+## Lesson 16: Conservative Scaling Restores Convergence After Failed Aggressive Run
+**Observation**: The first 5090 run (batch=16, base_channels=64, 2× LR, jpeg_weight=0.7) never converged — BER stayed at ~0.49-0.51 through step 7200.
+**Fix**: Restored base_channels=48, LRs to 1e-4/3e-4/1e-4, jpeg_weight=0.6, robustness_max_prob=0.85; only kept batch_size=8 (modest increase from 4).
+**Lesson**: When resuming after a failed run, revert ALL failed overrides and change only the single safe dimension (batch size). Old checkpoints from a failed architecture-change run cannot be resumed — start fresh.
+
+## Lesson 17: Signal Handler + Progress JSON Are Essential for Supervised Runs
+**Fix**: Added SIGINT/SIGTERM handler in `train_v4.py` that saves an emergency checkpoint at the current step and then breaks the training loop cleanly. Added per-step `outputs_v4_5090/progress.json` written every `log_interval` steps so training state can be inspected without relying on stdout buffering (cf. Lesson 5).
+**Lesson**: Any training run expected to be manually stopped should have both mechanisms from the start.
