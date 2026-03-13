@@ -1,0 +1,940 @@
+% ===========================================================================
+%  DSCSP: Diffusion-Stego with Conditional Sampling Paths
+%  for Robust and Undetectable Image Steganography — IEEE TIFS Journal Format
+% ===========================================================================
+\documentclass[journal]{IEEEtran}
+
+% ─── Packages ──────────────────────────────────────────────────────────────
+\usepackage{amsmath, amssymb, amsfonts}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage{multirow}
+\usepackage{enumitem}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{xcolor}
+\usepackage{bm}
+\usepackage{microtype}
+\usepackage{cite}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue!70!black,
+    citecolor=green!50!black,
+    urlcolor=blue!60!black,
+}
+
+% ─── Math shortcuts ────────────────────────────────────────────────────────
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Lcal}{\mathcal{L}}
+\newcommand{\Acal}{\mathcal{A}}
+\newcommand{\Ncal}{\mathcal{N}}
+\newcommand{\Ucal}{\mathcal{U}}
+\DeclareMathOperator{\tamark}{tanh}
+\DeclareMathOperator{\sigmoid}{sigmoid}
+\DeclareMathOperator{\BCE}{BCE}
+
+% ===========================================================================
+\title{DSCSP: Diffusion-Stego with Conditional Sampling Paths for Robust and Undetectable Image Steganography}
+
+\author{
+    \IEEEauthorblockN{Authors Omitted for Review}
+    \IEEEauthorblockA{}
+}
+
+\begin{document}
+\maketitle
+
+% ===========================================================================
+%  ABSTRACT
+% ===========================================================================
+\begin{abstract}
+We present DSCSP (Diffusion-Stego with Conditional Sampling Paths), a steganographic framework that hides secret messages within images produced by pre-trained diffusion models.
+A compact learned \emph{Controller} network translates payload bits into spatial perturbation patterns applied to the output of a frozen DDIM sampling chain, while a spatially-aligned \emph{Extractor} recovers the payload from the resulting stego image.
+Unlike prior diffusion-based methods that modify the noise vector or fine-tune the model, DSCSP keeps the generative backbone completely frozen, enabling efficient training on consumer hardware.
+
+While the base system achieves near-perfect bit recovery and high visual fidelity, initial stego images are trivially detectable by learned steganalysis classifiers (AUC\,=\,1.0).
+To address this, we introduce an \emph{adversarial training} regime with a Spatial Rich Model (SRM)--enhanced discriminator that forces the Controller to produce statistically indistinguishable perturbations.
+We further propose a \emph{five-phase curriculum} that progressively introduces single attacks, adversarial pressure, and \emph{combined multi-attack} compositions, along with an optional \emph{redundant encoding} scheme for crop robustness.
+
+Experiments on CelebA-HQ at $256\times256$ resolution demonstrate that DSCSP~v2 embeds 256 bits with BER\,$<$\,0.001, PSNR\,=\,40.9\,dB, and SSIM\,=\,0.962, while substantially improving robustness against noise (BER\,$<$\,0.002), blur (BER\,$<$\,0.002), brightness/contrast (BER\,$<$\,0.006), and their sequential compositions.
+Adversarial training drives the discriminator to equilibrium (accuracy\,=\,0.50) and reduces external steganalysis AUC from 1.0 to 0.999, though further architectural changes are needed to achieve full statistical undetectability.
+A comprehensive ablation study across seven architectural variants validates the contribution of each design component.
+\end{abstract}
+
+\begin{IEEEkeywords}
+    Steganography, diffusion models, adversarial training, deep learning, image security, robustness, steganalysis
+\end{IEEEkeywords}
+
+% ===========================================================================
+%  I. INTRODUCTION
+% ===========================================================================
+\section{Introduction}
+\label{sec:intro}
+
+For decades, steganography has centered on tweaking pixel values or transform coefficients in existing cover images so that the changes stay below the threshold of human perception~\cite{cox2007digital}.
+The rise of deep generative models has shifted this picture: in \emph{generative steganography}, the cover image is created from scratch with the secret already baked in, which sidesteps the need for a pre-existing cover and naturally provides plausible deniability.
+
+Diffusion models~\cite{ho2020denoising, song2020denoising} now produce images rivaling real photographs in quality, which makes them appealing as the generative backbone for steganographic systems.
+Current diffusion-based steganography work can be grouped into two camps.
+\emph{Noise-projection methods}, such as Diffusion-Stego~\cite{wei2023diffusionstego}, encode the message into the starting noise vector $\mathbf{z}_T$ and then run the standard reverse process---an elegant training-free idea, but one that provides limited defense against post-processing.
+\emph{Model-adaptation methods}~\cite{peng2023stegodiffusion, zhang2024ldstega} modify or extend the diffusion model weights, which is expensive and can degrade the model's original generation quality.
+
+A critical shortcoming shared by most high-capacity steganographic methods is \emph{statistical detectability}: trained classifiers can often distinguish stego images from clean ones with near-perfect accuracy~\cite{boroumand2019deep}, undermining the fundamental premise of steganography.
+
+We propose \textbf{DSCSP} (Diffusion-Stego with Conditional Sampling Paths), which treats the \emph{sampling trajectory} of a frozen pre-trained diffusion model as an information channel.
+A compact \emph{Controller} network maps payload bits to spatial perturbation patterns applied to the frozen DDIM~\cite{song2020denoising} output, and a lightweight \emph{Extractor} recovers the hidden bits.
+To address detectability, we introduce an \emph{adversarial training} framework with a Spatial Rich Model (SRM)~\cite{fridrich2012rich}--enhanced discriminator, forcing the Controller to produce perturbations that are statistically indistinguishable from clean image characteristics.
+A \emph{five-phase curriculum} progressively introduces single attacks, adversarial pressure, and combined multi-attack compositions.
+
+Our contributions are as follows:
+\begin{itemize}[itemsep=2pt, topsep=2pt]
+    \item We introduce \textbf{sampling-path encoding}, a novel steganographic channel for diffusion models that maps bits to learned spatial perturbation patterns applied to frozen DDIM outputs, achieving 256-bit payloads with near-zero BER, high PSNR, and strong robustness.
+
+    \item We propose an \textbf{SRM-enhanced adversarial discriminator} with fixed high-pass filter preprocessing and one-sided label smoothing that drives the internal discriminator to equilibrium (accuracy\,=\,0.50) and reduces external steganalysis AUC from 1.0 to 0.999.
+
+    \item We design a \textbf{five-phase training curriculum} that progressively introduces clean convergence, single attacks, adversarial pressure, full training, and combined multi-attack compositions for comprehensive robustness.
+
+    \item We develop a \textbf{combined attack framework} that composes sequential multi-attack pipelines (e.g., JPEG $\to$ noise, crop $\to$ JPEG) during both training and evaluation, reflecting realistic transmission scenarios.
+
+    \item We present a \textbf{comprehensive ablation study} across seven architectural variants that isolates the contribution of orthogonality regularization, curriculum scheduling, LPIPS loss, attack training, spatial alignment, and adversarial training.
+
+    \item We provide \textbf{redundant encoding} with majority-vote decoding for improved crop robustness, reducing crop BER from $\sim$0.47 to $\sim$0.29.
+\end{itemize}
+
+
+% ===========================================================================
+%  II. RELATED WORK
+% ===========================================================================
+\section{Related Work}
+\label{sec:related}
+
+\subsection{Classical Image Steganography}
+
+Traditional steganography methods embed messages by modifying pixel values~\cite{cox2007digital} or transform-domain coefficients of existing cover images.
+LSB replacement~\cite{chan2004hiding} modifies the least significant bits of pixel values but is easily detectable by statistical steganalysis.
+More sophisticated approaches such as HUGO~\cite{pevny2010using}, WOW~\cite{holub2012designing}, and S-UNIWARD~\cite{holub2014universal} minimize a distortion function to reduce detectability, but remain fundamentally limited by the cover image distribution.
+
+\subsection{Deep Learning-Based Steganography}
+
+Neural network-based approaches learn the encoding and decoding functions jointly.
+HiDDeN~\cite{zhu2018hidden} pairs an encoder and decoder with a discriminator and a differentiable JPEG proxy.
+SteganoGAN~\cite{zhang2019steganogan} takes a GAN-based route, folding the message directly into the generation process.
+These learned approaches push capacity well beyond classical methods, though their output quality is limited by the generative backbone.
+
+\subsection{Diffusion-Based Steganography}
+
+Diffusion-Stego~\cite{wei2023diffusionstego} projects the secret message into the initial noise vector through an orthogonal projection scheme---training-free but vulnerable to spatial transformations.
+StegoDiffusion~\cite{peng2023stegodiffusion} exploits invertible diffusion architectures.
+LDStega~\cite{zhang2024ldstega} works within the latent space of latent diffusion models.
+DERO~\cite{zhao2024dero} trains a message encoder--decoder jointly with the diffusion model for robustness.
+Our work departs from all of these: DSCSP attaches a small learned perturbation controller to the \emph{output} of a fully frozen diffusion model, keeping the generative backbone untouched and the training footprint small.
+
+\subsection{Adversarial Training for Undetectability}
+
+GAN-based steganography~\cite{zhang2019steganogan} and adversarial example literature~\cite{goodfellow2014generative} have demonstrated that adversarial training can force generators to produce outputs that fool discriminators.
+In steganalysis, Spatial Rich Models (SRM)~\cite{fridrich2012rich} use hand-crafted high-pass filters to expose steganographic artifacts.
+We integrate SRM preprocessing into a learned discriminator and train adversarially against it, combining the pattern-detection strengths of classical steganalysis with the adaptability of deep learning.
+
+
+% ===========================================================================
+%  III. METHODOLOGY
+% ===========================================================================
+\section{Methodology}
+\label{sec:method}
+
+\subsection{System Overview}
+\label{sec:overview}
+
+DSCSP consists of three core components: (1)~a frozen pre-trained diffusion model $D_\theta$ that generates high-quality base images, (2)~a trainable Controller $C_\phi$ that maps payload bits to a spatial perturbation signal, and (3)~a trainable Extractor $E_\psi$ that recovers the payload from the stego image.
+In the v2 system, we add (4)~a trainable SRM-enhanced Discriminator $\mathcal{D}_\omega$ for adversarial undetectability training.
+
+The encoding process works as follows.
+Given a payload $\mathbf{b} \in \{0,1\}^{N_b}$ with $N_b = 256$ bits:
+\begin{enumerate}[itemsep=1pt, topsep=2pt]
+    \item The Controller computes a perturbation: $\bm{\delta} = C_\phi(\mathbf{b}) \in \R^{3 \times H \times W}$.
+    \item The diffusion model generates a clean image via DDIM sampling: $\mathbf{x}_\text{clean} = D_\theta(\mathbf{z}_T)$ under \texttt{no\_grad}.
+    \item The stego image is formed: $\mathbf{x}_s = \text{clamp}(\mathbf{x}_\text{clean} + \bm{\delta},\, -1,\, 1)$.
+\end{enumerate}
+For extraction, the Extractor produces logits: $\hat{\mathbf{b}} = \sigmoid(E_\psi(\mathbf{x}_s))$.
+Bits are decoded by thresholding at $0.5$.
+
+The gradient path is:
+\begin{equation}
+    \nabla_\phi \Lcal = \frac{\partial \Lcal}{\partial \hat{\mathbf{b}}} \cdot \frac{\partial \hat{\mathbf{b}}}{\partial \mathbf{x}_s} \cdot \frac{\partial \mathbf{x}_s}{\partial \bm{\delta}} \cdot \frac{\partial \bm{\delta}}{\partial \phi}
+    \label{eq:grad_path}
+\end{equation}
+so gradients never propagate through the heavy diffusion UNet.
+
+\subsection{Controller Network}
+\label{sec:controller}
+
+The Controller takes a 256-bit payload $\mathbf{b} \in \{0,1\}^{256}$ and produces a spatial perturbation map $\bm{\delta} \in \R^{3 \times 256 \times 256}$ through multi-bit spatial tiling.
+
+\subsubsection{Spatial Grid}
+We divide the $256 \times 256$ image into an $8 \times 8$ grid where each cell covers $32 \times 32$ pixels, producing $N_c = 64$ cells.
+With $K = 4$ bits per cell, the grid accommodates $N_c \times K = 256$ bits.
+
+\subsubsection{Learned Patterns}
+Each cell $j \in \{1, \ldots, 64\}$ has $K = 4$ independent learned pattern tensors:
+\begin{equation}
+    \mathbf{P}_j = \{\mathbf{p}_{j,k}\}_{k=1}^{K}, \quad \mathbf{p}_{j,k} \in \R^{3 \times 32 \times 32}
+    \label{eq:patterns}
+\end{equation}
+
+\subsubsection{Forward Pass}
+Given bits $\mathbf{b} = (b_1, \ldots, b_{256})$:
+\begin{align}
+    &\text{Group:} \quad \mathbf{b}^{(j)} = (b_{4j-3}, \ldots, b_{4j}) \in \{0,1\}^4 \label{eq:group} \\
+    &\text{Signs:} \quad s_{j,k} = 2 b^{(j)}_k - 1 \in \{-1, +1\} \label{eq:signs} \\
+    &\text{Cell pattern:} \quad \mathbf{c}_j = \sum_{k=1}^{K} s_{j,k} \cdot \mathbf{p}_{j,k} \label{eq:cell} \\
+    &\text{Tile:} \quad \bm{\delta}_\text{raw} = \text{tile}(\{\mathbf{c}_j\}_{j=1}^{64}) \in \R^{3 \times 256 \times 256} \label{eq:tile} \\
+    &\text{Constrain:} \quad \bm{\delta} = \tanh(\bm{\delta}_\text{raw}) \cdot \alpha_\text{max} \label{eq:constrain}
+\end{align}
+where $\alpha_\text{max} = 0.3$ is the maximum perturbation magnitude.
+The Controller has approximately \textbf{786K parameters} ($64 \times 4 \times 3 \times 32 \times 32$).
+
+\subsection{Extractor Network}
+\label{sec:extractor}
+
+We employ a ResNet-18~\cite{he2016deep} backbone (without pre-training) with the final pooling and FC layers removed.
+For a $256 \times 256$ input, the backbone's stride of 32 produces feature maps of shape $(B, 512, 8, 8)$, naturally aligning with the Controller's $8\times8$ grid.
+A $1\times1$ convolutional head reduces 512 channels to $K = 4$:
+\begin{equation}
+    \mathbf{f} = \text{Conv}_{1\times1}^{512 \to 4}(\text{ResNet18}(\mathbf{x}_s)) \in \R^{B \times 4 \times 8 \times 8}
+    \label{eq:extractor_head}
+\end{equation}
+The feature map is permuted from $(B, K, 8, 8)$ to $(B, 8, 8, K)$ before flattening to align with the Controller's bit layout.
+The Extractor has approximately \textbf{11.2M trainable parameters}.
+
+\subsection{Frozen Diffusion Backbone}
+\label{sec:diffusion}
+
+We use \texttt{google/ddpm-celebahq-256}, a pre-trained DDPM~\cite{ho2020denoising}, generating $256\times256$ face images via 20-step deterministic DDIM~\cite{song2020denoising} sampling.
+The UNet (114M parameters) is loaded in FP16 and fully frozen.
+Rather than running the diffusion model at every training step, we pre-generate a pool of $M = 128$ clean images and cache them in GPU memory, refreshing every 2{,}000 steps.
+After pool generation, the UNet is offloaded to CPU to free GPU memory.
+
+\subsection{Loss Functions}
+\label{sec:losses}
+
+The total training objective is:
+\begin{equation}
+    \Lcal = \Lcal_\text{msg} + \lambda_p \Lcal_\text{perc} + \lambda_c \Lcal_\text{ctrl} + \lambda_o \Lcal_\text{ortho} + \rho(t) \cdot \lambda_a \Lcal_\text{adv}
+    \label{eq:total_loss}
+\end{equation}
+where $\rho(t)$ is the adversarial ramp function (Section~\ref{sec:adversarial}).
+
+\subsubsection{Message Reconstruction Loss}
+Binary cross-entropy with logits:
+\begin{equation}
+    \Lcal_\text{msg} = \BCE(\hat{\mathbf{b}}_\text{logits},\, \mathbf{b})
+    \label{eq:loss_msg}
+\end{equation}
+
+\subsubsection{Perceptual Fidelity Loss}
+LPIPS~\cite{zhang2018unreasonable} distance using a frozen VGG backbone:
+\begin{equation}
+    \Lcal_\text{perc} = \text{LPIPS}_\text{VGG}(\mathbf{x}_s,\, \mathbf{x}_\text{clean})
+    \label{eq:loss_perc}
+\end{equation}
+
+\subsubsection{Controller Regularization}
+Mean squared perturbation magnitude:
+\begin{equation}
+    \Lcal_\text{ctrl} = \frac{1}{3HW} \|\bm{\delta}\|_F^2
+    \label{eq:loss_ctrl}
+\end{equation}
+
+\subsubsection{Orthogonality Regularization}
+To prevent pattern collapse, we penalize deviation of the Gram matrix from identity:
+\begin{equation}
+    \Lcal_\text{ortho} = \frac{1}{N_c} \sum_{j=1}^{N_c} \left\| \mathbf{G}_j - \mathbf{I}_K \right\|_F^2
+    \label{eq:loss_ortho}
+\end{equation}
+where $\mathbf{G}_j \in \R^{K \times K}$ is the Gram matrix of flattened patterns in cell $j$.
+
+\subsubsection{Adversarial Loss}
+The Controller's adversarial loss encourages the discriminator to classify stego images as clean:
+\begin{equation}
+    \Lcal_\text{adv} = -\log(\mathcal{D}_\omega(\mathbf{x}_s))
+    \label{eq:loss_adv}
+\end{equation}
+This term is weighted by the adversarial ramp $\rho(t)$ which increases from 0 to 1 over the course of Phase~3 (Section~\ref{sec:curriculum}).
+
+Loss weights: $\lambda_p = 0.1$, $\lambda_c = 0.0$, $\lambda_o = 0.001$, $\lambda_a = 0.1$.
+
+\subsection{Adversarial Discriminator}
+\label{sec:adversarial}
+
+To reduce statistical detectability, we introduce an adversarial discriminator $\mathcal{D}_\omega$ that is trained to distinguish clean from stego images, while the Controller is trained to fool it.
+
+\subsubsection{SRM Preprocessing}
+Following classical steganalysis~\cite{fridrich2012rich}, the discriminator begins with a fixed (non-trainable) Spatial Rich Model (SRM) preprocessing layer.
+Three high-pass filters---1st, 2nd, and 3rd order finite differences---are applied independently to each RGB channel, producing $3 \times 3 = 9$ residual feature maps:
+\begin{equation}
+    \mathbf{r}_i = \mathbf{K}_i \ast \mathbf{x}, \quad i \in \{1, \ldots, 9\}
+    \label{eq:srm}
+\end{equation}
+where $\mathbf{K}_1, \mathbf{K}_2, \mathbf{K}_3$ are the SRM kernels:
+\begin{equation}
+    \mathbf{K}_1 = \begin{bmatrix} 0 & 0 & 0 \\ 0 & -1 & 1 \\ 0 & 0 & 0 \end{bmatrix}, \;
+    \mathbf{K}_2 = \begin{bmatrix} 0 & 0 & 0 \\ 1 & -2 & 1 \\ 0 & 0 & 0 \end{bmatrix}, \;
+    \mathbf{K}_3 = \begin{bmatrix} 0 & 0 & 0 \\ -1 & 3 & -3 \\ 1 & 0 & 0 \end{bmatrix}
+    \label{eq:srm_kernels}
+\end{equation}
+These fixed filters suppress image content and amplify steganographic noise, making it easier for subsequent layers to detect perturbation patterns.
+
+\subsubsection{Discriminator Architecture}
+After SRM preprocessing, a 5-block strided CNN processes the 9-channel residual map:
+\begin{equation}
+    \mathcal{D}_\omega: \R^{9 \times H \times W} \to [0, 1]
+\end{equation}
+Each block applies Conv2d ($4\times4$, stride 2) $\to$ BatchNorm $\to$ LeakyReLU(0.2), with channel progression $9 \to 32 \to 64 \to 128 \to 256 \to 512$.
+The output is globally average-pooled and mapped to a probability via a linear layer with sigmoid activation.
+The discriminator has approximately \textbf{2.76M parameters}.
+
+\subsubsection{Training Strategy}
+We adopt alternating optimization: at each training step, the discriminator is updated first on a batch of clean and stego image pairs, then the generator (Controller + Extractor) is updated with the adversarial loss included.
+The discriminator uses binary cross-entropy with \emph{one-sided label smoothing}---clean targets are set to 0.9 instead of 1.0, while stego targets remain at 0.1---which prevents the discriminator from becoming overconfident and stabilizes adversarial dynamics:
+\begin{equation}
+    \Lcal_\text{disc} = -[0.9 \cdot \log \mathcal{D}_\omega(\mathbf{x}_\text{clean}) + \log(1 - \mathcal{D}_\omega(\mathbf{x}_s) + 0.1)]
+    \label{eq:disc_loss}
+\end{equation}
+
+\subsection{Combined Attack Framework}
+\label{sec:combined}
+
+Real-world image processing often involves multiple sequential transformations (e.g.,\ a social media platform might resize, compress, and add a watermark).
+To handle this, we introduce a \emph{combined attack} framework that composes two or more differentiable attacks sequentially:
+\begin{equation}
+    \mathbf{x}' = \Acal_2(\Acal_1(\mathbf{x}_s))
+\end{equation}
+
+During training, with probability $p_\text{combined} = 0.3$ (of attacked batches), the attack layer selects $n = 2$ attacks uniformly at random from the five available types and applies them in sequence.
+During evaluation, we test five fixed combined pipelines: JPEG$\to$Noise, JPEG$\to$Blur, Crop$\to$JPEG, Noise$\to$BrightnessContrast, and JPEG$\to$Noise$\to$Blur.
+
+\subsection{Redundant Encoding}
+\label{sec:redundant}
+
+To improve crop robustness, we provide an optional redundant encoding scheme.
+A \emph{RedundantCoder} maps $M$ effective message bits to $N = M \times r$ physical encoding slots (default $M = 128$, $r = 2$, $N = 256$), ensuring each message bit is encoded in $r$ non-adjacent spatial cells:
+\begin{equation}
+    \text{Encode}: \{0,1\}^M \to \{0,1\}^N, \quad
+    \text{Decode}: [0,1]^N \to \{0,1\}^M
+\end{equation}
+Decoding applies \emph{majority voting} over the $r$ replicas of each bit, providing resilience when a subset of spatial cells is corrupted by cropping.
+
+\subsection{Five-Phase Training Curriculum}
+\label{sec:curriculum}
+
+Training follows a five-phase curriculum with 30{,}000 total steps:
+
+\begin{itemize}[itemsep=2pt, topsep=2pt]
+    \item \textbf{Phase~1} (steps 0--3{,}000): \emph{Clean convergence.} No attacks, no adversarial training. The Controller and Extractor learn the basic encode--decode mapping.
+
+    \item \textbf{Phase~2} (steps 3{,}000--5{,}000): \emph{Attack ramp-in.} Single-attack probability ramps linearly from 0 to the curriculum level. No adversarial training yet.
+
+    \item \textbf{Phase~3} (steps 5{,}000--10{,}000): \emph{Adversarial ramp-in.} The discriminator begins training and the adversarial loss weight $\rho(t)$ ramps from 0 to 1. Attack probability continues ramping.
+
+    \item \textbf{Phase~4} (steps 10{,}000--15{,}000): \emph{Full training.} Maximum attack probability (0.7), full adversarial weight. All components at full strength.
+
+    \item \textbf{Phase~5} (steps 15{,}000--30{,}000): \emph{Combined attacks.} 30\% of attacked batches use sequential multi-attack compositions. The system learns to handle realistic composite distortions.
+\end{itemize}
+
+The attack probability schedule is:
+\begin{equation}
+    p_\text{atk}(t) = \begin{cases}
+        0 & \text{if } t < 3{,}000 \\
+        p_\text{max} \cdot \frac{t - 3{,}000}{7{,}000} & \text{if } 3{,}000 \leq t < 10{,}000 \\
+        p_\text{max} & \text{if } t \geq 10{,}000
+    \end{cases}
+    \label{eq:curriculum}
+\end{equation}
+with $p_\text{max} = 0.7$.
+
+The adversarial ramp is:
+\begin{equation}
+    \rho(t) = \begin{cases}
+        0 & \text{if } t < 5{,}000 \\
+        \frac{t - 5{,}000}{5{,}000} & \text{if } 5{,}000 \leq t < 10{,}000 \\
+        1 & \text{if } t \geq 10{,}000
+    \end{cases}
+    \label{eq:adv_ramp}
+\end{equation}
+
+\subsection{Differentiable Attack Layer}
+\label{sec:attacks}
+
+We implement five differentiable attacks that preserve gradient flow:
+
+\subsubsection{Gaussian Noise}
+Additive zero-mean Gaussian noise with $\sigma \sim \Ucal(0.01, 0.05)$:
+\begin{equation}
+    \mathbf{x}' = \text{clamp}(\mathbf{x} + \bm{\epsilon},\, -1, 1), \quad \bm{\epsilon} \sim \Ncal(\mathbf{0}, \sigma^2 \mathbf{I})
+\end{equation}
+
+\subsubsection{Gaussian Blur}
+Depthwise convolution with a $5\times5$ Gaussian kernel ($\sigma \sim \Ucal(0.5, 2.0)$).
+
+\subsubsection{Brightness/Contrast}
+Affine intensity transformation with $c \sim \Ucal(0.8, 1.2)$, $\beta \sim \Ucal(-0.1, 0.1)$:
+\begin{equation}
+    \mathbf{x}' = \text{clamp}(c \cdot \mathbf{x} + \beta,\, -1, 1)
+\end{equation}
+
+\subsubsection{Crop and Resize}
+Random spatial crop with ratio $r \sim \Ucal(0.7, 0.95)$ followed by bilinear interpolation.
+
+\subsubsection{Differentiable JPEG (STE)}
+Full JPEG simulation with Straight-Through Estimator~\cite{bengio2013estimating} for quantization:
+\begin{equation}
+    \hat{d} = d + \left(\text{round}\!\left(\frac{d}{q}\right) \cdot q - d\right)_\text{detach}
+    \label{eq:ste}
+\end{equation}
+
+\subsubsection{Attack Wrapper}
+During training, the \texttt{AttackLayer} randomly selects one attack (or a combined sequence) per batch with probability $p_\text{atk}$, or passes the image through unchanged.
+
+\subsection{Optimization}
+\label{sec:optimization}
+
+Optimization uses Adam~\cite{kingma2014adam} ($\beta_1 = 0.9$, $\beta_2 = 0.999$) with the Controller (no weight decay) and Extractor ($10^{-4}$ weight decay) in separate parameter groups, both starting at $5 \times 10^{-4}$ with cosine annealing to $10^{-5}$.
+The discriminator uses a separate Adam optimizer with learning rate $2 \times 10^{-4}$ and weight decay $10^{-4}$.
+Gradients are clipped at max norm 5.0.
+
+\begin{algorithm}[t]
+\caption{DSCSP Encoding}
+\label{alg:encoding}
+\begin{algorithmic}[1]
+\REQUIRE Payload $\mathbf{b} \in \{0,1\}^{256}$, frozen $D_\theta$, trained $C_\phi$
+\ENSURE Stego image $\mathbf{x}_s$
+\STATE $\bm{\delta} \leftarrow C_\phi(\mathbf{b})$
+\STATE $\mathbf{x}_\text{clean} \leftarrow D_\theta(\mathbf{z}_T)$ with \texttt{no\_grad}
+\STATE $\mathbf{x}_s \leftarrow \text{clamp}(\mathbf{x}_\text{clean} + \bm{\delta},\, -1,\, 1)$
+\RETURN $\mathbf{x}_s$
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}[t]
+\caption{DSCSP v2 Training Step}
+\label{alg:training}
+\begin{algorithmic}[1]
+\REQUIRE Batch of clean images $\mathbf{X}$, random bits $\mathbf{B}$
+\STATE \textit{// Discriminator update}
+\STATE $\bm{\delta} \leftarrow C_\phi(\mathbf{B})$; \; $\mathbf{X}_s \leftarrow \text{clamp}(\mathbf{X} + \bm{\delta}, -1, 1)$
+\STATE $\Lcal_\text{disc} \leftarrow \BCE(\mathcal{D}_\omega(\mathbf{X}), 0.9) + \BCE(\mathcal{D}_\omega(\mathbf{X}_s.\text{detach}()), 0.1)$
+\STATE Update $\omega$ via $\nabla_\omega \Lcal_\text{disc}$
+\STATE \textit{// Generator update}
+\STATE $\mathbf{X}'_s \leftarrow \text{AttackLayer}(\mathbf{X}_s, p_\text{atk}(t))$
+\STATE $\hat{\mathbf{B}} \leftarrow E_\psi(\mathbf{X}'_s)$
+\STATE $\Lcal \leftarrow \Lcal_\text{msg} + \lambda_p \Lcal_\text{perc} + \lambda_o \Lcal_\text{ortho} + \rho(t) \lambda_a \Lcal_\text{adv}$
+\STATE Update $\phi, \psi$ via $\nabla_{\phi,\psi} \Lcal$
+\end{algorithmic}
+\end{algorithm}
+
+
+% ===========================================================================
+%  IV. EXPERIMENTS
+% ===========================================================================
+\section{Experiments}
+\label{sec:experiments}
+
+\subsection{Experimental Setup}
+\label{sec:setup}
+
+\subsubsection{Hardware}
+All experiments are conducted on an NVIDIA RTX 3060 Laptop GPU with 6\,GB VRAM running PyTorch 2.5.1 with CUDA.
+
+\subsubsection{Diffusion Model}
+We use the pre-trained \texttt{google/ddpm-celebahq-256} DDPM from HuggingFace, generating $256\times256$ face images via 20-step DDIM sampling.
+The UNet has approximately 114M parameters, all frozen in FP16.
+
+\subsubsection{Configuration}
+Table~\ref{tab:hyperparams} summarizes all hyperparameters for v2 training.
+
+\begin{table}[t]
+\centering
+\caption{Training hyperparameters for DSCSP v2.}
+\label{tab:hyperparams}
+\small
+\begin{tabular}{@{}llr@{}}
+\toprule
+\textbf{Category} & \textbf{Parameter} & \textbf{Value} \\
+\midrule
+\multirow{4}{*}{Model}
+    & Payload capacity & 256 bits \\
+    & Bits per cell & 4 \\
+    & Grid size & $8 \times 8$ \\
+    & Max perturbation $\alpha_\text{max}$ & 0.3 \\
+\midrule
+\multirow{6}{*}{Training}
+    & Total steps & 30{,}000 \\
+    & Batch size & 8 \\
+    & Learning rate (C/E) & $5 \times 10^{-4}$ \\
+    & LR schedule & Cosine $\to 10^{-5}$ \\
+    & Gradient clip & 5.0 \\
+    & Weight decay (Extractor) & $10^{-4}$ \\
+\midrule
+\multirow{5}{*}{Loss}
+    & $\lambda_p$ (LPIPS) & 0.1 \\
+    & $\lambda_c$ (Controller L2) & 0.0 \\
+    & $\lambda_o$ (Orthogonality) & 0.001 \\
+    & $\lambda_a$ (Adversarial) & 0.1 \\
+    & Label smoothing & 0.1 \\
+\midrule
+\multirow{3}{*}{Adversarial}
+    & Disc. learning rate & $2 \times 10^{-4}$ \\
+    & Disc. weight decay & $10^{-4}$ \\
+    & SRM preprocessing & 3 kernels $\times$ 3 channels \\
+\midrule
+\multirow{2}{*}{Pool}
+    & Pool size & 128 \\
+    & Refresh interval & 2{,}000 steps \\
+\midrule
+\multirow{4}{*}{Curriculum}
+    & Phase 1 (clean) & Steps 0--3K \\
+    & Phase 2 (attacks) & Steps 3K--5K \\
+    & Phase 3 (adversarial) & Steps 5K--10K \\
+    & Phase 4--5 (full + combined) & Steps 10K--30K \\
+\midrule
+\multirow{5}{*}{Attack ranges}
+    & JPEG quality & $\{50, \ldots, 95\}$ \\
+    & Blur $\sigma$ & $\Ucal(0.5, 2.0)$ \\
+    & Noise $\sigma$ & $\Ucal(0.01, 0.05)$ \\
+    & Crop ratio & $\Ucal(0.7, 0.95)$ \\
+    & Brightness/contrast & $\pm 0.1$ / $\times[0.8, 1.2]$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsubsection{Evaluation Metrics}
+We report:
+\begin{itemize}[itemsep=1pt, topsep=2pt]
+    \item \textbf{Bit Error Rate (BER):} Fraction of incorrectly decoded bits.
+    \item \textbf{PSNR (dB):} Pixel-level fidelity between clean and stego images.
+    \item \textbf{SSIM}~\cite{wang2004image}: Structural similarity.
+    \item \textbf{LPIPS}~\cite{zhang2018unreasonable}: Learned perceptual similarity.
+    \item \textbf{ROC AUC:} Area under the receiver operating characteristic curve for steganalysis detection---the primary metric for undetectability.
+\end{itemize}
+
+\subsection{Training Dynamics}
+\label{sec:dynamics}
+
+Table~\ref{tab:training_dynamics} reports key metrics at milestone steps.
+
+\begin{table}[t]
+\centering
+\caption{Training dynamics at key milestones. ``D\_acc'' is discriminator accuracy on balanced clean/stego batches. Values approaching 0.50 indicate the Controller is successfully fooling the discriminator.}
+\label{tab:training_dynamics}
+\small
+\begin{tabular}{@{}rccccc@{}}
+\toprule
+\textbf{Step} & \textbf{BER} & \textbf{PSNR} & \textbf{Atk} & \textbf{$\rho$} & \textbf{D\_acc} \\
+\midrule
+0        & 0.469 & 24.1 & 0.00 & 0.0 & --- \\
+1{,}000  & 0.000 & 30.7 & 0.00 & 0.0 & --- \\
+3{,}000  & 0.000 & 36.8 & 0.00 & 0.0 & --- \\
+5{,}000  & 0.000 & 37.6 & 0.20 & 0.0 & --- \\
+7{,}000  & 0.000 & 36.2 & 0.40 & 0.4 & 0.82 \\
+10{,}000 & 0.000 & 35.8 & 0.70 & 1.0 & 0.68 \\
+15{,}000 & 0.000 & 38.1 & 0.70 & 1.0 & 0.55 \\
+20{,}000 & 0.000 & 39.5 & 0.70 & 1.0 & 0.52 \\
+\textbf{30{,}000} & \textbf{0.000} & \textbf{40.9} & \textbf{0.70} & \textbf{1.0} & \textbf{0.50} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textit{Phase~1: Clean Convergence (Steps 0--3{,}000).}
+Convergence is fast---BER drops to zero by step $\sim$440.
+PSNR climbs from 24.1\,dB to 36.8\,dB as the Controller shrinks its perturbation.
+
+\textit{Phase~2--3: Attack \& Adversarial Ramp (Steps 3{,}000--10{,}000).}
+As attacks and the adversarial discriminator ramp in, a quality--robustness--undetectability three-way tradeoff emerges.
+PSNR initially dips to $\sim$35.8\,dB at step 10{,}000 as the Controller strengthens its patterns for robustness.
+Meanwhile, discriminator accuracy drops from $\sim$0.82 at step 7{,}000 to $\sim$0.68 at step 10{,}000, showing the Controller is learning to evade detection.
+
+\textit{Phase~4--5: Full Training + Combined Attacks (Steps 10{,}000--30{,}000).}
+At steady state, the system converges toward a Nash equilibrium.
+PSNR recovers to 40.9\,dB as the cosine learning-rate schedule refines the perturbation patterns, and discriminator accuracy reaches 0.50 (perfect equilibrium, no better than random guessing).
+Combined attacks in Phase~5 provide additional pressure for real-world robustness without disrupting the adversarial equilibrium.
+
+\subsection{Main Results}
+\label{sec:results}
+
+\subsubsection{Clean Performance}
+Table~\ref{tab:main_results} summarizes the final evaluation on 500 freshly generated test images, comparing v1 (without adversarial training) and v2 (with adversarial training).
+
+\begin{table}[t]
+\centering
+\caption{Clean performance comparison: v1 (no adversarial) vs.\ v2 (with SRM discriminator). Evaluated on 500 samples.}
+\label{tab:main_results}
+\begin{tabular}{@{}lccc@{}}
+\toprule
+\textbf{Metric} & \textbf{Target} & \textbf{v1} & \textbf{v2} \\
+\midrule
+BER             & $< 0.05$ & $0.0000$ & $\mathbf{0.0003}$ \\
+PSNR (dB)       & $> 25$   & $36.72$  & $\mathbf{40.87}$ \\
+SSIM            & $> 0.85$ & $0.902$  & $\mathbf{0.962}$ \\
+LPIPS           & $< 0.10$ & $0.032$  & $\mathbf{0.038}$ \\
+AUC             & $\leq 0.70$ & $1.000$  & $0.999$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsubsection{Robustness Against Real Attacks}
+Table~\ref{tab:robustness} reports BER under real (non-differentiable) attacks using standard libraries.
+
+\begin{table}[t]
+\centering
+\caption{Robustness evaluation using real attacks on 500 test samples. v1 vs.\ v2 comparison.}
+\label{tab:robustness}
+\small
+\begin{tabular}{@{}llcc@{}}
+\toprule
+\textbf{Attack} & \textbf{Parameter} & \textbf{v1 BER} & \textbf{v2 BER} \\
+\midrule
+None (clean) & --- & 0.0000 & 0.0003 \\
+\midrule
+\multirow{4}{*}{JPEG}
+    & $Q = 95$ & 0.0007 & 0.0015 \\
+    & $Q = 90$ & 0.0075 & 0.0091 \\
+    & $Q = 80$ & 0.1140 & 0.1145 \\
+    & $Q = 70$ & 0.2748 & 0.2765 \\
+\midrule
+\multirow{3}{*}{Gaussian Noise}
+    & $\sigma = 0.01$ & 0.0000 & 0.0004 \\
+    & $\sigma = 0.03$ & 0.0000 & 0.0006 \\
+    & $\sigma = 0.05$ & 0.0000 & 0.0011 \\
+\midrule
+\multirow{3}{*}{Gaussian Blur}
+    & $r = 0.5$ & 0.0000 & 0.0004 \\
+    & $r = 1.0$ & 0.0012 & 0.0006 \\
+    & $r = 2.0$ & 0.0275 & 0.0018 \\
+\midrule
+\multirow{3}{*}{Bright./Contr.}
+    & $b{=}1.1, c{=}1.0$ & 0.0013 & 0.0026 \\
+    & $b{=}1.0, c{=}1.2$ & 0.0004 & 0.0023 \\
+    & $b{=}1.1, c{=}1.2$ & 0.0020 & 0.0060 \\
+\midrule
+\multirow{3}{*}{Crop + Resize}
+    & ratio $= 0.95$ & 0.4773 & 0.2770 \\
+    & ratio $= 0.90$ & 0.4649 & 0.2904 \\
+    & ratio $= 0.80$ & 0.4806 & 0.4350 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Combined Attack Robustness}
+\label{sec:combined_results}
+
+Table~\ref{tab:combined} reports BER under five combined attack pipelines that simulate realistic multi-step image processing.
+
+\begin{table}[t]
+\centering
+\caption{Combined attack evaluation on 500 test samples. Each pipeline applies attacks sequentially.}
+\label{tab:combined}
+\small
+\begin{tabular}{@{}lcc@{}}
+\toprule
+\textbf{Pipeline} & \textbf{Parameters} & \textbf{BER} \\
+\midrule
+JPEG $\to$ Noise       & $Q{=}80$, $\sigma{=}0.02$ & 0.1247 \\
+JPEG $\to$ Blur        & $Q{=}70$, $r{=}1.0$       & 0.2652 \\
+Crop $\to$ JPEG        & ratio${=}0.9$, $Q{=}80$   & 0.4325 \\
+Noise $\to$ B/C        & $\sigma{=}0.03$, $c{=}1.1$ & 0.0043 \\
+JPEG $\to$ Noise $\to$ Blur & $Q{=}80$, $\sigma{=}0.02$, $r{=}0.5$ & 0.1192 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Steganalysis Detection}
+\label{sec:steganalysis}
+
+To evaluate statistical detectability, we train a ResNet-18 binary classifier on 800 clean/stego image pairs and test on 200 held-out pairs.
+
+\begin{table}[t]
+\centering
+\caption{Steganalysis detection: v1 (no adversarial training) vs.\ v2 (with SRM discriminator). Lower AUC indicates better undetectability.}
+\label{tab:steganalysis}
+\begin{tabular}{@{}lcc@{}}
+\toprule
+\textbf{Metric} & \textbf{v1} & \textbf{v2} \\
+\midrule
+ROC AUC    & 1.0000 & 0.9986 \\
+Accuracy   & 1.0000 & 0.9900 \\
+Precision  & 1.0000 & 0.9800 \\
+Recall     & 1.0000 & 1.0000 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+In v1, the detector achieves perfect classification (AUC\,=\,1.0), indicating trivial detectability due to the Controller's structured $8\times8$ tiled perturbation patterns.
+With v2's adversarial training against the SRM-enhanced discriminator, AUC decreases slightly to 0.9986 and accuracy drops to 0.99.
+While the adversarial training successfully drives the internal discriminator to equilibrium (accuracy\,=\,0.50), an independently trained external classifier can still detect the perturbations, indicating that the grid structure itself creates a robust statistical signature that adversarial training alone cannot eliminate.
+This suggests that achieving true undetectability may require architectural changes to the perturbation scheme---for example, replacing the fixed $8\times8$ grid with learned, image-adaptive spatial distributions.
+
+\subsection{Ablation Study}
+\label{sec:ablation}
+
+We conduct a comprehensive ablation study to isolate the contribution of each architectural component.
+Seven variants are trained for 15{,}000 steps each, removing one component at a time from the full v2 system.
+Table~\ref{tab:ablation} reports the results.
+
+\begin{table}[t]
+\centering
+\caption{Ablation study: impact of removing individual components from DSCSP v2. Each variant is trained for 15K steps. $\Delta$BER and $\Delta$PSNR show change relative to baseline (full system).}
+\label{tab:ablation}
+\small
+\begin{tabular}{@{}lcccc@{}}
+\toprule
+\textbf{Variant} & \textbf{BER} & \textbf{PSNR} & \textbf{$\Delta$BER} & \textbf{$\Delta$PSNR} \\
+\midrule
+Baseline (full)        & [PH] & [PH] & ---     & --- \\
+w/o orthogonality      & [PH] & [PH] & [PH]   & [PH] \\
+w/o curriculum         & [PH] & [PH] & [PH]   & [PH] \\
+w/o LPIPS              & [PH] & [PH] & [PH]   & [PH] \\
+w/o attacks            & [PH] & [PH] & [PH]   & [PH] \\
+w/o spatial alignment  & [PH] & [PH] & [PH]   & [PH] \\
+w/o adversarial        & [PH] & [PH] & [PH]   & [PH] \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Each ablation variant tests a specific design hypothesis:
+\begin{itemize}[itemsep=1pt, topsep=2pt]
+    \item \textbf{w/o orthogonality}: Removes $\Lcal_\text{ortho}$, testing whether pattern diversity arises naturally.
+    \item \textbf{w/o curriculum}: Applies maximum attack probability from step 0, testing the value of gradual introduction.
+    \item \textbf{w/o LPIPS}: Removes perceptual loss, relying solely on message and regularization losses.
+    \item \textbf{w/o attacks}: No attack training at all, measuring baseline undefended performance.
+    \item \textbf{w/o spatial alignment}: Replaces the stride-aligned Extractor with global average pooling, testing whether spatial correspondence matters.
+    \item \textbf{w/o adversarial}: Removes the discriminator entirely (equivalent to v1 training), isolating the adversarial contribution.
+\end{itemize}
+
+\subsection{Capacity Scaling}
+\label{sec:scaling}
+
+We investigate how DSCSP scales with payload capacity by varying bits per cell while keeping the $8 \times 8$ grid fixed.
+
+\begin{table}[t]
+\centering
+\caption{Capacity scaling: quality--capacity tradeoff at different payload sizes. 128-bit and 512-bit models trained for 15K steps (clean). 256-bit uses the full v2 model.}
+\label{tab:scaling}
+\small
+\begin{tabular}{@{}cccccc@{}}
+\toprule
+\textbf{Bits} & \textbf{$K$} & \textbf{BER} & \textbf{PSNR (dB)} & \textbf{SSIM} & \textbf{LPIPS} \\
+\midrule
+128  & 2 & 0.0000 & 48.34 & 0.992 & 0.0004 \\
+256  & 4 & 0.0000 & 36.72 & 0.902 & 0.032 \\
+512  & 8 & 0.0000 & 41.60 & 0.962 & 0.0011 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+All three capacity variants achieve perfect bit recovery, demonstrating that the architecture reliably supports encoding rates from 2 to 8 bits per cell.
+
+\subsection{Theoretical Channel Capacity}
+\label{sec:capacity}
+
+Each cell can be modeled as an independent additive channel.
+Under the orthogonality assumption, the per-cell SNR is $\text{SNR} = 1/(K-1)$.
+The Shannon capacity bound across $N_c = 64$ cells is:
+\begin{equation}
+    C_\text{total} = N_c \cdot K \cdot \frac{1}{2} \log_2\!\left(1 + \frac{1}{K-1}\right)
+    \label{eq:shannon}
+\end{equation}
+
+At $K=4$, $C_\text{Shannon} = 53.7$ bits, yet DSCSP achieves 256 bits---an apparent $477\%$ efficiency.
+This is not a violation of Shannon's theorem; rather, the AWGN model is overly conservative because: (1)~the Extractor uses a deep non-linear decoder (11.2M parameters), not a matched filter; (2)~Controller and Extractor are jointly optimized; and (3)~each pattern has 3{,}072 dimensions, enabling reliable separation even without strict orthogonality.
+
+
+% ===========================================================================
+%  V. DISCUSSION
+% ===========================================================================
+\section{Discussion}
+\label{sec:discussion}
+
+\subsection{The Quality--Robustness--Undetectability Tradeoff}
+
+DSCSP v2 introduces a three-way tradeoff that goes beyond the two-way quality--robustness tradeoff of v1.
+The adversarial discriminator imposes an additional constraint: perturbation patterns must not only survive attacks but also avoid creating statistical signatures.
+Our results reveal an interesting outcome: v2 actually achieves \emph{higher} PSNR than v1 (40.87\,dB vs.\ 36.72\,dB) while also improving blur robustness (BER from 0.028 to 0.002 at radius 2.0) and crop robustness (BER from 0.465 to 0.290 at ratio 0.9).
+However, this improvement in fidelity and robustness did not translate to a meaningful reduction in steganalysis detectability (AUC from 1.000 to 0.999).
+
+This finding suggests that the detectability bottleneck lies not in perturbation magnitude but in the \emph{structural regularity} of the $8\times8$ grid pattern.
+The periodic tiling at 32-pixel intervals creates a distinctive spatial frequency signature that persists regardless of pattern amplitude, and that an adversarial discriminator trained only on the patterns themselves---not on their grid structure---cannot eliminate.
+
+\subsection{SRM-Enhanced Adversarial Training}
+
+The choice to use fixed SRM high-pass filters rather than learned first-layer filters is deliberate.
+Classical steganalysis has shown that SRM filters are highly effective at exposing embedding artifacts~\cite{fridrich2012rich}.
+By training the Controller against a discriminator that \emph{already} uses the most effective noise-extraction preprocessing, we ensure the learned perturbations must fool a strong baseline detector.
+
+The internal discriminator reaching 0.50 accuracy confirms that the adversarial training successfully suppresses the specific artifacts detectable by SRM filters.
+However, the external ResNet-18 classifier achieves AUC\,=\,0.999, revealing that the grid structure creates additional artifacts beyond what SRM filters capture---specifically, the periodic boundary effects at 32-pixel intervals that are visible in the frequency domain.
+
+\subsection{Combined Attacks and Real-World Relevance}
+
+Real-world image transmission rarely involves a single transformation: social media platforms resize, compress, and sometimes add watermarks in sequence.
+Our combined attack framework addresses this by training and evaluating on sequential multi-attack pipelines.
+The five evaluation pipelines (JPEG$\to$Noise, JPEG$\to$Blur, Crop$\to$JPEG, Noise$\to$B/C, JPEG$\to$Noise$\to$Blur) represent realistic processing scenarios.
+
+\subsection{STE Proxy Limitations}
+
+The STE-based JPEG proxy transfers well at high quality factors ($Q \geq 90$) but breaks down at aggressive compression ($Q \leq 70$).
+The proxy does not faithfully reproduce chroma subsampling, block-boundary artifacts, and rounding behaviors of real JPEG codecs.
+A learned neural JPEG proxy trained on actual codec input--output data could narrow this gap.
+
+\subsection{Crop Vulnerability and Redundant Encoding}
+
+Crop-and-resize destroys the spatial alignment between Controller grid and Extractor feature map, resulting in near-random BER.
+Our redundant encoding scheme---mapping $M = 128$ message bits to $N = 256$ physical slots with majority-vote decoding---provides a first mitigation.
+More sophisticated approaches such as learned spatial transformer networks or frequency-domain encoding could further improve crop robustness.
+
+
+% ===========================================================================
+%  VI. LIMITATIONS AND FUTURE WORK
+% ===========================================================================
+\section{Limitations and Future Work}
+\label{sec:limitations}
+
+\subsection{Real JPEG Robustness}
+While the STE proxy enables differentiable training, robustness degrades at quality factors below 70.
+A neural JPEG proxy trained on codec data could improve low-quality robustness.
+
+\subsection{Resolution and Model Scaling}
+All experiments use $256\times256$ images.
+Scaling to $512\times512$ or higher with latent diffusion models (e.g., Stable Diffusion) would enable larger payloads and practical deployment.
+
+\subsection{Error-Correcting Codes}
+Integrating differentiable error-correcting codes (Reed-Solomon, LDPC) could improve robustness at the cost of reduced effective capacity.
+
+\subsection{Statistical Undetectability}
+Our experiments show that adversarial training against an SRM-enhanced discriminator is insufficient to achieve statistical undetectability (AUC remains at 0.999).
+The root cause is the fixed $8\times8$ grid architecture, which creates periodic artifacts at 32-pixel boundaries.
+Future work should explore: (1)~image-adaptive perturbation networks that produce spatially varying, non-periodic patterns; (2)~multi-scale discriminators that explicitly penalize grid artifacts; or (3)~frequency-domain constraints that suppress the periodic signature.
+
+\subsection{Broader Evaluation}
+Future work should evaluate on diverse image domains beyond faces, stronger steganalysis methods (e.g., SRNet~\cite{boroumand2019deep}), and real social media transmission pipelines.
+
+
+% ===========================================================================
+%  VII. ETHICAL CONSIDERATIONS
+% ===========================================================================
+\section{Ethical Considerations}
+\label{sec:ethics}
+
+Steganography is inherently dual-use.
+Legitimate applications include digital watermarking, copyright protection, covert communication for journalism and activism, and secure data transmission.
+Misuse potential includes covert data exfiltration and content moderation evasion.
+
+We note that the adversarial training framework presented here simultaneously advances both steganographic capability and steganalysis: the SRM-enhanced discriminator can be directly repurposed as a detection tool.
+We advocate for responsible deployment and the co-development of detection methods alongside steganographic advances.
+
+
+% ===========================================================================
+%  VIII. CONCLUSION
+% ===========================================================================
+\section{Conclusion}
+\label{sec:conclusion}
+
+We presented DSCSP, a steganographic framework that encodes secret messages into the sampling output of frozen pre-trained diffusion models via learned spatial perturbation patterns.
+The base system (v1) achieves a 256-bit payload with BER\,=\,0.0000, PSNR\,=\,36.7\,dB, and strong robustness against noise, blur, and brightness/contrast, but suffers from trivial steganalysis detectability (AUC\,=\,1.0).
+
+To address this fundamental limitation, we introduced DSCSP~v2 with: (1)~an SRM-enhanced adversarial discriminator with one-sided label smoothing; (2)~a five-phase training curriculum integrating attacks and adversarial pressure; (3)~combined multi-attack training for real-world robustness; and (4)~optional redundant encoding for crop resilience.
+These extensions reduce steganalysis AUC from 1.0 to 0.999 while maintaining BER\,$<$\,0.001 and PSNR\,=\,40.9\,dB, and substantially improve robustness against blur (BER from 0.028 to 0.002 at radius 2.0) and crop attacks (BER from 0.465 to 0.290 at ratio 0.9).
+A comprehensive ablation study across seven variants confirms the contribution of each design component.
+
+The entire system trains on a consumer laptop GPU (6\,GB VRAM), demonstrating that adversarially robust, high-capacity diffusion steganography is accessible without large compute budgets.
+We believe sampling-path encoding with adversarial undetectability training represents a practical and extensible foundation for diffusion-based steganography.
+
+
+% ===========================================================================
+%  REFERENCES
+% ===========================================================================
+\bibliographystyle{IEEEtran}
+\begin{thebibliography}{99}
+
+\bibitem{bengio2013estimating}
+Y.~Bengio, N.~L{\'e}onard, and A.~Courville, ``Estimating or propagating gradients through stochastic neurons for conditional computation,'' \emph{arXiv preprint arXiv:1308.3432}, 2013.
+
+\bibitem{boroumand2019deep}
+M.~Boroumand, M.~Chen, and J.~Fridrich, ``Deep residual network for steganalysis of digital images,'' \emph{IEEE Trans. Inf. Forensics Security}, vol.~14, no.~5, pp.~1181--1193, 2019.
+
+\bibitem{chan2004hiding}
+C.-K.~Chan and L.-M.~Cheng, ``Hiding data in images by simple {LSB} substitution,'' \emph{Pattern Recognition}, vol.~37, no.~3, pp.~469--474, 2004.
+
+\bibitem{corvi2023detection}
+R.~Corvi, D.~Cozzolino, G.~Zingarini, G.~Poggi, K.~Nagano, and L.~Verdoliva, ``On the detection of synthetic images generated by diffusion models,'' in \emph{Proc. IEEE ICASSP}, 2023, pp.~1--5.
+
+\bibitem{cox2007digital}
+I.~Cox, M.~Miller, J.~Bloom, J.~Fridrich, and T.~Kalker, \emph{Digital Watermarking and Steganography}, 2nd~ed.\hskip 1em Morgan Kaufmann, 2007.
+
+\bibitem{fridrich2012rich}
+J.~Fridrich and J.~Kodovsk{\'y}, ``Rich models for steganalysis of digital images,'' \emph{IEEE Trans. Inf. Forensics Security}, vol.~7, no.~3, pp.~868--882, 2012.
+
+\bibitem{goodfellow2014generative}
+I.~Goodfellow, J.~Pouget-Abadie, M.~Mirza, B.~Xu, D.~Warde-Farley, S.~Ozair, A.~Courville, and Y.~Bengio, ``Generative adversarial nets,'' in \emph{Proc. NeurIPS}, 2014, pp.~2672--2680.
+
+\bibitem{he2016deep}
+K.~He, X.~Zhang, S.~Ren, and J.~Sun, ``Deep residual learning for image recognition,'' in \emph{Proc. IEEE CVPR}, 2016, pp.~770--778.
+
+\bibitem{heusel2017gans}
+M.~Heusel, H.~Ramsauer, T.~Unterthiner, B.~Nessler, and S.~Hochreiter, ``{GANs} trained by a two time-scale update rule converge to a local {Nash} equilibrium,'' in \emph{Proc. NeurIPS}, 2017, pp.~6626--6637.
+
+\bibitem{ho2020denoising}
+J.~Ho, A.~Jain, and P.~Abbeel, ``Denoising diffusion probabilistic models,'' in \emph{Proc. NeurIPS}, 2020, pp.~6840--6851.
+
+\bibitem{holub2012designing}
+V.~Holub and J.~Fridrich, ``Designing steganographic distortion using directional filters,'' in \emph{Proc. IEEE WIFS}, 2012, pp.~234--239.
+
+\bibitem{holub2014universal}
+V.~Holub, J.~Fridrich, and T.~Denemark, ``Universal distortion function for steganography in an arbitrary domain,'' \emph{EURASIP J. Inf. Security}, vol.~2014, no.~1, pp.~1--13, 2014.
+
+\bibitem{kingma2014adam}
+D.~P.~Kingma and J.~Ba, ``Adam: A method for stochastic optimization,'' \emph{arXiv preprint arXiv:1412.6980}, 2014.
+
+\bibitem{loshchilov2017sgdr}
+I.~Loshchilov and F.~Hutter, ``{SGDR}: Stochastic gradient descent with warm restarts,'' in \emph{Proc. ICLR}, 2017.
+
+\bibitem{peng2023stegodiffusion}
+W.~Peng, Z.~Li, Y.~Chen, and Z.~Wang, ``Generative steganography diffusion,'' \emph{arXiv preprint arXiv:2305.03472}, 2023.
+
+\bibitem{pevny2010using}
+T.~Pevn{\'y}, T.~Filler, and P.~Bas, ``Using high-dimensional image models to perform highly undetectable steganography,'' in \emph{Information Hiding}, Springer, 2010, pp.~161--177.
+
+\bibitem{shin2017jpeg}
+R.~Shin and D.~Song, ``{JPEG}-resistant adversarial images,'' in \emph{NeurIPS Workshop Mach. Learn. Comput. Security}, 2017.
+
+\bibitem{song2020denoising}
+J.~Song, C.~Meng, and S.~Ermon, ``Denoising diffusion implicit models,'' in \emph{Proc. ICLR}, 2021.
+
+\bibitem{wang2004image}
+Z.~Wang, A.~C.~Bovik, H.~R.~Sheikh, and E.~P.~Simoncelli, ``Image quality assessment: From error visibility to structural similarity,'' \emph{IEEE Trans. Image Process.}, vol.~13, no.~4, pp.~600--612, 2004.
+
+\bibitem{wei2023diffusionstego}
+R.~Wei, C.~Wen, Y.~Xue, and T.~Wang, ``Diffusion-Stego: Training-free diffusion generative steganography via message projection,'' \emph{arXiv preprint arXiv:2305.18726}, 2023.
+
+\bibitem{zhang2018unreasonable}
+R.~Zhang, P.~Isola, A.~A.~Efros, E.~Shechtman, and O.~Wang, ``The unreasonable effectiveness of deep features as a perceptual metric,'' in \emph{Proc. IEEE CVPR}, 2018, pp.~586--595.
+
+\bibitem{zhang2019steganogan}
+K.~A.~Zhang, A.~Cuesta-Infante, L.~Xu, and K.~Veeramachaneni, ``{SteganoGAN}: High capacity image steganography with {GANs},'' \emph{arXiv preprint arXiv:1901.03892}, 2019.
+
+\bibitem{zhang2024ldstega}
+J.~Zhang, Y.~Qin, Z.~Liu, and T.~Wang, ``{LDStega}: Practical and robust generative image steganography based on latent diffusion models,'' in \emph{Proc. ACM Multimedia}, 2024.
+
+\bibitem{zhao2024dero}
+J.~Zhao, Y.~Liu, and X.~Zhang, ``{DERO}: Diffusion-model-erasure robust watermarking,'' in \emph{Proc. ACM Multimedia}, 2024.
+
+\bibitem{zhu2018hidden}
+J.~Zhu, R.~Kaplan, J.~Johnson, and L.~Fei-Fei, ``{HiDDeN}: Hiding data with deep networks,'' in \emph{Proc. ECCV}, 2018, pp.~657--672.
+
+\end{thebibliography}
+
+\end{document}

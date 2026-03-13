@@ -1,0 +1,38 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+dist/
+build/
+
+# Model checkpoints (large binary files)
+checkpoints_v4/*.pt
+checkpoints_v4_5090/*.pt
+
+# Training outputs (generated images)
+outputs_v4/
+outputs_v4_5090/
+
+# Logs
+*.log
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Claude Code temp files
+tmpclaude-*
+
+# LaTeX build artifacts
+*.aux
+*.bbl
+*.blg
+*.out
+*.synctex*
+*.fdb_latexmk
+*.fls
