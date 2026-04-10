@@ -14,6 +14,7 @@ Usage:
 
 import os
 import random
+import signal
 import time
 import json
 import torch
@@ -329,6 +330,17 @@ def train(config=None):
         print(f"VRAM: {torch.cuda.get_device_properties(0).total_memory / 1024**3:.1f} GB")
     print()
 
+    # ── Signal handler — save checkpoint on SIGINT / SIGTERM ──
+    # Allows `kill -TERM <pid>` or Ctrl-C to gracefully save progress (Lesson 14).
+    _interrupted = [False]
+
+    def _handle_signal(signum, frame):
+        print(f"\n  [Signal {signum}] Interrupt received — will checkpoint and exit after this step.")
+        _interrupted[0] = True
+
+    signal.signal(signal.SIGINT, _handle_signal)
+    signal.signal(signal.SIGTERM, _handle_signal)
+
     # ── Initialize diffusion model ──
     print("Loading diffusion model...")
     diffusion = DiffusionWrapper(
@@ -554,6 +566,28 @@ def train(config=None):
             if ber < best_ber:
                 best_ber = ber
 
+            # Write a small JSON progress file — allows monitoring without
+            # stdout buffering (Lesson 5).
+            progress = {
+                "step": step,
+                "total_steps": config["total_steps"],
+                "ber": round(ber, 6),
+                "psnr": round(psnr, 2),
+                "best_ber": round(best_ber, 6),
+                "msg_loss": round(loss_dict["msg"], 6),
+                "perc_loss": round(loss_dict["perc"], 6),
+                "attack_prob": round(attack_prob, 3),
+                "lr": cur_lr,
+                "avg_step_time_s": round(avg_time, 3),
+                "eta_min": round(remaining / 60, 1),
+            }
+            progress_path = os.path.join(config["output_dir"], "progress.json")
+            try:
+                with open(progress_path, "w") as _f:
+                    json.dump(progress, _f, indent=2)
+            except OSError:
+                pass
+
         # ── Save images ──
         if step % config["save_image_interval"] == 0:
             save_comparison(
@@ -581,6 +615,28 @@ def train(config=None):
                 ckpt_data["disc_optimizer"] = disc_optimizer.state_dict()
             torch.save(ckpt_data, ckpt_path)
             print(f"  Saved checkpoint: {ckpt_path}")
+
+        # ── Signal-triggered emergency checkpoint ──
+        if _interrupted[0]:
+            interrupt_path = os.path.join(
+                config["checkpoint_dir"], f"dscsp_v4_interrupt_step_{step:06d}.pt"
+            )
+            ckpt_interrupt = {
+                "step": step,
+                "controller": controller.state_dict(),
+                "extractor": extractor.state_dict(),
+                "optimizer": optimizer.state_dict(),
+                "scheduler": scheduler.state_dict(),
+                "config": config,
+                "best_ber": best_ber,
+            }
+            if discriminator is not None:
+                ckpt_interrupt["discriminator"] = discriminator.state_dict()
+            if disc_optimizer is not None:
+                ckpt_interrupt["disc_optimizer"] = disc_optimizer.state_dict()
+            torch.save(ckpt_interrupt, interrupt_path)
+            print(f"  Interrupt checkpoint saved: {interrupt_path}")
+            break
 
         # Free memory
         del x_stego, x_for_extraction, delta, delta_norms, bits_pred, loss, payload

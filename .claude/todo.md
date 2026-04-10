@@ -13,19 +13,25 @@
 - [x] Start from-scratch v4 5090 training run (`python -u train_v4_5090.py 2>&1 | tee train_v4_5090.log`)
 - [x] Stop 5090 training run on user request and preserve artifacts on disk
 - [x] Set up Git LFS tracking for `checkpoints_v4_5090/*.pt` and stage saved checkpoints for GitHub
+- [x] Diagnose failed 5090 run (BER stuck ~0.50): root cause was simultaneous aggressive scaling (Lesson 13)
+- [x] Fix train_v4_5090.py: conservative overrides (batch_size=8, base_channels=48, proven LRs)
+- [x] Add signal handler to train_v4.py (SIGINT/SIGTERM → emergency checkpoint, Lesson 14)
+- [x] Add TF32 optimization to train_v4_5090.py startup
+- [x] Add per-step progress.json for stdout-independent monitoring (Lesson 5)
 
 ## Pending (in order)
-1. [ ] Analyze stopped 5090 run artifacts (`train_v4_5090.log`, `checkpoints_v4_5090/`, `outputs_v4_5090/`) and decide on next config only if user wants to resume experimentation later
-2. [ ] Evaluate v4 only if a satisfactory final checkpoint is produced in a future run
-3. [ ] Analyze v4 results against ALL target metrics
-4. [ ] If metrics not met: iterate (adjust max_perturbation, loss weights, JPEG schedule, architecture)
-5. [ ] Capacity scaling curve (64, 128, 256, 384 bits)
-6. [ ] Baseline comparison table (v4 vs literature)
-7. [ ] Update paper_ieee.tex with v4 results
-8. [ ] Final paper review and polishing
+1. [ ] Launch fresh conservative 5090 run: `python -u train_v4_5090.py 2>&1 | tee train_v4_5090.log`
+2. [ ] Monitor via `outputs_v4_5090/progress.json` and checkpoints; expect ~0.20s/step → ~2.8 hrs for 50K steps
+3. [ ] After run: evaluate with `python evaluate_v4.py --checkpoint checkpoints_v4_5090/dscsp_v4_final.pt`
+4. [ ] Analyze v4 results against ALL target metrics
+5. [ ] If metrics not met: iterate (adjust max_perturbation, loss weights, JPEG schedule, architecture)
+6. [ ] Capacity scaling curve (64, 128, 256, 384 bits)
+7. [ ] Baseline comparison table (v4 vs literature)
+8. [ ] Update paper_ieee.tex with v4 results
+9. [ ] Final paper review and polishing
 
 ## Current Saved State
-- Stopped 5090 run artifacts preserved in `train_v4_5090.log`, `checkpoints_v4_5090/`, and `outputs_v4_5090/`
-- Saved checkpoints available at steps 2000, 4000, and 6000
-- Latest logged step before interruption: ~7200 (not checkpointed)
-- `checkpoints_v4_5090/*.pt` are now intended to be versioned via Git LFS rather than normal Git
+- Previous failed 5090 run artifacts in `checkpoints_v4_5090/` (steps 2000, 4000, 6000)
+  - Those checkpoints used base_channels=64; incompatible with corrected config (base_channels=48)
+  - Start fresh — do NOT resume from these
+- Fixed `train_v4_5090.py` uses conservative overrides; ready to launch
