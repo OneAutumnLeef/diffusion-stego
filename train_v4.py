@@ -52,6 +52,9 @@ CONFIG = {
     "weight_decay_extractor": 1e-4,
     "grad_clip": 5.0,
 
+    # Spectral consistency penalty
+    "lambda_spec": 0.01,
+
     # Image pool
     "pool_size": 128,
     "pool_refresh_interval": 2000,
@@ -60,6 +63,13 @@ CONFIG = {
     "lambda_perc": 0.3,
     "lambda_ctrl": 0.0,
     "warmup_steps": 0,
+
+    # Payload-bit curriculum (helps escape random-guess regime)
+    # If start/end are equal or steps <= 0, curriculum is disabled.
+    "bit_curriculum_start_bits": 256,
+    "bit_curriculum_end_bits": 256,
+    "bit_curriculum_steps": 0,
+    "bit_curriculum_start_step": 1,
 
     # Attack schedule — JPEG-heavy
     "robustness_start_step": 500,
@@ -102,6 +112,10 @@ CONFIG = {
 
     # Resume
     "resume_path": "",
+    "resume_load_optimizer": True,
+    "resume_load_scheduler": True,
+    "resume_load_disc_optimizer": True,
+    "override_lrs_on_resume": True,
 }
 
 
@@ -271,6 +285,39 @@ def should_use_combined_attack(step, config):
     return random.random() < config["combined_attack_ratio"]
 
 
+def get_active_bits(step, config):
+    """
+    Number of payload bits supervised at this step.
+
+    Curriculum linearly increases supervised bits from
+    bit_curriculum_start_bits to bit_curriculum_end_bits over
+    bit_curriculum_steps, beginning at bit_curriculum_start_step.
+    """
+    num_bits = int(config["num_bits"])
+    start_bits = int(config.get("bit_curriculum_start_bits", num_bits))
+    end_bits = int(config.get("bit_curriculum_end_bits", num_bits))
+    steps = int(config.get("bit_curriculum_steps", 0))
+    start_step = int(config.get("bit_curriculum_start_step", 1))
+
+    start_bits = max(1, min(num_bits, start_bits))
+    end_bits = max(1, min(num_bits, end_bits))
+
+    if steps <= 0 or start_bits == end_bits:
+        return end_bits
+
+    if step <= start_step:
+        active = start_bits
+    else:
+        progress = min(1.0, (step - start_step) / max(1, steps))
+        active = int(round(start_bits + progress * (end_bits - start_bits)))
+
+    # Keep changes smooth and aligned to byte boundaries where possible.
+    if active < num_bits:
+        active = max(1, (active // 8) * 8)
+
+    return max(1, min(num_bits, active))
+
+
 # ─── Discriminator Training Step ────────────────────────────────────────────
 
 def train_discriminator_step(discriminator, disc_optimizer, x_clean, x_stego, label_smoothing=0.1):
@@ -407,20 +454,36 @@ def train(config=None):
     # ── Resume from checkpoint ──
     start_step = 0
     best_ber = 1.0
+    best_ber_active = 1.0
     if config["resume_path"] and os.path.exists(config["resume_path"]):
         print(f"Resuming from {config['resume_path']}...")
         ckpt = torch.load(config["resume_path"], map_location=device, weights_only=False)
         controller.load_state_dict(ckpt["controller"])
         extractor.load_state_dict(ckpt["extractor"])
-        optimizer.load_state_dict(ckpt["optimizer"])
-        if "scheduler" in ckpt:
+        if config.get("resume_load_optimizer", True) and "optimizer" in ckpt:
+            optimizer.load_state_dict(ckpt["optimizer"])
+        if config.get("resume_load_scheduler", True) and "scheduler" in ckpt:
             scheduler.load_state_dict(ckpt["scheduler"])
         start_step = ckpt["step"]
         best_ber = ckpt.get("best_ber", 1.0)
+        best_ber_active = ckpt.get("best_ber_active", best_ber)
         if discriminator is not None and "discriminator" in ckpt:
             discriminator.load_state_dict(ckpt["discriminator"])
-        if disc_optimizer is not None and "disc_optimizer" in ckpt:
+        if (
+            disc_optimizer is not None
+            and config.get("resume_load_disc_optimizer", True)
+            and "disc_optimizer" in ckpt
+        ):
             disc_optimizer.load_state_dict(ckpt["disc_optimizer"])
+
+        # Apply configured learning rates after resume (optimizer state may contain old LRs).
+        if config.get("override_lrs_on_resume", True):
+            if len(optimizer.param_groups) >= 2:
+                optimizer.param_groups[0]["lr"] = config["lr_controller"]
+                optimizer.param_groups[1]["lr"] = config["lr_extractor"]
+            if disc_optimizer is not None and len(disc_optimizer.param_groups) >= 1:
+                disc_optimizer.param_groups[0]["lr"] = config["disc_lr"]
+
         print(f"  Resumed at step {start_step}, best BER: {best_ber:.4f}")
         del ckpt
 
@@ -440,8 +503,15 @@ def train(config=None):
     print(f"  Total trainable params: {total_params / 1e6:.2f}M")
     print(f"  Batch size: {config['batch_size']}")
     print(f"  Payload: {config['num_bits']} bits")
+    print(
+        f"  Active bits curriculum: {config['bit_curriculum_start_bits']} -> "
+        f"{config['bit_curriculum_end_bits']} over {config['bit_curriculum_steps']} steps"
+    )
     print(f"  Max perturbation: {config['max_perturbation']}")
-    print(f"  Lambda perc: {config['lambda_perc']}, adv: {config['lambda_adv']}")
+    print(
+        f"  Lambda perc: {config['lambda_perc']}, "
+        f"spec: {config['lambda_spec']}, adv: {config['lambda_adv']}"
+    )
     print(f"  Adversarial: starts step {config['adv_start_step']}, "
           f"ramps {config['adv_ramp_steps']} steps, {config['disc_steps_per_gen_step']} D steps/G step")
     print(f"  Attacks: starts step {config['robustness_start_step']}, "
@@ -506,6 +576,9 @@ def train(config=None):
 
         # Extract bits
         bits_pred = extractor(x_for_extraction)
+        active_bits = get_active_bits(step, config)
+        bits_pred_loss = bits_pred[:, :active_bits]
+        payload_loss = payload[:, :active_bits]
 
         # Compute adversarial logits
         disc_logits_stego = None
@@ -518,13 +591,13 @@ def train(config=None):
 
         # Compute composite loss
         loss, loss_dict = criterion(
-            bits_pred, payload, x_stego, x_clean, delta_norms,
+            bits_pred_loss, payload_loss, x_stego, x_clean, delta_norms,
             step=step, disc_logits_stego=disc_logits_stego,
         )
 
         # Spectral loss (penalize frequency-domain differences)
         spec_loss = compute_spectral_loss(x_stego, x_clean)
-        loss = loss + 0.01 * spec_loss
+        loss = loss + config["lambda_spec"] * spec_loss
         loss_dict["spec"] = spec_loss.item()
 
         loss.backward()
@@ -542,16 +615,21 @@ def train(config=None):
         # ── Logging ──
         if step % config["log_interval"] == 0:
             ber = compute_ber(bits_pred.detach(), payload)
+            ber_active = compute_ber(bits_pred_loss.detach(), payload_loss)
             psnr = compute_psnr(x_stego.detach(), x_clean.detach())
+            delta_rms = delta.pow(2).mean().sqrt().item()
             avg_time = sum(step_times[-10:]) / len(step_times[-10:])
             remaining = avg_time * (config["total_steps"] - step)
             cur_lr = scheduler.get_last_lr()[0]
 
             log_line = (
                 f"Step {step:5d}/{config['total_steps']} | "
-                f"BER: {ber:.4f} | PSNR: {psnr:.1f}dB | "
+                f"BER: {ber:.4f} | "
+                f"A-BER({active_bits}): {ber_active:.4f} | "
+                f"PSNR: {psnr:.1f}dB | "
                 f"msg: {loss_dict['msg']:.4f} | perc: {loss_dict['perc']:.4f} | "
                 f"spec: {loss_dict['spec']:.4f} | "
+                f"d_rms: {delta_rms:.4f} | "
                 f"atk: {attack_prob:.2f} | "
                 f"lr: {cur_lr:.1e} | "
                 f"{avg_time:.2f}s/step | ETA: {remaining/60:.0f}min"
@@ -565,6 +643,8 @@ def train(config=None):
 
             if ber < best_ber:
                 best_ber = ber
+            if ber_active < best_ber_active:
+                best_ber_active = ber_active
 
             # Write a small JSON progress file — allows monitoring without
             # stdout buffering (Lesson 5).
@@ -572,10 +652,14 @@ def train(config=None):
                 "step": step,
                 "total_steps": config["total_steps"],
                 "ber": round(ber, 6),
+                "ber_active": round(ber_active, 6),
+                "active_bits": active_bits,
                 "psnr": round(psnr, 2),
                 "best_ber": round(best_ber, 6),
+                "best_ber_active": round(best_ber_active, 6),
                 "msg_loss": round(loss_dict["msg"], 6),
                 "perc_loss": round(loss_dict["perc"], 6),
+                "delta_rms": round(delta_rms, 6),
                 "attack_prob": round(attack_prob, 3),
                 "lr": cur_lr,
                 "avg_step_time_s": round(avg_time, 3),
@@ -608,6 +692,7 @@ def train(config=None):
                 "scheduler": scheduler.state_dict(),
                 "config": config,
                 "best_ber": best_ber,
+                "best_ber_active": best_ber_active,
             }
             if discriminator is not None:
                 ckpt_data["discriminator"] = discriminator.state_dict()
@@ -629,6 +714,7 @@ def train(config=None):
                 "scheduler": scheduler.state_dict(),
                 "config": config,
                 "best_ber": best_ber,
+                "best_ber_active": best_ber_active,
             }
             if discriminator is not None:
                 ckpt_interrupt["discriminator"] = discriminator.state_dict()
@@ -676,6 +762,7 @@ def train(config=None):
     print(f"  Average BER:  {avg_ber:.6f} (target: 0.0000)")
     print(f"  Average PSNR: {avg_psnr:.1f} dB (target: >= 35)")
     print(f"  Best BER during training: {best_ber:.6f}")
+    print(f"  Best active-bit BER during training: {best_ber_active:.6f}")
 
     # Discriminator accuracy on eval set
     disc_acc_final = None
@@ -712,13 +799,19 @@ def train(config=None):
         "step": config["total_steps"],
         "controller": controller.state_dict(),
         "extractor": extractor.state_dict(),
+        "optimizer": optimizer.state_dict(),
+        "scheduler": scheduler.state_dict(),
         "config": config,
         "final_ber": avg_ber,
         "final_psnr": avg_psnr,
+        "best_ber": best_ber,
+        "best_ber_active": best_ber_active,
     }
     if discriminator is not None:
         final_data["discriminator"] = discriminator.state_dict()
         final_data["disc_acc"] = disc_acc_final
+    if disc_optimizer is not None:
+        final_data["disc_optimizer"] = disc_optimizer.state_dict()
     torch.save(final_data, final_path)
     print(f"  Saved final model: {final_path}")
 
@@ -727,6 +820,7 @@ def train(config=None):
         "final_ber": avg_ber,
         "final_psnr": avg_psnr,
         "best_ber": best_ber,
+        "best_ber_active": best_ber_active,
         "disc_acc": disc_acc_final,
         "config": {k: str(v) if isinstance(v, tuple) else v for k, v in config.items()},
     }
