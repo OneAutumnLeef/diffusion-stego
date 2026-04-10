@@ -35,7 +35,6 @@ python3 -c "import torch; print(f'PyTorch {torch.__version__}, CUDA {torch.versi
 echo ""
 echo "[2/7] Installing dependencies..."
 pip install --quiet --upgrade \
-    torch torchvision \
     "diffusers>=0.25.0" \
     "accelerate>=0.25.0" \
     "lpips>=0.1.4" \
@@ -47,7 +46,7 @@ pip install --quiet --upgrade \
     Pillow \
     tqdm
 
-echo "  Dependencies installed."
+echo "  Dependencies installed (kept existing torch/torchvision from RunPod image)."
 
 # ─── 3. Verify project files ────────────────────────────────────────────────
 echo ""
@@ -169,23 +168,15 @@ echo "DSCSP v4 Training — RTX 5090 (32GB VRAM)"
 echo "============================================"
 echo ""
 echo "Config overrides for 5090:"
-echo "  batch_size: 4 → 16"
-echo "  base_channels: 48 → 64"
-echo "  lr_controller: 1e-4 → 2e-4"
-echo "  lr_extractor: 3e-4 → 6e-4"
-echo "  jpeg_weight: 0.6 → 0.7"
-echo "  robustness_max_prob: 0.85 → 0.9"
+echo "  batch_size: 4 → 8 (conservative, proven-stable)"
+echo "  base_channels: 48 (unchanged)"
+echo "  learning rates unchanged from base config"
+echo "  jpeg_weight: 0.6 (unchanged)"
+echo "  robustness_max_prob: 0.85 (unchanged)"
 echo ""
 
-# If resuming, patch the resume path into train_v4_5090.py temporarily
 if [ -n "$RESUME_ARG" ]; then
-    python3 -c "
-import train_v4
-from train_v4_5090 import OVERRIDES
-config = {**train_v4.CONFIG, **OVERRIDES, 'resume_path': '$RESUME_ARG'}
-print('Starting with resume_path:', config['resume_path'])
-train_v4.train(config)
-" 2>&1 | tee train_v4_5090.log
+    python3 -u train_v4_5090.py --resume "$RESUME_ARG" 2>&1 | tee train_v4_5090.log
 else
     python3 -u train_v4_5090.py 2>&1 | tee train_v4_5090.log
 fi
@@ -240,6 +231,8 @@ echo "  tail -f train_v4_5090.log"
 echo "  ls -la checkpoints_v4_5090/"
 echo "  ls -la outputs_v4_5090/"
 echo ""
-echo "Estimated training time: ~1.5 hours for 50K steps"
-echo "  (vs ~7.5 hours on RTX 3060)"
+echo "Monitor live progress (stdout can buffer):"
+echo "  cat outputs_v4_5090/progress.json"
+echo ""
+echo "Estimated training time: typically a few hours for 50K steps on RTX 5090"
 echo ""
