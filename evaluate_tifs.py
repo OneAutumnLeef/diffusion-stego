@@ -273,6 +273,7 @@ def evaluate_checkpoint(
     adaptive_test: int,
 ) -> Dict:
     device = "cuda" if torch.cuda.is_available() else "cpu"
+    print(f"[eval] Loading checkpoint: {checkpoint}", flush=True)
     controller, extractor, config = ev.load_v4_model(checkpoint, device)
     num_bits = int(config["num_bits"])
 
@@ -283,14 +284,20 @@ def evaluate_checkpoint(
     )
 
     n_base = max(num_samples, adaptive_train + adaptive_test)
+    print(f"[eval] Generating {n_base} base images", flush=True)
     images = ev.generate_images(diffusion, n_base, device)
 
+    print(f"[eval] Running clean/jpeg/crop metrics on {num_samples} samples", flush=True)
     clean = _eval_clean_series(controller, extractor, images[:num_samples], device, num_bits)
     jpeg75 = _eval_jpeg_series(controller, extractor, images[:num_samples], device, num_bits, 75)
     jpeg50 = _eval_jpeg_series(controller, extractor, images[:num_samples], device, num_bits, 50)
     crop80 = _eval_crop_series(controller, extractor, images[:num_samples], device, num_bits, 0.80)
     crop70 = _eval_crop_series(controller, extractor, images[:num_samples], device, num_bits, 0.70)
 
+    print(
+        f"[eval] Running adaptive steganalysis (train={adaptive_train}, test={adaptive_test})",
+        flush=True,
+    )
     adaptive = _adaptive_steganalysis(
         controller,
         images,
@@ -309,9 +316,12 @@ def evaluate_checkpoint(
 
     cross_dataset = {}
     if not skip_cross_dataset:
+        print(f"[eval] Running cross-dataset checks ({cross_dataset_samples} samples each)", flush=True)
         for ds_name in ["cifar10", "stl10"]:
             try:
+                print(f"[eval] Loading dataset: {ds_name}", flush=True)
                 ds_images = _load_dataset_images(ds_name, cross_dataset_samples)
+                print(f"[eval] Evaluating dataset: {ds_name} (n={len(ds_images)})", flush=True)
                 ds_clean = _eval_clean_series(controller, extractor, ds_images, device, num_bits)
                 ds_crop = _eval_crop_series(controller, extractor, ds_images, device, num_bits, 0.80)
                 cross_dataset[ds_name] = {
@@ -399,6 +409,7 @@ def evaluate_checkpoint(
         "areas": areas,
     }
 
+    print("[eval] Completed full TIFS evaluation", flush=True)
     del controller, extractor, diffusion, images
     torch.cuda.empty_cache()
     return summary

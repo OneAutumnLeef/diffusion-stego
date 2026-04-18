@@ -307,6 +307,9 @@ def main() -> None:
         args.state_path,
         {
             "cycle": 0,
+            "phase": "init",
+            "active_variant": "",
+            "cycle_total": int(args.max_cycles),
             "resume_checkpoint": "",
             "best": None,
             "history": [],
@@ -353,6 +356,14 @@ def main() -> None:
         print(f"Cycle {cycle}/{args.max_cycles} | variant={variant_name} | step {current_step} -> {total_steps}")
         print("=" * 72)
 
+        state["phase"] = "training"
+        state["active_variant"] = variant_name
+        state["cycle"] = cycle
+        state["cycle_total"] = int(args.max_cycles)
+        state["step_start"] = int(current_step)
+        state["step_target"] = int(total_steps)
+        _save_json(args.state_path, state)
+
         train_v4.train(cfg)
 
         final_ckpt = os.path.join(args.checkpoint_root, "dscsp_v4_final.pt")
@@ -361,6 +372,10 @@ def main() -> None:
 
         skip_cross = args.cross_dataset_every > 0 and (cycle % args.cross_dataset_every != 0)
         eval_out = os.path.join(args.eval_root, f"cycle_{cycle:03d}_{variant_name}.json")
+
+        state["phase"] = "evaluating"
+        state["eval_output"] = eval_out
+        _save_json(args.state_path, state)
 
         eval_result = evaluate_tifs.evaluate_checkpoint(
             checkpoint=final_ckpt,
@@ -387,6 +402,7 @@ def main() -> None:
         state["tried_variants"].append(variant_name)
         state["cycle"] = cycle
         state["resume_checkpoint"] = final_ckpt
+        state["phase"] = "cycle_complete"
 
         _write_ablation_report(state["history"], "outputs_tifs_ablation/latest_ablation.json")
 
@@ -432,6 +448,7 @@ def main() -> None:
         if done:
             state["finished"] = True
             state["finished_cycle"] = cycle
+            state["phase"] = "finished"
             _append_major_log(
                 args.major_log,
                 [
@@ -452,6 +469,7 @@ def main() -> None:
 
     state["finished"] = False
     state["stopped_reason"] = "max_cycles_reached"
+    state["phase"] = "stopped"
     _save_json(args.state_path, state)
     _append_major_log(
         args.major_log,

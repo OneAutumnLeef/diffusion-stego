@@ -21,6 +21,7 @@ outputs_v4_probe/
 outputs_tifs/
 outputs_tifs_eval/
 outputs_tifs_ablation/
+.tifs_data/
 
 # Logs
 *.log

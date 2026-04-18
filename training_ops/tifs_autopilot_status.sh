@@ -34,6 +34,12 @@ p='outputs_tifs/autopilot_state.json'
 with open(p,'r',encoding='utf-8') as f:
     s=json.load(f)
 print('cycle:', s.get('cycle'))
+print('cycle_total:', s.get('cycle_total'))
+print('phase:', s.get('phase'))
+print('active_variant:', s.get('active_variant'))
+print('step_start:', s.get('step_start'))
+print('step_target:', s.get('step_target'))
+print('eval_output:', s.get('eval_output'))
 print('finished:', s.get('finished'))
 print('best:', s.get('best', {}))
 PY
