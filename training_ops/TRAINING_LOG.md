@@ -66,8 +66,8 @@ Use this file as the top-level chronological ledger.
 - Stage/Goal: substantive warmup training (2000 steps)
 - Command: `bash training_ops/run_logged.sh warmup_2000 ... train_v4.train(cfg)`
 - Status: running
-- Key Metrics: pending first periodic logging line
+- Key Metrics: live snapshot to step 260: BER range 0.4639-0.5332, PSNR up to 44.3 dB
 - Errors: none so far (non-fatal diffusers warning only)
-- Learnings: process is stable enough to start long-form logged training
+- Learnings: early BER is near random-guess while visual fidelity trend improves quickly
 - Next Steps: monitor first metrics/checkpoint events and update with trend data
 - Linked Record: training_ops/records/20260418_190432_warmup_2000.md
