@@ -1,0 +1,17 @@
+{
+  "step": 1,
+  "total_steps": 1,
+  "ber": 0.503906,
+  "ber_active": 0.503906,
+  "active_bits": 256,
+  "psnr": 37.42,
+  "best_ber": 0.503906,
+  "best_ber_active": 0.503906,
+  "msg_loss": 0.711458,
+  "perc_loss": 0.147314,
+  "delta_rms": 0.026917,
+  "attack_prob": 0.0,
+  "lr": 1e-06,
+  "avg_step_time_s": 1.336,
+  "eta_min": 0.0
+}

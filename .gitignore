@@ -1,48 +1,4 @@
-# Python
+# Ignore only Python cache artifacts.
 __pycache__/
 *.pyc
 *.pyo
-*.egg-info/
-dist/
-build/
-
-# Model checkpoints (large binary files)
-checkpoints_v4/*.pt
-checkpoints_v4_5090/*.pt
-checkpoints_v4_probe/
-checkpoints_tifs/
-checkpoints_tifs_ablation/
-
-# Training outputs (generated images)
-outputs_v4/
-outputs_v4_5090/
-outputs_v4_5090_final/
-outputs_v4_probe/
-outputs_tifs/
-outputs_tifs_eval/
-outputs_tifs_ablation/
-.tifs_data/
-
-# Logs
-*.log
-training_ops/runs/
-
-# IDE
-.vscode/
-.idea/
-
-# OS
-.DS_Store
-Thumbs.db
-
-# Claude Code temp files
-tmpclaude-*
-
-# LaTeX build artifacts
-*.aux
-*.bbl
-*.blg
-*.out
-*.synctex*
-*.fdb_latexmk
-*.fls

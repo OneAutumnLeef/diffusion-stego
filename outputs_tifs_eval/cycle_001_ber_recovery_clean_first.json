@@ -1,0 +1,81 @@
+{
+  "checkpoint": "checkpoints_tifs/ber_recovery/dscsp_v4_final.pt",
+  "num_samples": 320,
+  "clean": {
+    "ber": 0.00745849609375,
+    "psnr": 35.31474857330322,
+    "ber_ci95": [
+      0.00651824951171875,
+      0.00842315673828125
+    ]
+  },
+  "jpeg": {
+    "q75_ber": 0.0100830078125,
+    "q50_ber": 0.01392822265625,
+    "q75_ber_ci95": [
+      0.00893524169921875,
+      0.01138946533203125
+    ]
+  },
+  "crop": {
+    "q80_ber": 0.49774169921875,
+    "q70_ber": 0.50025634765625,
+    "q80_ber_ci95": [
+      0.4940185546875,
+      0.50167236328125
+    ]
+  },
+  "adaptive_steganalysis": {
+    "auc_clean": 1.0,
+    "auc_adaptive": 0.9605555555555556,
+    "accuracy_adaptive": 0.9041666666666667
+  },
+  "cross_dataset": {},
+  "statistics": {
+    "p_clean_vs_crop80": 0.0,
+    "p_clean_vs_jpeg75": 5.069928501099298e-08
+  },
+  "ablation": {
+    "has_report": false,
+    "report": ""
+  },
+  "areas": {
+    "detectability": {
+      "current": 0.9605555555555556,
+      "target": 0.7,
+      "pass": false
+    },
+    "crop_robustness": {
+      "current": 0.49774169921875,
+      "target": 0.35,
+      "pass": false
+    },
+    "ablation": {
+      "current": "minimal",
+      "target": "extensive",
+      "pass": false
+    },
+    "statistical_analysis": {
+      "current": "deep",
+      "target": "deep",
+      "pass": true
+    },
+    "cross_dataset": {
+      "current": "no",
+      "target": "yes",
+      "pass": false
+    },
+    "adaptive_steganalysis": {
+      "current": 0.9605555555555556,
+      "target": 0.7,
+      "pass": false
+    },
+    "ber_focus": {
+      "clean_ber": 0.00745849609375,
+      "jpeg_q75_ber": 0.0100830078125,
+      "clean_target": 0.1,
+      "jpeg_q75_target": 0.2,
+      "pass": true
+    }
+  }
+}

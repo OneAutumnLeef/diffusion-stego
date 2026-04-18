@@ -1,0 +1,53 @@
+Device: cuda
+GPU: NVIDIA GeForce RTX 5090
+VRAM: 31.4 GB
+
+Loading diffusion model...
+Loading pipeline components...:   0%|          | 0/2 [00:00<?, ?it/s]An error occurred while trying to fetch /workspace/.cache/huggingface/hub/models--google--ddpm-celebahq-256/snapshots/cd5c944777ea2668051904ead6cc120739b86c4d: Error no file named diffusion_pytorch_model.safetensors found in directory /workspace/.cache/huggingface/hub/models--google--ddpm-celebahq-256/snapshots/cd5c944777ea2668051904ead6cc120739b86c4d.
+Defaulting to unsafe serialization. Pass `allow_pickle=False` to raise an error instead.
+Loading pipeline components...: 100%|██████████| 2/2 [00:15<00:00,  7.87s/it]Loading pipeline components...: 100%|██████████| 2/2 [00:15<00:00,  7.87s/it]
+/root/diffusion-stego/dscsp/models/diffusion_wrapper.py:37: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.detach().clone() or sourceTensor.detach().clone().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  self.final_alpha_cumprod = torch.tensor(
+  UNet params: 113.7M (frozen)
+
+Initializing content-adaptive controller...
+  Controller params: 4.20M
+Initializing global-pool extractor...
+  Extractor params: 11.31M
+Setting up [LPIPS] perceptual loss: trunk [vgg], v[0.1], spatial [off]
+/usr/local/lib/python3.12/dist-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+  warnings.warn(
+/usr/local/lib/python3.12/dist-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=VGG16_Weights.IMAGENET1K_V1`. You can also use `weights=VGG16_Weights.DEFAULT` to get the most up-to-date weights.
+  warnings.warn(msg)
+Downloading: "https://download.pytorch.org/models/vgg16-397923af.pth" to /root/.cache/torch/hub/checkpoints/vgg16-397923af.pth
+  0%|          | 0.00/528M [00:00<?, ?B/s]  1%|          | 4.62M/528M [00:00<00:11, 48.5MB/s]  3%|▎         | 17.2M/528M [00:00<00:05, 97.7MB/s]  6%|▌         | 30.1M/528M [00:00<00:04, 115MB/s]   8%|▊         | 42.9M/528M [00:00<00:04, 122MB/s] 11%|█         | 55.8M/528M [00:00<00:03, 126MB/s] 14%|█▎        | 71.8M/528M [00:00<00:03, 140MB/s] 16%|█▋        | 86.1M/528M [00:00<00:03, 144MB/s] 19%|█▉        | 99.9M/528M [00:00<00:03, 142MB/s] 22%|██▏       | 114M/528M [00:00<00:03, 140MB/s]  24%|██▍       | 127M/528M [00:01<00:03, 138MB/s] 27%|██▋       | 140M/528M [00:01<00:02, 139MB/s] 30%|██▉       | 157M/528M [00:01<00:02, 148MB/s] 33%|███▎      | 172M/528M [00:01<00:02, 152MB/s] 35%|███▌      | 187M/528M [00:01<00:02, 148MB/s] 38%|███▊      | 201M/528M [00:01<00:02, 144MB/s] 41%|████      | 215M/528M [00:01<00:02, 144MB/s] 43%|████▎     | 229M/528M [00:01<00:02, 147MB/s] 47%|████▋     | 247M/528M [00:01<00:01, 158MB/s] 50%|████▉     | 263M/528M [00:01<00:01, 159MB/s] 53%|█████▎    | 278M/528M [00:02<00:01, 144MB/s] 55%|█████▌    | 292M/528M [00:02<00:01, 134MB/s] 58%|█████▊    | 305M/528M [00:02<00:01, 134MB/s] 61%|██████    | 320M/528M [00:02<00:01, 140MB/s] 64%|██████▍   | 337M/528M [00:02<00:01, 151MB/s] 67%|██████▋   | 352M/528M [00:02<00:01, 148MB/s] 69%|██████▉   | 366M/528M [00:02<00:01, 147MB/s] 72%|███████▏  | 380M/528M [00:02<00:01, 145MB/s] 75%|███████▍  | 394M/528M [00:02<00:00, 145MB/s] 78%|███████▊  | 410M/528M [00:03<00:00, 150MB/s] 80%|████████  | 425M/528M [00:03<00:00, 151MB/s] 83%|████████▎ | 439M/528M [00:03<00:00, 149MB/s] 86%|████████▌ | 454M/528M [00:03<00:00, 148MB/s] 89%|████████▊ | 468M/528M [00:03<00:00, 146MB/s] 91%|█████████▏| 482M/528M [00:03<00:00, 145MB/s] 94%|█████████▍| 498M/528M [00:03<00:00, 152MB/s] 97%|█████████▋| 514M/528M [00:03<00:00, 155MB/s]100%|██████████| 528M/528M [00:03<00:00, 144MB/s]
+Loading model from: /usr/local/lib/python3.12/dist-packages/lpips/weights/v0.1/vgg.pth
+  JPEG-heavy attack layer (JPEG weight: 0.6)
+Generating image pool...
+  Generating 4 clean images...
+    4/4  Image pool: torch.Size([4, 3, 256, 256]), range: [-0.990, 0.981]
+
+Starting DSCSP v4 training for 1 steps (from step 0)...
+  Total trainable params: 15.50M
+  Batch size: 1
+  Payload: 256 bits
+  Active bits curriculum: 256 -> 256 over 0 steps
+  Max perturbation: 0.08
+  Lambda perc: 0.3, spec: 0.01, adv: 0.0
+  Adversarial: starts step 1000, ramps 4000 steps, 3 D steps/G step
+  Attacks: starts step 100000, max prob 0.85, JPEG weight 0.6
+  LR: controller=0.0001, extractor=0.0003
+
+Step     1/1 | BER: 0.5039 | A-BER(256): 0.5039 | PSNR: 37.4dB | msg: 0.7115 | perc: 0.1473 | spec: 0.3837 | d_rms: 0.0269 | atk: 0.00 | lr: 1.0e-06 | 1.34s/step | ETA: 0min
+
+============================================================
+FINAL EVALUATION (200 samples)
+============================================================
+  Average BER:  0.500762 (target: 0.0000)
+  Average PSNR: 57.0 dB (target: >= 35)
+  Best BER during training: 0.503906
+  Best active-bit BER during training: 0.503906
+
+  WARNING: Clean BER not yet at target
+  Saved final model: checkpoints_v4_probe/dscsp_v4_final.pt
+  Saved results: outputs_v4_probe/train_v4_results.json

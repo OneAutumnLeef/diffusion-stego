@@ -1,0 +1,257 @@
+Device: cuda
+GPU: NVIDIA GeForce RTX 5090
+VRAM: 31.4 GB
+
+Loading diffusion model...
+Loading pipeline components...:   0%|          | 0/2 [00:00<?, ?it/s]An error occurred while trying to fetch /workspace/.cache/huggingface/hub/models--google--ddpm-celebahq-256/snapshots/cd5c944777ea2668051904ead6cc120739b86c4d: Error no file named diffusion_pytorch_model.safetensors found in directory /workspace/.cache/huggingface/hub/models--google--ddpm-celebahq-256/snapshots/cd5c944777ea2668051904ead6cc120739b86c4d.
+Defaulting to unsafe serialization. Pass `allow_pickle=False` to raise an error instead.
+Loading pipeline components...: 100%|██████████| 2/2 [00:14<00:00,  7.47s/it]Loading pipeline components...: 100%|██████████| 2/2 [00:14<00:00,  7.47s/it]
+/root/diffusion-stego/dscsp/models/diffusion_wrapper.py:37: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.detach().clone() or sourceTensor.detach().clone().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  self.final_alpha_cumprod = torch.tensor(
+  UNet params: 113.7M (frozen)
+
+Initializing content-adaptive controller...
+  Controller params: 4.20M
+Initializing global-pool extractor...
+  Extractor params: 11.31M
+Initializing SN-discriminator...
+  Discriminator params: 2.76M
+Setting up [LPIPS] perceptual loss: trunk [vgg], v[0.1], spatial [off]
+/usr/local/lib/python3.12/dist-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+  warnings.warn(
+/usr/local/lib/python3.12/dist-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=VGG16_Weights.IMAGENET1K_V1`. You can also use `weights=VGG16_Weights.DEFAULT` to get the most up-to-date weights.
+  warnings.warn(msg)
+Loading model from: /usr/local/lib/python3.12/dist-packages/lpips/weights/v0.1/vgg.pth
+  JPEG-heavy attack layer (JPEG weight: 0.6)
+Generating image pool...
+  Generating 128 clean images...
+    4/128    8/128    12/128    16/128    20/128    24/128    28/128    32/128    36/128    40/128    44/128    48/128    52/128    56/128    60/128    64/128    68/128    72/128    76/128    80/128    84/128    88/128    92/128    96/128    100/128    104/128    108/128    112/128    116/128    120/128    124/128    128/128  Image pool: torch.Size([128, 3, 256, 256]), range: [-1.000, 1.000]
+
+Starting DSCSP v4 training for 2000 steps (from step 0)...
+  Total trainable params: 18.27M
+  Batch size: 4
+  Payload: 256 bits
+  Active bits curriculum: 256 -> 256 over 0 steps
+  Max perturbation: 0.08
+  Lambda perc: 0.3, spec: 0.01, adv: 0.5
+  Adversarial: starts step 1000, ramps 4000 steps, 3 D steps/G step
+  Attacks: starts step 500, max prob 0.85, JPEG weight 0.6
+  LR: controller=0.0001, extractor=0.0003
+
+Step    10/2000 | BER: 0.5146 | A-BER(256): 0.5146 | PSNR: 38.7dB | msg: 0.7144 | perc: 0.0768 | spec: 0.1581 | d_rms: 0.0233 | atk: 0.00 | lr: 1.0e-04 | 0.14s/step | ETA: 5min
+Step    20/2000 | BER: 0.4736 | A-BER(256): 0.4736 | PSNR: 39.9dB | msg: 0.7020 | perc: 0.0160 | spec: 0.0635 | d_rms: 0.0206 | atk: 0.00 | lr: 1.0e-04 | 0.06s/step | ETA: 2min
+Step    30/2000 | BER: 0.4854 | A-BER(256): 0.4854 | PSNR: 40.5dB | msg: 0.7035 | perc: 0.0064 | spec: 0.0350 | d_rms: 0.0193 | atk: 0.00 | lr: 1.0e-04 | 0.06s/step | ETA: 2min
+Step    40/2000 | BER: 0.4922 | A-BER(256): 0.4922 | PSNR: 40.6dB | msg: 0.7044 | perc: 0.0075 | spec: 0.0310 | d_rms: 0.0187 | atk: 0.00 | lr: 1.0e-04 | 0.06s/step | ETA: 2min
+Step    50/2000 | BER: 0.5020 | A-BER(256): 0.5020 | PSNR: 41.2dB | msg: 0.7068 | perc: 0.0047 | spec: 0.0303 | d_rms: 0.0175 | atk: 0.00 | lr: 1.0e-04 | 0.06s/step | ETA: 2min
+Step    60/2000 | BER: 0.5068 | A-BER(256): 0.5068 | PSNR: 40.8dB | msg: 0.7050 | perc: 0.0030 | spec: 0.0261 | d_rms: 0.0183 | atk: 0.00 | lr: 1.0e-04 | 0.06s/step | ETA: 2min
+Step    70/2000 | BER: 0.5332 | A-BER(256): 0.5332 | PSNR: 40.9dB | msg: 0.7186 | perc: 0.0023 | spec: 0.0277 | d_rms: 0.0180 | atk: 0.00 | lr: 1.0e-04 | 0.06s/step | ETA: 2min
+Step    80/2000 | BER: 0.4980 | A-BER(256): 0.4980 | PSNR: 41.3dB | msg: 0.7098 | perc: 0.0022 | spec: 0.0207 | d_rms: 0.0176 | atk: 0.00 | lr: 1.0e-04 | 0.06s/step | ETA: 2min
+Step    90/2000 | BER: 0.5000 | A-BER(256): 0.5000 | PSNR: 40.9dB | msg: 0.7060 | perc: 0.0026 | spec: 0.0270 | d_rms: 0.0181 | atk: 0.00 | lr: 1.0e-04 | 0.06s/step | ETA: 2min
+Step   100/2000 | BER: 0.5078 | A-BER(256): 0.5078 | PSNR: 41.1dB | msg: 0.7040 | perc: 0.0018 | spec: 0.0303 | d_rms: 0.0177 | atk: 0.00 | lr: 9.9e-05 | 0.06s/step | ETA: 2min
+Step   110/2000 | BER: 0.4941 | A-BER(256): 0.4941 | PSNR: 41.6dB | msg: 0.7032 | perc: 0.0022 | spec: 0.0243 | d_rms: 0.0167 | atk: 0.00 | lr: 9.9e-05 | 0.07s/step | ETA: 2min
+Step   120/2000 | BER: 0.5098 | A-BER(256): 0.5098 | PSNR: 42.6dB | msg: 0.7040 | perc: 0.0017 | spec: 0.0153 | d_rms: 0.0150 | atk: 0.00 | lr: 9.9e-05 | 0.06s/step | ETA: 2min
+Step   130/2000 | BER: 0.4941 | A-BER(256): 0.4941 | PSNR: 41.8dB | msg: 0.6944 | perc: 0.0025 | spec: 0.0274 | d_rms: 0.0164 | atk: 0.00 | lr: 9.9e-05 | 0.06s/step | ETA: 2min
+Step   140/2000 | BER: 0.5186 | A-BER(256): 0.5186 | PSNR: 42.5dB | msg: 0.7042 | perc: 0.0018 | spec: 0.0184 | d_rms: 0.0150 | atk: 0.00 | lr: 9.9e-05 | 0.06s/step | ETA: 2min
+Step   150/2000 | BER: 0.5059 | A-BER(256): 0.5059 | PSNR: 41.9dB | msg: 0.6992 | perc: 0.0010 | spec: 0.0178 | d_rms: 0.0160 | atk: 0.00 | lr: 9.9e-05 | 0.06s/step | ETA: 2min
+Step   160/2000 | BER: 0.5205 | A-BER(256): 0.5205 | PSNR: 42.3dB | msg: 0.7038 | perc: 0.0017 | spec: 0.0189 | d_rms: 0.0153 | atk: 0.00 | lr: 9.8e-05 | 0.06s/step | ETA: 2min
+Step   170/2000 | BER: 0.5049 | A-BER(256): 0.5049 | PSNR: 42.5dB | msg: 0.7018 | perc: 0.0010 | spec: 0.0185 | d_rms: 0.0149 | atk: 0.00 | lr: 9.8e-05 | 0.06s/step | ETA: 2min
+Step   180/2000 | BER: 0.4893 | A-BER(256): 0.4893 | PSNR: 42.9dB | msg: 0.7002 | perc: 0.0012 | spec: 0.0221 | d_rms: 0.0144 | atk: 0.00 | lr: 9.8e-05 | 0.06s/step | ETA: 2min
+Step   190/2000 | BER: 0.4980 | A-BER(256): 0.4980 | PSNR: 43.0dB | msg: 0.6990 | perc: 0.0009 | spec: 0.0192 | d_rms: 0.0142 | atk: 0.00 | lr: 9.8e-05 | 0.06s/step | ETA: 2min
+Step   200/2000 | BER: 0.5146 | A-BER(256): 0.5146 | PSNR: 43.1dB | msg: 0.7021 | perc: 0.0008 | spec: 0.0152 | d_rms: 0.0140 | atk: 0.00 | lr: 9.8e-05 | 0.06s/step | ETA: 2min
+Step   210/2000 | BER: 0.5088 | A-BER(256): 0.5088 | PSNR: 43.3dB | msg: 0.7012 | perc: 0.0008 | spec: 0.0182 | d_rms: 0.0137 | atk: 0.00 | lr: 9.7e-05 | 0.06s/step | ETA: 2min
+Step   220/2000 | BER: 0.4688 | A-BER(256): 0.4688 | PSNR: 43.8dB | msg: 0.6950 | perc: 0.0007 | spec: 0.0143 | d_rms: 0.0130 | atk: 0.00 | lr: 9.7e-05 | 0.06s/step | ETA: 2min
+Step   230/2000 | BER: 0.5107 | A-BER(256): 0.5107 | PSNR: 43.6dB | msg: 0.7018 | perc: 0.0008 | spec: 0.0165 | d_rms: 0.0132 | atk: 0.00 | lr: 9.7e-05 | 0.06s/step | ETA: 2min
+Step   240/2000 | BER: 0.4639 | A-BER(256): 0.4639 | PSNR: 43.6dB | msg: 0.6942 | perc: 0.0010 | spec: 0.0153 | d_rms: 0.0132 | atk: 0.00 | lr: 9.7e-05 | 0.06s/step | ETA: 2min
+Step   250/2000 | BER: 0.5098 | A-BER(256): 0.5098 | PSNR: 43.9dB | msg: 0.6995 | perc: 0.0009 | spec: 0.0135 | d_rms: 0.0128 | atk: 0.00 | lr: 9.6e-05 | 0.06s/step | ETA: 2min
+Step   260/2000 | BER: 0.4883 | A-BER(256): 0.4883 | PSNR: 44.3dB | msg: 0.6961 | perc: 0.0006 | spec: 0.0118 | d_rms: 0.0123 | atk: 0.00 | lr: 9.6e-05 | 0.06s/step | ETA: 2min
+Step   270/2000 | BER: 0.4814 | A-BER(256): 0.4814 | PSNR: 44.7dB | msg: 0.6931 | perc: 0.0006 | spec: 0.0103 | d_rms: 0.0117 | atk: 0.00 | lr: 9.6e-05 | 0.06s/step | ETA: 2min
+Step   280/2000 | BER: 0.4932 | A-BER(256): 0.4932 | PSNR: 44.7dB | msg: 0.6962 | perc: 0.0005 | spec: 0.0131 | d_rms: 0.0117 | atk: 0.00 | lr: 9.5e-05 | 0.06s/step | ETA: 2min
+Step   290/2000 | BER: 0.5088 | A-BER(256): 0.5088 | PSNR: 44.9dB | msg: 0.6964 | perc: 0.0006 | spec: 0.0108 | d_rms: 0.0114 | atk: 0.00 | lr: 9.5e-05 | 0.06s/step | ETA: 2min
+Step   300/2000 | BER: 0.5137 | A-BER(256): 0.5137 | PSNR: 45.4dB | msg: 0.7003 | perc: 0.0005 | spec: 0.0092 | d_rms: 0.0107 | atk: 0.00 | lr: 9.5e-05 | 0.06s/step | ETA: 2min
+Step   310/2000 | BER: 0.4834 | A-BER(256): 0.4834 | PSNR: 44.5dB | msg: 0.6935 | perc: 0.0016 | spec: 0.0164 | d_rms: 0.0120 | atk: 0.00 | lr: 9.4e-05 | 0.06s/step | ETA: 2min
+Step   320/2000 | BER: 0.5029 | A-BER(256): 0.5029 | PSNR: 44.2dB | msg: 0.6949 | perc: 0.0005 | spec: 0.0107 | d_rms: 0.0124 | atk: 0.00 | lr: 9.4e-05 | 0.06s/step | ETA: 2min
+Step   330/2000 | BER: 0.5088 | A-BER(256): 0.5088 | PSNR: 44.1dB | msg: 0.6966 | perc: 0.0004 | spec: 0.0169 | d_rms: 0.0124 | atk: 0.00 | lr: 9.3e-05 | 0.06s/step | ETA: 2min
+Step   340/2000 | BER: 0.4971 | A-BER(256): 0.4971 | PSNR: 44.1dB | msg: 0.6982 | perc: 0.0004 | spec: 0.0129 | d_rms: 0.0124 | atk: 0.00 | lr: 9.3e-05 | 0.06s/step | ETA: 2min
+Step   350/2000 | BER: 0.4932 | A-BER(256): 0.4932 | PSNR: 44.3dB | msg: 0.6988 | perc: 0.0005 | spec: 0.0106 | d_rms: 0.0122 | atk: 0.00 | lr: 9.3e-05 | 0.06s/step | ETA: 2min
+Step   360/2000 | BER: 0.4795 | A-BER(256): 0.4795 | PSNR: 44.5dB | msg: 0.6928 | perc: 0.0004 | spec: 0.0123 | d_rms: 0.0120 | atk: 0.00 | lr: 9.2e-05 | 0.06s/step | ETA: 2min
+Step   370/2000 | BER: 0.4795 | A-BER(256): 0.4795 | PSNR: 45.1dB | msg: 0.6931 | perc: 0.0004 | spec: 0.0093 | d_rms: 0.0111 | atk: 0.00 | lr: 9.2e-05 | 0.06s/step | ETA: 2min
+Step   380/2000 | BER: 0.4707 | A-BER(256): 0.4707 | PSNR: 45.0dB | msg: 0.6929 | perc: 0.0004 | spec: 0.0099 | d_rms: 0.0112 | atk: 0.00 | lr: 9.1e-05 | 0.06s/step | ETA: 2min
+Step   390/2000 | BER: 0.5020 | A-BER(256): 0.5020 | PSNR: 45.4dB | msg: 0.6946 | perc: 0.0003 | spec: 0.0091 | d_rms: 0.0107 | atk: 0.00 | lr: 9.1e-05 | 0.06s/step | ETA: 2min
+Step   400/2000 | BER: 0.4697 | A-BER(256): 0.4697 | PSNR: 45.9dB | msg: 0.6930 | perc: 0.0003 | spec: 0.0098 | d_rms: 0.0101 | atk: 0.00 | lr: 9.1e-05 | 0.06s/step | ETA: 2min
+Step   410/2000 | BER: 0.5303 | A-BER(256): 0.5303 | PSNR: 46.4dB | msg: 0.6984 | perc: 0.0004 | spec: 0.0097 | d_rms: 0.0096 | atk: 0.00 | lr: 9.0e-05 | 0.06s/step | ETA: 2min
+Step   420/2000 | BER: 0.5010 | A-BER(256): 0.5010 | PSNR: 46.5dB | msg: 0.6954 | perc: 0.0003 | spec: 0.0072 | d_rms: 0.0094 | atk: 0.00 | lr: 9.0e-05 | 0.06s/step | ETA: 2min
+Step   430/2000 | BER: 0.4951 | A-BER(256): 0.4951 | PSNR: 47.0dB | msg: 0.6945 | perc: 0.0003 | spec: 0.0081 | d_rms: 0.0089 | atk: 0.00 | lr: 8.9e-05 | 0.06s/step | ETA: 2min
+Step   440/2000 | BER: 0.5273 | A-BER(256): 0.5273 | PSNR: 47.2dB | msg: 0.6964 | perc: 0.0004 | spec: 0.0068 | d_rms: 0.0088 | atk: 0.00 | lr: 8.9e-05 | 0.06s/step | ETA: 2min
+Step   450/2000 | BER: 0.4902 | A-BER(256): 0.4902 | PSNR: 47.8dB | msg: 0.6922 | perc: 0.0004 | spec: 0.0056 | d_rms: 0.0082 | atk: 0.00 | lr: 8.8e-05 | 0.06s/step | ETA: 2min
+Step   460/2000 | BER: 0.5059 | A-BER(256): 0.5059 | PSNR: 47.8dB | msg: 0.6974 | perc: 0.0004 | spec: 0.0044 | d_rms: 0.0082 | atk: 0.00 | lr: 8.8e-05 | 0.06s/step | ETA: 2min
+Step   470/2000 | BER: 0.5049 | A-BER(256): 0.5049 | PSNR: 47.9dB | msg: 0.6938 | perc: 0.0007 | spec: 0.0049 | d_rms: 0.0081 | atk: 0.00 | lr: 8.7e-05 | 0.06s/step | ETA: 2min
+Step   480/2000 | BER: 0.5146 | A-BER(256): 0.5146 | PSNR: 48.1dB | msg: 0.6979 | perc: 0.0006 | spec: 0.0038 | d_rms: 0.0079 | atk: 0.00 | lr: 8.7e-05 | 0.06s/step | ETA: 2min
+Step   490/2000 | BER: 0.5176 | A-BER(256): 0.5176 | PSNR: 48.1dB | msg: 0.6986 | perc: 0.0005 | spec: 0.0033 | d_rms: 0.0079 | atk: 0.00 | lr: 8.6e-05 | 0.06s/step | ETA: 2min
+Step   500/2000 | BER: 0.4932 | A-BER(256): 0.4932 | PSNR: 47.9dB | msg: 0.6950 | perc: 0.0005 | spec: 0.0031 | d_rms: 0.0080 | atk: 0.00 | lr: 8.6e-05 | 0.06s/step | ETA: 2min
+Step   510/2000 | BER: 0.4951 | A-BER(256): 0.4951 | PSNR: 48.2dB | msg: 0.6960 | perc: 0.0005 | spec: 0.0028 | d_rms: 0.0078 | atk: 0.00 | lr: 8.5e-05 | 0.06s/step | ETA: 2min
+Step   520/2000 | BER: 0.4883 | A-BER(256): 0.4883 | PSNR: 48.3dB | msg: 0.6930 | perc: 0.0003 | spec: 0.0030 | d_rms: 0.0077 | atk: 0.01 | lr: 8.4e-05 | 0.06s/step | ETA: 2min
+Step   530/2000 | BER: 0.5000 | A-BER(256): 0.5000 | PSNR: 48.2dB | msg: 0.6958 | perc: 0.0004 | spec: 0.0026 | d_rms: 0.0078 | atk: 0.01 | lr: 8.4e-05 | 0.06s/step | ETA: 1min
+Step   540/2000 | BER: 0.4766 | A-BER(256): 0.4766 | PSNR: 48.4dB | msg: 0.6923 | perc: 0.0004 | spec: 0.0021 | d_rms: 0.0076 | atk: 0.02 | lr: 8.3e-05 | 0.06s/step | ETA: 1min
+Step   550/2000 | BER: 0.5322 | A-BER(256): 0.5322 | PSNR: 48.8dB | msg: 0.6999 | perc: 0.0003 | spec: 0.0018 | d_rms: 0.0073 | atk: 0.02 | lr: 8.3e-05 | 0.06s/step | ETA: 1min
+Step   560/2000 | BER: 0.5059 | A-BER(256): 0.5059 | PSNR: 49.0dB | msg: 0.6960 | perc: 0.0003 | spec: 0.0018 | d_rms: 0.0071 | atk: 0.03 | lr: 8.2e-05 | 0.06s/step | ETA: 1min
+Step   570/2000 | BER: 0.4883 | A-BER(256): 0.4883 | PSNR: 48.6dB | msg: 0.6936 | perc: 0.0003 | spec: 0.0016 | d_rms: 0.0074 | atk: 0.03 | lr: 8.1e-05 | 0.06s/step | ETA: 1min
+Step   580/2000 | BER: 0.5068 | A-BER(256): 0.5068 | PSNR: 48.8dB | msg: 0.6957 | perc: 0.0004 | spec: 0.0020 | d_rms: 0.0073 | atk: 0.03 | lr: 8.1e-05 | 0.06s/step | ETA: 1min
+Step   590/2000 | BER: 0.4902 | A-BER(256): 0.4902 | PSNR: 48.8dB | msg: 0.6935 | perc: 0.0005 | spec: 0.0019 | d_rms: 0.0072 | atk: 0.04 | lr: 8.0e-05 | 0.06s/step | ETA: 1min
+Step   600/2000 | BER: 0.4912 | A-BER(256): 0.4912 | PSNR: 49.1dB | msg: 0.6951 | perc: 0.0004 | spec: 0.0013 | d_rms: 0.0070 | atk: 0.04 | lr: 8.0e-05 | 0.06s/step | ETA: 1min
+Step   610/2000 | BER: 0.5117 | A-BER(256): 0.5117 | PSNR: 49.1dB | msg: 0.6950 | perc: 0.0004 | spec: 0.0016 | d_rms: 0.0071 | atk: 0.05 | lr: 7.9e-05 | 0.06s/step | ETA: 1min
+Step   620/2000 | BER: 0.5039 | A-BER(256): 0.5039 | PSNR: 49.0dB | msg: 0.6958 | perc: 0.0002 | spec: 0.0020 | d_rms: 0.0071 | atk: 0.05 | lr: 7.8e-05 | 0.06s/step | ETA: 1min
+Step   630/2000 | BER: 0.5039 | A-BER(256): 0.5039 | PSNR: 49.1dB | msg: 0.6952 | perc: 0.0002 | spec: 0.0019 | d_rms: 0.0070 | atk: 0.06 | lr: 7.8e-05 | 0.06s/step | ETA: 1min
+Step   640/2000 | BER: 0.5088 | A-BER(256): 0.5088 | PSNR: 49.1dB | msg: 0.6950 | perc: 0.0003 | spec: 0.0016 | d_rms: 0.0070 | atk: 0.06 | lr: 7.7e-05 | 0.06s/step | ETA: 1min
+Step   650/2000 | BER: 0.5049 | A-BER(256): 0.5049 | PSNR: 49.0dB | msg: 0.6952 | perc: 0.0003 | spec: 0.0015 | d_rms: 0.0071 | atk: 0.06 | lr: 7.6e-05 | 0.06s/step | ETA: 1min
+Step   660/2000 | BER: 0.5088 | A-BER(256): 0.5088 | PSNR: 49.7dB | msg: 0.6964 | perc: 0.0002 | spec: 0.0012 | d_rms: 0.0065 | atk: 0.07 | lr: 7.6e-05 | 0.06s/step | ETA: 1min
+Step   670/2000 | BER: 0.5098 | A-BER(256): 0.5098 | PSNR: 49.6dB | msg: 0.6969 | perc: 0.0002 | spec: 0.0015 | d_rms: 0.0066 | atk: 0.07 | lr: 7.5e-05 | 0.06s/step | ETA: 1min
+Step   680/2000 | BER: 0.4902 | A-BER(256): 0.4902 | PSNR: 49.3dB | msg: 0.6911 | perc: 0.0003 | spec: 0.0012 | d_rms: 0.0069 | atk: 0.08 | lr: 7.4e-05 | 0.06s/step | ETA: 1min
+Step   690/2000 | BER: 0.5029 | A-BER(256): 0.5029 | PSNR: 49.9dB | msg: 0.6949 | perc: 0.0002 | spec: 0.0011 | d_rms: 0.0064 | atk: 0.08 | lr: 7.4e-05 | 0.06s/step | ETA: 1min
+Step   700/2000 | BER: 0.4678 | A-BER(256): 0.4678 | PSNR: 49.6dB | msg: 0.6926 | perc: 0.0002 | spec: 0.0015 | d_rms: 0.0066 | atk: 0.09 | lr: 7.3e-05 | 0.06s/step | ETA: 1min
+Step   710/2000 | BER: 0.5332 | A-BER(256): 0.5332 | PSNR: 49.7dB | msg: 0.6959 | perc: 0.0002 | spec: 0.0011 | d_rms: 0.0066 | atk: 0.09 | lr: 7.2e-05 | 0.06s/step | ETA: 1min
+Step   720/2000 | BER: 0.5010 | A-BER(256): 0.5010 | PSNR: 49.7dB | msg: 0.6947 | perc: 0.0002 | spec: 0.0010 | d_rms: 0.0065 | atk: 0.09 | lr: 7.2e-05 | 0.06s/step | ETA: 1min
+Step   730/2000 | BER: 0.5020 | A-BER(256): 0.5020 | PSNR: 49.8dB | msg: 0.6945 | perc: 0.0002 | spec: 0.0012 | d_rms: 0.0065 | atk: 0.10 | lr: 7.1e-05 | 0.06s/step | ETA: 1min
+Step   740/2000 | BER: 0.5000 | A-BER(256): 0.5000 | PSNR: 49.9dB | msg: 0.6953 | perc: 0.0002 | spec: 0.0014 | d_rms: 0.0064 | atk: 0.10 | lr: 7.0e-05 | 0.06s/step | ETA: 1min
+Step   750/2000 | BER: 0.5000 | A-BER(256): 0.5000 | PSNR: 49.9dB | msg: 0.6967 | perc: 0.0003 | spec: 0.0013 | d_rms: 0.0065 | atk: 0.11 | lr: 6.9e-05 | 0.06s/step | ETA: 1min
+Step   760/2000 | BER: 0.4805 | A-BER(256): 0.4805 | PSNR: 49.9dB | msg: 0.6929 | perc: 0.0002 | spec: 0.0009 | d_rms: 0.0064 | atk: 0.11 | lr: 6.9e-05 | 0.06s/step | ETA: 1min
+Step   770/2000 | BER: 0.5156 | A-BER(256): 0.5156 | PSNR: 49.9dB | msg: 0.6976 | perc: 0.0001 | spec: 0.0010 | d_rms: 0.0064 | atk: 0.11 | lr: 6.8e-05 | 0.06s/step | ETA: 1min
+Step   780/2000 | BER: 0.5225 | A-BER(256): 0.5225 | PSNR: 50.0dB | msg: 0.6973 | perc: 0.0002 | spec: 0.0013 | d_rms: 0.0063 | atk: 0.12 | lr: 6.7e-05 | 0.06s/step | ETA: 1min
+Step   790/2000 | BER: 0.4727 | A-BER(256): 0.4727 | PSNR: 50.0dB | msg: 0.6923 | perc: 0.0002 | spec: 0.0008 | d_rms: 0.0063 | atk: 0.12 | lr: 6.7e-05 | 0.06s/step | ETA: 1min
+Step   800/2000 | BER: 0.5127 | A-BER(256): 0.5127 | PSNR: 50.1dB | msg: 0.6936 | perc: 0.0002 | spec: 0.0007 | d_rms: 0.0062 | atk: 0.13 | lr: 6.6e-05 | 0.06s/step | ETA: 1min
+Step   810/2000 | BER: 0.4912 | A-BER(256): 0.4912 | PSNR: 50.2dB | msg: 0.6938 | perc: 0.0002 | spec: 0.0011 | d_rms: 0.0062 | atk: 0.13 | lr: 6.5e-05 | 0.06s/step | ETA: 1min
+Step   820/2000 | BER: 0.5176 | A-BER(256): 0.5176 | PSNR: 50.1dB | msg: 0.6958 | perc: 0.0002 | spec: 0.0008 | d_rms: 0.0063 | atk: 0.14 | lr: 6.4e-05 | 0.06s/step | ETA: 1min
+Step   830/2000 | BER: 0.5020 | A-BER(256): 0.5020 | PSNR: 50.3dB | msg: 0.6936 | perc: 0.0001 | spec: 0.0008 | d_rms: 0.0061 | atk: 0.14 | lr: 6.4e-05 | 0.06s/step | ETA: 1min
+Step   840/2000 | BER: 0.5059 | A-BER(256): 0.5059 | PSNR: 50.0dB | msg: 0.6927 | perc: 0.0004 | spec: 0.0011 | d_rms: 0.0063 | atk: 0.14 | lr: 6.3e-05 | 0.06s/step | ETA: 1min
+Step   850/2000 | BER: 0.4658 | A-BER(256): 0.4658 | PSNR: 50.1dB | msg: 0.6909 | perc: 0.0003 | spec: 0.0013 | d_rms: 0.0063 | atk: 0.15 | lr: 6.2e-05 | 0.06s/step | ETA: 1min
+Step   860/2000 | BER: 0.5059 | A-BER(256): 0.5059 | PSNR: 50.1dB | msg: 0.6957 | perc: 0.0002 | spec: 0.0008 | d_rms: 0.0063 | atk: 0.15 | lr: 6.1e-05 | 0.06s/step | ETA: 1min
+Step   870/2000 | BER: 0.4814 | A-BER(256): 0.4814 | PSNR: 50.2dB | msg: 0.6923 | perc: 0.0002 | spec: 0.0007 | d_rms: 0.0062 | atk: 0.16 | lr: 6.1e-05 | 0.06s/step | ETA: 1min
+Step   880/2000 | BER: 0.4795 | A-BER(256): 0.4795 | PSNR: 50.2dB | msg: 0.6929 | perc: 0.0002 | spec: 0.0009 | d_rms: 0.0061 | atk: 0.16 | lr: 6.0e-05 | 0.06s/step | ETA: 1min
+Step   890/2000 | BER: 0.5098 | A-BER(256): 0.5098 | PSNR: 50.2dB | msg: 0.6948 | perc: 0.0002 | spec: 0.0007 | d_rms: 0.0062 | atk: 0.17 | lr: 5.9e-05 | 0.06s/step | ETA: 1min
+Step   900/2000 | BER: 0.4941 | A-BER(256): 0.4941 | PSNR: 50.3dB | msg: 0.6937 | perc: 0.0001 | spec: 0.0008 | d_rms: 0.0061 | atk: 0.17 | lr: 5.8e-05 | 0.06s/step | ETA: 1min
+Step   910/2000 | BER: 0.4854 | A-BER(256): 0.4854 | PSNR: 50.1dB | msg: 0.6928 | perc: 0.0001 | spec: 0.0008 | d_rms: 0.0062 | atk: 0.17 | lr: 5.7e-05 | 0.06s/step | ETA: 1min
+Step   920/2000 | BER: 0.5039 | A-BER(256): 0.5039 | PSNR: 50.2dB | msg: 0.6942 | perc: 0.0002 | spec: 0.0006 | d_rms: 0.0062 | atk: 0.18 | lr: 5.7e-05 | 0.06s/step | ETA: 1min
+Step   930/2000 | BER: 0.5117 | A-BER(256): 0.5117 | PSNR: 50.3dB | msg: 0.6950 | perc: 0.0001 | spec: 0.0008 | d_rms: 0.0061 | atk: 0.18 | lr: 5.6e-05 | 0.06s/step | ETA: 1min
+Step   940/2000 | BER: 0.5254 | A-BER(256): 0.5254 | PSNR: 50.5dB | msg: 0.6963 | perc: 0.0001 | spec: 0.0008 | d_rms: 0.0060 | atk: 0.19 | lr: 5.5e-05 | 0.06s/step | ETA: 1min
+Step   950/2000 | BER: 0.5264 | A-BER(256): 0.5264 | PSNR: 50.1dB | msg: 0.6987 | perc: 0.0001 | spec: 0.0009 | d_rms: 0.0063 | atk: 0.19 | lr: 5.4e-05 | 0.06s/step | ETA: 1min
+Step   960/2000 | BER: 0.5195 | A-BER(256): 0.5195 | PSNR: 50.2dB | msg: 0.6952 | perc: 0.0002 | spec: 0.0007 | d_rms: 0.0062 | atk: 0.20 | lr: 5.4e-05 | 0.06s/step | ETA: 1min
+Step   970/2000 | BER: 0.5088 | A-BER(256): 0.5088 | PSNR: 50.7dB | msg: 0.6953 | perc: 0.0001 | spec: 0.0008 | d_rms: 0.0058 | atk: 0.20 | lr: 5.3e-05 | 0.06s/step | ETA: 1min
+Step   980/2000 | BER: 0.5088 | A-BER(256): 0.5088 | PSNR: 50.6dB | msg: 0.6962 | perc: 0.0001 | spec: 0.0008 | d_rms: 0.0059 | atk: 0.20 | lr: 5.2e-05 | 0.06s/step | ETA: 1min
+Step   990/2000 | BER: 0.4883 | A-BER(256): 0.4883 | PSNR: 50.7dB | msg: 0.6933 | perc: 0.0001 | spec: 0.0008 | d_rms: 0.0059 | atk: 0.21 | lr: 5.1e-05 | 0.06s/step | ETA: 1min
+Step  1000/2000 | BER: 0.5068 | A-BER(256): 0.5068 | PSNR: 50.8dB | msg: 0.6939 | perc: 0.0001 | spec: 0.0007 | d_rms: 0.0058 | atk: 0.21 | lr: 5.1e-05 | 0.07s/step | ETA: 1min | D_loss: 0.693 D_acc: 0.50 adv: 0.0000
+Step  1010/2000 | BER: 0.4668 | A-BER(256): 0.4668 | PSNR: 50.7dB | msg: 0.6913 | perc: 0.0001 | spec: 0.0009 | d_rms: 0.0058 | atk: 0.22 | lr: 5.0e-05 | 0.10s/step | ETA: 2min | D_loss: 0.687 D_acc: 0.50 adv: 0.8533
+Step  1020/2000 | BER: 0.5117 | A-BER(256): 0.5117 | PSNR: 50.9dB | msg: 0.6937 | perc: 0.0001 | spec: 0.0006 | d_rms: 0.0057 | atk: 0.22 | lr: 4.9e-05 | 0.10s/step | ETA: 2min | D_loss: 0.679 D_acc: 0.88 adv: 0.6095
+Step  1030/2000 | BER: 0.5322 | A-BER(256): 0.5322 | PSNR: 50.7dB | msg: 0.6954 | perc: 0.0001 | spec: 0.0020 | d_rms: 0.0058 | atk: 0.23 | lr: 4.8e-05 | 0.09s/step | ETA: 2min | D_loss: 0.835 D_acc: 0.50 adv: 0.6662
+Step  1040/2000 | BER: 0.5039 | A-BER(256): 0.5039 | PSNR: 50.5dB | msg: 0.6951 | perc: 0.0001 | spec: 0.0024 | d_rms: 0.0059 | atk: 0.23 | lr: 4.7e-05 | 0.09s/step | ETA: 1min | D_loss: 0.559 D_acc: 0.75 adv: 1.1662
+Step  1050/2000 | BER: 0.5078 | A-BER(256): 0.5078 | PSNR: 50.4dB | msg: 0.6934 | perc: 0.0002 | spec: 0.0031 | d_rms: 0.0061 | atk: 0.23 | lr: 4.7e-05 | 0.10s/step | ETA: 2min | D_loss: 0.488 D_acc: 1.00 adv: 1.5940
+Step  1060/2000 | BER: 0.4873 | A-BER(256): 0.4873 | PSNR: 50.0dB | msg: 0.6929 | perc: 0.0003 | spec: 0.0024 | d_rms: 0.0063 | atk: 0.24 | lr: 4.6e-05 | 0.10s/step | ETA: 1min | D_loss: 0.585 D_acc: 0.88 adv: 0.6998
+Step  1070/2000 | BER: 0.4922 | A-BER(256): 0.4922 | PSNR: 48.7dB | msg: 0.6935 | perc: 0.0015 | spec: 0.0016 | d_rms: 0.0073 | atk: 0.24 | lr: 4.5e-05 | 0.10s/step | ETA: 1min | D_loss: 0.629 D_acc: 0.75 adv: 0.7849
+Step  1080/2000 | BER: 0.5234 | A-BER(256): 0.5234 | PSNR: 48.7dB | msg: 0.6955 | perc: 0.0003 | spec: 0.0030 | d_rms: 0.0074 | atk: 0.25 | lr: 4.4e-05 | 0.10s/step | ETA: 2min | D_loss: 0.668 D_acc: 0.88 adv: 0.8867
+Step  1090/2000 | BER: 0.5293 | A-BER(256): 0.5293 | PSNR: 48.2dB | msg: 0.6966 | perc: 0.0008 | spec: 0.0018 | d_rms: 0.0078 | atk: 0.25 | lr: 4.4e-05 | 0.09s/step | ETA: 1min | D_loss: 0.671 D_acc: 0.50 adv: 0.6141
+Step  1100/2000 | BER: 0.4912 | A-BER(256): 0.4912 | PSNR: 47.7dB | msg: 0.6930 | perc: 0.0014 | spec: 0.0009 | d_rms: 0.0083 | atk: 0.26 | lr: 4.3e-05 | 0.09s/step | ETA: 1min | D_loss: 0.638 D_acc: 1.00 adv: 0.8822
+Step  1110/2000 | BER: 0.4736 | A-BER(256): 0.4736 | PSNR: 47.1dB | msg: 0.6933 | perc: 0.0013 | spec: 0.0005 | d_rms: 0.0089 | atk: 0.26 | lr: 4.2e-05 | 0.09s/step | ETA: 1min | D_loss: 0.697 D_acc: 0.50 adv: 0.6303
+Step  1120/2000 | BER: 0.4854 | A-BER(256): 0.4854 | PSNR: 46.3dB | msg: 0.6927 | perc: 0.0006 | spec: 0.0009 | d_rms: 0.0097 | atk: 0.26 | lr: 4.1e-05 | 0.09s/step | ETA: 1min | D_loss: 0.692 D_acc: 0.50 adv: 0.6675
+Step  1130/2000 | BER: 0.5029 | A-BER(256): 0.5029 | PSNR: 47.1dB | msg: 0.6944 | perc: 0.0006 | spec: 0.0005 | d_rms: 0.0089 | atk: 0.27 | lr: 4.0e-05 | 0.09s/step | ETA: 1min | D_loss: 0.693 D_acc: 0.50 adv: 0.6902
+Step  1140/2000 | BER: 0.4912 | A-BER(256): 0.4912 | PSNR: 46.5dB | msg: 0.6940 | perc: 0.0010 | spec: 0.0005 | d_rms: 0.0095 | atk: 0.27 | lr: 4.0e-05 | 0.09s/step | ETA: 1min | D_loss: 0.693 D_acc: 0.50 adv: 0.7141
+Step  1150/2000 | BER: 0.4990 | A-BER(256): 0.4990 | PSNR: 46.2dB | msg: 0.6932 | perc: 0.0005 | spec: 0.0008 | d_rms: 0.0099 | atk: 0.28 | lr: 3.9e-05 | 0.09s/step | ETA: 1min | D_loss: 0.694 D_acc: 0.50 adv: 0.6950
+Step  1160/2000 | BER: 0.4883 | A-BER(256): 0.4883 | PSNR: 47.2dB | msg: 0.6930 | perc: 0.0008 | spec: 0.0005 | d_rms: 0.0087 | atk: 0.28 | lr: 3.8e-05 | 0.09s/step | ETA: 1min | D_loss: 0.693 D_acc: 0.50 adv: 0.6870
+Step  1170/2000 | BER: 0.4883 | A-BER(256): 0.4883 | PSNR: 46.3dB | msg: 0.6927 | perc: 0.0012 | spec: 0.0006 | d_rms: 0.0097 | atk: 0.28 | lr: 3.7e-05 | 0.09s/step | ETA: 1min | D_loss: 0.693 D_acc: 0.50 adv: 0.6900
+Step  1180/2000 | BER: 0.5107 | A-BER(256): 0.5107 | PSNR: 46.4dB | msg: 0.6946 | perc: 0.0004 | spec: 0.0004 | d_rms: 0.0097 | atk: 0.29 | lr: 3.7e-05 | 0.09s/step | ETA: 1min | D_loss: 0.693 D_acc: 0.50 adv: 0.6728
+Step  1190/2000 | BER: 0.4883 | A-BER(256): 0.4883 | PSNR: 46.8dB | msg: 0.6930 | perc: 0.0003 | spec: 0.0004 | d_rms: 0.0091 | atk: 0.29 | lr: 3.6e-05 | 0.09s/step | ETA: 1min | D_loss: 0.693 D_acc: 0.50 adv: 0.6857
+Step  1200/2000 | BER: 0.5078 | A-BER(256): 0.5078 | PSNR: 46.7dB | msg: 0.6949 | perc: 0.0006 | spec: 0.0007 | d_rms: 0.0095 | atk: 0.30 | lr: 3.5e-05 | 0.09s/step | ETA: 1min | D_loss: 0.693 D_acc: 0.50 adv: 0.7321
+Step  1210/2000 | BER: 0.5107 | A-BER(256): 0.5107 | PSNR: 46.7dB | msg: 0.6951 | perc: 0.0017 | spec: 0.0004 | d_rms: 0.0092 | atk: 0.30 | lr: 3.4e-05 | 0.09s/step | ETA: 1min | D_loss: 0.693 D_acc: 0.50 adv: 0.6909
+Step  1220/2000 | BER: 0.4961 | A-BER(256): 0.4961 | PSNR: 46.3dB | msg: 0.6942 | perc: 0.0005 | spec: 0.0007 | d_rms: 0.0097 | atk: 0.31 | lr: 3.4e-05 | 0.09s/step | ETA: 1min | D_loss: 0.693 D_acc: 0.50 adv: 0.6943
+Step  1230/2000 | BER: 0.4893 | A-BER(256): 0.4893 | PSNR: 46.7dB | msg: 0.6926 | perc: 0.0014 | spec: 0.0005 | d_rms: 0.0093 | atk: 0.31 | lr: 3.3e-05 | 0.09s/step | ETA: 1min | D_loss: 0.694 D_acc: 0.50 adv: 0.6680
+Step  1240/2000 | BER: 0.4971 | A-BER(256): 0.4971 | PSNR: 45.9dB | msg: 0.6937 | perc: 0.0005 | spec: 0.0004 | d_rms: 0.0101 | atk: 0.31 | lr: 3.2e-05 | 0.09s/step | ETA: 1min | D_loss: 0.693 D_acc: 0.50 adv: 0.6892
+Step  1250/2000 | BER: 0.5039 | A-BER(256): 0.5039 | PSNR: 46.0dB | msg: 0.6946 | perc: 0.0005 | spec: 0.0005 | d_rms: 0.0101 | atk: 0.32 | lr: 3.2e-05 | 0.09s/step | ETA: 1min | D_loss: 0.693 D_acc: 0.50 adv: 0.6964
+Step  1260/2000 | BER: 0.5088 | A-BER(256): 0.5088 | PSNR: 46.1dB | msg: 0.6930 | perc: 0.0007 | spec: 0.0006 | d_rms: 0.0100 | atk: 0.32 | lr: 3.1e-05 | 0.10s/step | ETA: 1min | D_loss: 0.707 D_acc: 0.50 adv: 0.6959
+Step  1270/2000 | BER: 0.5332 | A-BER(256): 0.5332 | PSNR: 46.4dB | msg: 0.6952 | perc: 0.0005 | spec: 0.0004 | d_rms: 0.0096 | atk: 0.33 | lr: 3.0e-05 | 0.10s/step | ETA: 1min | D_loss: 0.693 D_acc: 0.50 adv: 0.6944
+Step  1280/2000 | BER: 0.4863 | A-BER(256): 0.4863 | PSNR: 46.1dB | msg: 0.6926 | perc: 0.0007 | spec: 0.0006 | d_rms: 0.0099 | atk: 0.33 | lr: 2.9e-05 | 0.09s/step | ETA: 1min | D_loss: 0.683 D_acc: 0.50 adv: 0.6627
+Step  1290/2000 | BER: 0.4775 | A-BER(256): 0.4775 | PSNR: 46.6dB | msg: 0.6928 | perc: 0.0006 | spec: 0.0004 | d_rms: 0.0097 | atk: 0.34 | lr: 2.9e-05 | 0.09s/step | ETA: 1min | D_loss: 0.694 D_acc: 0.50 adv: 0.6859
+Step  1300/2000 | BER: 0.5176 | A-BER(256): 0.5176 | PSNR: 46.1dB | msg: 0.6935 | perc: 0.0003 | spec: 0.0004 | d_rms: 0.0099 | atk: 0.34 | lr: 2.8e-05 | 0.09s/step | ETA: 1min | D_loss: 0.699 D_acc: 0.50 adv: 0.6703
+Step  1310/2000 | BER: 0.5078 | A-BER(256): 0.5078 | PSNR: 45.8dB | msg: 0.6932 | perc: 0.0004 | spec: 0.0004 | d_rms: 0.0103 | atk: 0.34 | lr: 2.7e-05 | 0.09s/step | ETA: 1min | D_loss: 0.692 D_acc: 0.50 adv: 0.7176
+Step  1320/2000 | BER: 0.5068 | A-BER(256): 0.5068 | PSNR: 46.6dB | msg: 0.6941 | perc: 0.0004 | spec: 0.0004 | d_rms: 0.0093 | atk: 0.35 | lr: 2.7e-05 | 0.09s/step | ETA: 1min | D_loss: 0.690 D_acc: 0.50 adv: 0.6936
+Step  1330/2000 | BER: 0.4600 | A-BER(256): 0.4600 | PSNR: 46.2dB | msg: 0.6908 | perc: 0.0010 | spec: 0.0002 | d_rms: 0.0098 | atk: 0.35 | lr: 2.6e-05 | 0.09s/step | ETA: 1min | D_loss: 0.692 D_acc: 0.62 adv: 0.7011
+Step  1340/2000 | BER: 0.5146 | A-BER(256): 0.5146 | PSNR: 46.3dB | msg: 0.6954 | perc: 0.0004 | spec: 0.0004 | d_rms: 0.0101 | atk: 0.36 | lr: 2.5e-05 | 0.09s/step | ETA: 1min | D_loss: 0.692 D_acc: 0.50 adv: 0.6991
+Step  1350/2000 | BER: 0.5303 | A-BER(256): 0.5303 | PSNR: 45.8dB | msg: 0.6941 | perc: 0.0006 | spec: 0.0006 | d_rms: 0.0105 | atk: 0.36 | lr: 2.5e-05 | 0.09s/step | ETA: 1min | D_loss: 0.693 D_acc: 0.50 adv: 0.6770
+Step  1360/2000 | BER: 0.4971 | A-BER(256): 0.4971 | PSNR: 45.4dB | msg: 0.6939 | perc: 0.0006 | spec: 0.0003 | d_rms: 0.0107 | atk: 0.37 | lr: 2.4e-05 | 0.09s/step | ETA: 1min | D_loss: 0.692 D_acc: 0.50 adv: 0.6908
+Step  1370/2000 | BER: 0.5078 | A-BER(256): 0.5078 | PSNR: 45.6dB | msg: 0.6940 | perc: 0.0005 | spec: 0.0003 | d_rms: 0.0105 | atk: 0.37 | lr: 2.3e-05 | 0.09s/step | ETA: 1min | D_loss: 0.693 D_acc: 0.50 adv: 0.6877
+Step  1380/2000 | BER: 0.5000 | A-BER(256): 0.5000 | PSNR: 45.8dB | msg: 0.6940 | perc: 0.0003 | spec: 0.0004 | d_rms: 0.0103 | atk: 0.37 | lr: 2.3e-05 | 0.09s/step | ETA: 1min | D_loss: 0.693 D_acc: 0.62 adv: 0.6986
+Step  1390/2000 | BER: 0.5029 | A-BER(256): 0.5029 | PSNR: 45.4dB | msg: 0.6954 | perc: 0.0006 | spec: 0.0003 | d_rms: 0.0108 | atk: 0.38 | lr: 2.2e-05 | 0.09s/step | ETA: 1min | D_loss: 0.693 D_acc: 0.50 adv: 0.6965
+Step  1400/2000 | BER: 0.4932 | A-BER(256): 0.4932 | PSNR: 45.9dB | msg: 0.6931 | perc: 0.0005 | spec: 0.0004 | d_rms: 0.0101 | atk: 0.38 | lr: 2.1e-05 | 0.09s/step | ETA: 1min | D_loss: 0.692 D_acc: 0.50 adv: 0.6837
+Step  1410/2000 | BER: 0.4902 | A-BER(256): 0.4902 | PSNR: 46.7dB | msg: 0.6926 | perc: 0.0004 | spec: 0.0002 | d_rms: 0.0092 | atk: 0.39 | lr: 2.1e-05 | 0.09s/step | ETA: 1min | D_loss: 0.691 D_acc: 0.50 adv: 0.7028
+Step  1420/2000 | BER: 0.5107 | A-BER(256): 0.5107 | PSNR: 46.1dB | msg: 0.6934 | perc: 0.0005 | spec: 0.0004 | d_rms: 0.0103 | atk: 0.39 | lr: 2.0e-05 | 0.09s/step | ETA: 1min | D_loss: 0.691 D_acc: 0.50 adv: 0.6514
+Step  1430/2000 | BER: 0.4893 | A-BER(256): 0.4893 | PSNR: 46.8dB | msg: 0.6941 | perc: 0.0004 | spec: 0.0003 | d_rms: 0.0095 | atk: 0.40 | lr: 2.0e-05 | 0.10s/step | ETA: 1min | D_loss: 0.693 D_acc: 0.50 adv: 0.6949
+Step  1440/2000 | BER: 0.4941 | A-BER(256): 0.4941 | PSNR: 46.7dB | msg: 0.6935 | perc: 0.0004 | spec: 0.0002 | d_rms: 0.0092 | atk: 0.40 | lr: 1.9e-05 | 0.09s/step | ETA: 1min | D_loss: 0.693 D_acc: 0.50 adv: 0.6894
+Step  1450/2000 | BER: 0.5127 | A-BER(256): 0.5127 | PSNR: 46.0dB | msg: 0.6955 | perc: 0.0008 | spec: 0.0004 | d_rms: 0.0100 | atk: 0.40 | lr: 1.8e-05 | 0.09s/step | ETA: 1min | D_loss: 0.691 D_acc: 0.50 adv: 0.7083
+Step  1460/2000 | BER: 0.5117 | A-BER(256): 0.5117 | PSNR: 46.7dB | msg: 0.6956 | perc: 0.0006 | spec: 0.0004 | d_rms: 0.0092 | atk: 0.41 | lr: 1.8e-05 | 0.09s/step | ETA: 1min | D_loss: 0.692 D_acc: 0.50 adv: 0.7453
+Step  1470/2000 | BER: 0.5068 | A-BER(256): 0.5068 | PSNR: 46.4dB | msg: 0.6945 | perc: 0.0004 | spec: 0.0002 | d_rms: 0.0095 | atk: 0.41 | lr: 1.7e-05 | 0.09s/step | ETA: 1min | D_loss: 0.691 D_acc: 0.50 adv: 0.7271
+Step  1480/2000 | BER: 0.4912 | A-BER(256): 0.4912 | PSNR: 46.8dB | msg: 0.6935 | perc: 0.0004 | spec: 0.0002 | d_rms: 0.0091 | atk: 0.42 | lr: 1.7e-05 | 0.09s/step | ETA: 1min | D_loss: 0.693 D_acc: 0.50 adv: 0.6929
+Step  1490/2000 | BER: 0.5000 | A-BER(256): 0.5000 | PSNR: 46.0dB | msg: 0.6939 | perc: 0.0006 | spec: 0.0003 | d_rms: 0.0101 | atk: 0.42 | lr: 1.6e-05 | 0.09s/step | ETA: 1min | D_loss: 0.691 D_acc: 0.62 adv: 0.6933
+Step  1500/2000 | BER: 0.5176 | A-BER(256): 0.5176 | PSNR: 46.4dB | msg: 0.6949 | perc: 0.0014 | spec: 0.0003 | d_rms: 0.0095 | atk: 0.42 | lr: 1.5e-05 | 0.09s/step | ETA: 1min | D_loss: 0.691 D_acc: 0.50 adv: 0.6891
+Step  1510/2000 | BER: 0.5107 | A-BER(256): 0.5107 | PSNR: 46.6dB | msg: 0.6963 | perc: 0.0007 | spec: 0.0004 | d_rms: 0.0094 | atk: 0.43 | lr: 1.5e-05 | 0.08s/step | ETA: 1min | D_loss: 0.693 D_acc: 0.50 adv: 0.6883
+Step  1520/2000 | BER: 0.5039 | A-BER(256): 0.5039 | PSNR: 46.6dB | msg: 0.6944 | perc: 0.0007 | spec: 0.0002 | d_rms: 0.0094 | atk: 0.43 | lr: 1.4e-05 | 0.09s/step | ETA: 1min | D_loss: 0.692 D_acc: 0.62 adv: 0.6997
+Step  1530/2000 | BER: 0.4893 | A-BER(256): 0.4893 | PSNR: 46.2dB | msg: 0.6943 | perc: 0.0010 | spec: 0.0002 | d_rms: 0.0098 | atk: 0.44 | lr: 1.4e-05 | 0.09s/step | ETA: 1min | D_loss: 0.704 D_acc: 0.50 adv: 0.6865
+Step  1540/2000 | BER: 0.5020 | A-BER(256): 0.5020 | PSNR: 45.9dB | msg: 0.6949 | perc: 0.0004 | spec: 0.0005 | d_rms: 0.0103 | atk: 0.44 | lr: 1.3e-05 | 0.09s/step | ETA: 1min | D_loss: 0.692 D_acc: 0.50 adv: 0.6981
+Step  1550/2000 | BER: 0.5342 | A-BER(256): 0.5342 | PSNR: 46.5dB | msg: 0.6948 | perc: 0.0004 | spec: 0.0002 | d_rms: 0.0095 | atk: 0.45 | lr: 1.3e-05 | 0.09s/step | ETA: 1min | D_loss: 0.693 D_acc: 0.50 adv: 0.6908
+Step  1560/2000 | BER: 0.4961 | A-BER(256): 0.4961 | PSNR: 46.7dB | msg: 0.6929 | perc: 0.0003 | spec: 0.0003 | d_rms: 0.0093 | atk: 0.45 | lr: 1.2e-05 | 0.09s/step | ETA: 1min | D_loss: 0.692 D_acc: 0.62 adv: 0.6934
+Step  1570/2000 | BER: 0.4736 | A-BER(256): 0.4736 | PSNR: 46.1dB | msg: 0.6925 | perc: 0.0010 | spec: 0.0005 | d_rms: 0.0101 | atk: 0.45 | lr: 1.2e-05 | 0.09s/step | ETA: 1min | D_loss: 0.692 D_acc: 0.50 adv: 0.7014
+Step  1580/2000 | BER: 0.4580 | A-BER(256): 0.4580 | PSNR: 46.8dB | msg: 0.6917 | perc: 0.0003 | spec: 0.0002 | d_rms: 0.0091 | atk: 0.46 | lr: 1.1e-05 | 0.09s/step | ETA: 1min | D_loss: 0.693 D_acc: 0.50 adv: 0.6872
+Step  1590/2000 | BER: 0.5322 | A-BER(256): 0.5322 | PSNR: 46.3dB | msg: 0.6941 | perc: 0.0005 | spec: 0.0002 | d_rms: 0.0097 | atk: 0.46 | lr: 1.1e-05 | 0.09s/step | ETA: 1min | D_loss: 0.693 D_acc: 0.50 adv: 0.6933
+Step  1600/2000 | BER: 0.5039 | A-BER(256): 0.5039 | PSNR: 46.2dB | msg: 0.6940 | perc: 0.0005 | spec: 0.0003 | d_rms: 0.0098 | atk: 0.47 | lr: 1.0e-05 | 0.09s/step | ETA: 1min | D_loss: 0.692 D_acc: 0.50 adv: 0.6881
+Step  1610/2000 | BER: 0.4990 | A-BER(256): 0.4990 | PSNR: 46.1dB | msg: 0.6932 | perc: 0.0009 | spec: 0.0003 | d_rms: 0.0100 | atk: 0.47 | lr: 1.0e-05 | 0.09s/step | ETA: 1min | D_loss: 0.693 D_acc: 0.50 adv: 0.6923
+Step  1620/2000 | BER: 0.4873 | A-BER(256): 0.4873 | PSNR: 46.5dB | msg: 0.6925 | perc: 0.0015 | spec: 0.0003 | d_rms: 0.0095 | atk: 0.48 | lr: 9.6e-06 | 0.09s/step | ETA: 1min | D_loss: 0.693 D_acc: 0.50 adv: 0.6944
+Step  1630/2000 | BER: 0.4824 | A-BER(256): 0.4824 | PSNR: 46.4dB | msg: 0.6924 | perc: 0.0005 | spec: 0.0004 | d_rms: 0.0098 | atk: 0.48 | lr: 9.1e-06 | 0.09s/step | ETA: 1min | D_loss: 0.693 D_acc: 0.50 adv: 0.6840
+Step  1640/2000 | BER: 0.4619 | A-BER(256): 0.4619 | PSNR: 46.4dB | msg: 0.6918 | perc: 0.0004 | spec: 0.0002 | d_rms: 0.0096 | atk: 0.48 | lr: 8.7e-06 | 0.09s/step | ETA: 1min | D_loss: 0.692 D_acc: 0.50 adv: 0.6923
+Step  1650/2000 | BER: 0.4941 | A-BER(256): 0.4941 | PSNR: 47.2dB | msg: 0.6933 | perc: 0.0003 | spec: 0.0003 | d_rms: 0.0088 | atk: 0.49 | lr: 8.3e-06 | 0.09s/step | ETA: 1min | D_loss: 0.693 D_acc: 0.62 adv: 0.6940
+Step  1660/2000 | BER: 0.4902 | A-BER(256): 0.4902 | PSNR: 46.8dB | msg: 0.6931 | perc: 0.0003 | spec: 0.0003 | d_rms: 0.0091 | atk: 0.49 | lr: 7.9e-06 | 0.09s/step | ETA: 0min | D_loss: 0.693 D_acc: 0.50 adv: 0.6969
+Step  1670/2000 | BER: 0.5186 | A-BER(256): 0.5186 | PSNR: 47.2dB | msg: 0.6942 | perc: 0.0004 | spec: 0.0003 | d_rms: 0.0088 | atk: 0.50 | lr: 7.5e-06 | 0.09s/step | ETA: 0min | D_loss: 0.692 D_acc: 0.50 adv: 0.7048
+Step  1680/2000 | BER: 0.5049 | A-BER(256): 0.5049 | PSNR: 46.5dB | msg: 0.6942 | perc: 0.0003 | spec: 0.0002 | d_rms: 0.0095 | atk: 0.50 | lr: 7.1e-06 | 0.09s/step | ETA: 0min | D_loss: 0.692 D_acc: 0.50 adv: 0.7022
+Step  1690/2000 | BER: 0.4844 | A-BER(256): 0.4844 | PSNR: 46.6dB | msg: 0.6927 | perc: 0.0008 | spec: 0.0003 | d_rms: 0.0094 | atk: 0.51 | lr: 6.8e-06 | 0.09s/step | ETA: 0min | D_loss: 0.692 D_acc: 0.62 adv: 0.6949
+Step  1700/2000 | BER: 0.5029 | A-BER(256): 0.5029 | PSNR: 46.5dB | msg: 0.6937 | perc: 0.0004 | spec: 0.0002 | d_rms: 0.0095 | atk: 0.51 | lr: 6.4e-06 | 0.09s/step | ETA: 0min | D_loss: 0.692 D_acc: 0.50 adv: 0.6989
+Step  1710/2000 | BER: 0.5166 | A-BER(256): 0.5166 | PSNR: 47.4dB | msg: 0.6942 | perc: 0.0004 | spec: 0.0004 | d_rms: 0.0086 | atk: 0.51 | lr: 6.0e-06 | 0.09s/step | ETA: 0min | D_loss: 0.693 D_acc: 0.50 adv: 0.6906
+Step  1720/2000 | BER: 0.5166 | A-BER(256): 0.5166 | PSNR: 47.0dB | msg: 0.6941 | perc: 0.0006 | spec: 0.0003 | d_rms: 0.0089 | atk: 0.52 | lr: 5.7e-06 | 0.09s/step | ETA: 0min | D_loss: 0.693 D_acc: 0.50 adv: 0.6781
+Step  1730/2000 | BER: 0.5166 | A-BER(256): 0.5166 | PSNR: 46.4dB | msg: 0.6930 | perc: 0.0005 | spec: 0.0002 | d_rms: 0.0098 | atk: 0.52 | lr: 5.4e-06 | 0.09s/step | ETA: 0min | D_loss: 0.692 D_acc: 0.62 adv: 0.7070
+Step  1740/2000 | BER: 0.5146 | A-BER(256): 0.5146 | PSNR: 47.0dB | msg: 0.6939 | perc: 0.0006 | spec: 0.0002 | d_rms: 0.0089 | atk: 0.53 | lr: 5.1e-06 | 0.12s/step | ETA: 1min | D_loss: 0.692 D_acc: 0.62 adv: 0.6968
+Step  1750/2000 | BER: 0.5254 | A-BER(256): 0.5254 | PSNR: 46.5dB | msg: 0.6937 | perc: 0.0008 | spec: 0.0002 | d_rms: 0.0094 | atk: 0.53 | lr: 4.8e-06 | 0.09s/step | ETA: 0min | D_loss: 0.692 D_acc: 0.50 adv: 0.7003
+Step  1760/2000 | BER: 0.4961 | A-BER(256): 0.4961 | PSNR: 46.6dB | msg: 0.6932 | perc: 0.0006 | spec: 0.0003 | d_rms: 0.0093 | atk: 0.54 | lr: 4.5e-06 | 0.09s/step | ETA: 0min | D_loss: 0.693 D_acc: 0.50 adv: 0.6903
+Step  1770/2000 | BER: 0.4766 | A-BER(256): 0.4766 | PSNR: 47.1dB | msg: 0.6926 | perc: 0.0003 | spec: 0.0003 | d_rms: 0.0089 | atk: 0.54 | lr: 4.2e-06 | 0.09s/step | ETA: 0min | D_loss: 0.692 D_acc: 0.50 adv: 0.8098
+Step  1780/2000 | BER: 0.4805 | A-BER(256): 0.4805 | PSNR: 46.9dB | msg: 0.6924 | perc: 0.0003 | spec: 0.0002 | d_rms: 0.0090 | atk: 0.54 | lr: 3.9e-06 | 0.09s/step | ETA: 0min | D_loss: 0.692 D_acc: 0.50 adv: 0.6900
+Step  1790/2000 | BER: 0.5127 | A-BER(256): 0.5127 | PSNR: 47.2dB | msg: 0.6942 | perc: 0.0004 | spec: 0.0002 | d_rms: 0.0088 | atk: 0.55 | lr: 3.7e-06 | 0.09s/step | ETA: 0min | D_loss: 0.693 D_acc: 0.62 adv: 0.6868
+Step  1800/2000 | BER: 0.4961 | A-BER(256): 0.4961 | PSNR: 47.6dB | msg: 0.6929 | perc: 0.0002 | spec: 0.0002 | d_rms: 0.0083 | atk: 0.55 | lr: 3.4e-06 | 0.09s/step | ETA: 0min | D_loss: 0.693 D_acc: 0.50 adv: 0.6961
+Step  1810/2000 | BER: 0.5059 | A-BER(256): 0.5059 | PSNR: 47.2dB | msg: 0.6930 | perc: 0.0004 | spec: 0.0002 | d_rms: 0.0087 | atk: 0.56 | lr: 3.2e-06 | 0.09s/step | ETA: 0min | D_loss: 0.692 D_acc: 0.50 adv: 0.6956
+Step  1820/2000 | BER: 0.5127 | A-BER(256): 0.5127 | PSNR: 47.0dB | msg: 0.6930 | perc: 0.0007 | spec: 0.0002 | d_rms: 0.0090 | atk: 0.56 | lr: 3.0e-06 | 0.09s/step | ETA: 0min | D_loss: 0.692 D_acc: 0.50 adv: 0.6941
+Step  1830/2000 | BER: 0.5254 | A-BER(256): 0.5254 | PSNR: 47.1dB | msg: 0.6940 | perc: 0.0005 | spec: 0.0002 | d_rms: 0.0088 | atk: 0.57 | lr: 2.8e-06 | 0.08s/step | ETA: 0min | D_loss: 0.693 D_acc: 0.50 adv: 0.6933
+Step  1840/2000 | BER: 0.5049 | A-BER(256): 0.5049 | PSNR: 47.1dB | msg: 0.6931 | perc: 0.0003 | spec: 0.0002 | d_rms: 0.0088 | atk: 0.57 | lr: 2.6e-06 | 0.09s/step | ETA: 0min | D_loss: 0.693 D_acc: 0.62 adv: 0.6947
+Step  1850/2000 | BER: 0.4971 | A-BER(256): 0.4971 | PSNR: 47.8dB | msg: 0.6936 | perc: 0.0006 | spec: 0.0002 | d_rms: 0.0082 | atk: 0.57 | lr: 2.4e-06 | 0.09s/step | ETA: 0min | D_loss: 0.693 D_acc: 0.50 adv: 0.6924
+Step  1860/2000 | BER: 0.4951 | A-BER(256): 0.4951 | PSNR: 46.6dB | msg: 0.6934 | perc: 0.0003 | spec: 0.0003 | d_rms: 0.0094 | atk: 0.58 | lr: 2.2e-06 | 0.09s/step | ETA: 0min | D_loss: 0.693 D_acc: 0.50 adv: 0.6936
+Step  1870/2000 | BER: 0.4980 | A-BER(256): 0.4980 | PSNR: 47.7dB | msg: 0.6924 | perc: 0.0004 | spec: 0.0006 | d_rms: 0.0085 | atk: 0.58 | lr: 2.0e-06 | 0.09s/step | ETA: 0min | D_loss: 0.693 D_acc: 0.50 adv: 0.6945
+Step  1880/2000 | BER: 0.4854 | A-BER(256): 0.4854 | PSNR: 47.3dB | msg: 0.6930 | perc: 0.0004 | spec: 0.0002 | d_rms: 0.0086 | atk: 0.59 | lr: 1.9e-06 | 0.09s/step | ETA: 0min | D_loss: 0.693 D_acc: 0.75 adv: 0.6959
+Step  1890/2000 | BER: 0.4814 | A-BER(256): 0.4814 | PSNR: 47.4dB | msg: 0.6925 | perc: 0.0004 | spec: 0.0003 | d_rms: 0.0088 | atk: 0.59 | lr: 1.7e-06 | 0.09s/step | ETA: 0min | D_loss: 0.693 D_acc: 0.50 adv: 0.6941
+Step  1900/2000 | BER: 0.4766 | A-BER(256): 0.4766 | PSNR: 46.9dB | msg: 0.6922 | perc: 0.0010 | spec: 0.0002 | d_rms: 0.0091 | atk: 0.59 | lr: 1.6e-06 | 0.09s/step | ETA: 0min | D_loss: 0.693 D_acc: 0.50 adv: 0.6939
+Step  1910/2000 | BER: 0.4990 | A-BER(256): 0.4990 | PSNR: 47.1dB | msg: 0.6929 | perc: 0.0006 | spec: 0.0002 | d_rms: 0.0089 | atk: 0.60 | lr: 1.5e-06 | 0.09s/step | ETA: 0min | D_loss: 0.693 D_acc: 0.50 adv: 0.6940
+Step  1920/2000 | BER: 0.4951 | A-BER(256): 0.4951 | PSNR: 46.9dB | msg: 0.6936 | perc: 0.0004 | spec: 0.0002 | d_rms: 0.0090 | atk: 0.60 | lr: 1.4e-06 | 0.09s/step | ETA: 0min | D_loss: 0.692 D_acc: 0.50 adv: 0.6760
+Step  1930/2000 | BER: 0.5127 | A-BER(256): 0.5127 | PSNR: 47.7dB | msg: 0.6935 | perc: 0.0003 | spec: 0.0003 | d_rms: 0.0082 | atk: 0.61 | lr: 1.3e-06 | 0.09s/step | ETA: 0min | D_loss: 0.693 D_acc: 0.50 adv: 0.6895
+Step  1940/2000 | BER: 0.5186 | A-BER(256): 0.5186 | PSNR: 47.2dB | msg: 0.6937 | perc: 0.0005 | spec: 0.0003 | d_rms: 0.0087 | atk: 0.61 | lr: 1.2e-06 | 0.09s/step | ETA: 0min | D_loss: 0.692 D_acc: 0.62 adv: 0.6931
+Step  1950/2000 | BER: 0.4766 | A-BER(256): 0.4766 | PSNR: 46.9dB | msg: 0.6923 | perc: 0.0006 | spec: 0.0002 | d_rms: 0.0090 | atk: 0.62 | lr: 1.2e-06 | 0.09s/step | ETA: 0min | D_loss: 0.693 D_acc: 0.50 adv: 0.6979
+Step  1960/2000 | BER: 0.5137 | A-BER(256): 0.5137 | PSNR: 47.4dB | msg: 0.6943 | perc: 0.0007 | spec: 0.0002 | d_rms: 0.0086 | atk: 0.62 | lr: 1.1e-06 | 0.09s/step | ETA: 0min | D_loss: 0.693 D_acc: 0.50 adv: 0.7016
+Step  1970/2000 | BER: 0.4932 | A-BER(256): 0.4932 | PSNR: 47.1dB | msg: 0.6935 | perc: 0.0004 | spec: 0.0002 | d_rms: 0.0090 | atk: 0.62 | lr: 1.1e-06 | 0.09s/step | ETA: 0min | D_loss: 0.692 D_acc: 0.50 adv: 0.6965
+Step  1980/2000 | BER: 0.5205 | A-BER(256): 0.5205 | PSNR: 47.0dB | msg: 0.6944 | perc: 0.0003 | spec: 0.0003 | d_rms: 0.0089 | atk: 0.63 | lr: 1.0e-06 | 0.09s/step | ETA: 0min | D_loss: 0.692 D_acc: 0.50 adv: 0.6949
+Step  1990/2000 | BER: 0.4922 | A-BER(256): 0.4922 | PSNR: 46.9dB | msg: 0.6927 | perc: 0.0009 | spec: 0.0002 | d_rms: 0.0090 | atk: 0.63 | lr: 1.0e-06 | 0.09s/step | ETA: 0min | D_loss: 0.693 D_acc: 0.50 adv: 0.7060
+  Refreshing image pool...
+  Generating 128 clean images...
+    4/128    8/128    12/128    16/128    20/128    24/128    28/128    32/128    36/128    40/128    44/128    48/128    52/128    56/128    60/128    64/128    68/128    72/128    76/128    80/128    84/128    88/128    92/128    96/128    100/128    104/128    108/128    112/128    116/128    120/128    124/128    128/128  Image pool: torch.Size([128, 3, 256, 256]), range: [-1.000, 1.000]
+Step  2000/2000 | BER: 0.5127 | A-BER(256): 0.5127 | PSNR: 47.4dB | msg: 0.6937 | perc: 0.0003 | spec: 0.0002 | d_rms: 0.0085 | atk: 0.64 | lr: 1.0e-06 | 2.07s/step | ETA: 0min | D_loss: 0.693 D_acc: 0.50 adv: 0.6945
+  Saved checkpoint: checkpoints_v4/dscsp_v4_step_002000.pt
+
+============================================================
+FINAL EVALUATION (200 samples)
+============================================================
+  Average BER:  0.493496 (target: 0.0000)
+  Average PSNR: 47.4 dB (target: >= 35)
+  Best BER during training: 0.458008
+  Best active-bit BER during training: 0.458008
+  Discriminator accuracy: 0.5150 (target: ~0.50)
+
+  WARNING: Clean BER not yet at target
+  Saved final model: checkpoints_v4/dscsp_v4_final.pt
+  Saved results: outputs_v4/train_v4_results.json

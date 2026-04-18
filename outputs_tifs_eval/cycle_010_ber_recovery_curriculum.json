@@ -1,0 +1,92 @@
+{
+  "checkpoint": "checkpoints_tifs/ber_recovery/dscsp_v4_final.pt",
+  "num_samples": 200,
+  "clean": {
+    "ber": 0.00896484375,
+    "psnr": 32.56169044494629,
+    "ber_ci95": [
+      0.00757763671875,
+      0.01056640625
+    ]
+  },
+  "jpeg": {
+    "q75_ber": 0.01052734375,
+    "q50_ber": 0.0161328125,
+    "q75_ber_ci95": [
+      0.00890625,
+      0.011993164062499999
+    ]
+  },
+  "crop": {
+    "q80_ber": 0.49845703125,
+    "q70_ber": 0.49818359375,
+    "q80_ber_ci95": [
+      0.49406005859375,
+      0.50302783203125
+    ]
+  },
+  "adaptive_steganalysis": {
+    "auc_clean": 0.9993,
+    "auc_adaptive": 0.9986999999999999,
+    "accuracy_adaptive": 0.945
+  },
+  "cross_dataset": {
+    "cifar10": {
+      "n": 200,
+      "clean_ber": 0.00294921875,
+      "crop80_ber": 0.49806640625
+    },
+    "stl10": {
+      "n": 200,
+      "clean_ber": 0.04396484375,
+      "crop80_ber": 0.49689453125
+    }
+  },
+  "statistics": {
+    "p_clean_vs_crop80": 2.8701529021673565e-233,
+    "p_clean_vs_jpeg75": 0.01138734916363944
+  },
+  "ablation": {
+    "has_report": true,
+    "report": "outputs_tifs_ablation/latest_ablation.json"
+  },
+  "areas": {
+    "detectability": {
+      "current": 0.9986999999999999,
+      "target": 0.7,
+      "pass": false
+    },
+    "crop_robustness": {
+      "current": 0.49845703125,
+      "target": 0.35,
+      "pass": false
+    },
+    "ablation": {
+      "current": "extensive",
+      "target": "extensive",
+      "pass": true
+    },
+    "statistical_analysis": {
+      "current": "deep",
+      "target": "deep",
+      "pass": true
+    },
+    "cross_dataset": {
+      "current": "yes",
+      "target": "yes",
+      "pass": true
+    },
+    "adaptive_steganalysis": {
+      "current": 0.9986999999999999,
+      "target": 0.7,
+      "pass": false
+    },
+    "ber_focus": {
+      "clean_ber": 0.00896484375,
+      "jpeg_q75_ber": 0.01052734375,
+      "clean_target": 0.1,
+      "jpeg_q75_target": 0.2,
+      "pass": true
+    }
+  }
+}

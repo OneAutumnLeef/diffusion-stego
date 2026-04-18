@@ -1,0 +1,9 @@
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+  File "/root/diffusion-stego/train_v4.py", line 26, in <module>
+    from dscsp.models.diffusion_wrapper import DiffusionWrapper
+  File "/root/diffusion-stego/dscsp/models/__init__.py", line 8, in <module>
+    from .diffusion_wrapper import DiffusionWrapper
+  File "/root/diffusion-stego/dscsp/models/diffusion_wrapper.py", line 9, in <module>
+    from diffusers import DDPMPipeline, DDIMScheduler
+ModuleNotFoundError: No module named 'diffusers'

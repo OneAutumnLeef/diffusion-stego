@@ -1,0 +1,29 @@
+{
+  "variants": {
+    "ber_recovery_clean_first": {
+      "n": 3,
+      "clean_ber_mean": 0.0025008138020833335,
+      "crop80_ber_mean": 0.49926513671874995,
+      "auc_adaptive_mean": 0.9861712962962964
+    },
+    "ber_recovery_curriculum": {
+      "n": 3,
+      "clean_ber_mean": 0.013396809895833334,
+      "crop80_ber_mean": 0.4996931966145833,
+      "auc_adaptive_mean": 0.9413259259259258
+    },
+    "robust_balance": {
+      "n": 3,
+      "clean_ber_mean": 0.041003417968750004,
+      "crop80_ber_mean": 0.4984895833333334,
+      "auc_adaptive_mean": 0.7978611111111111
+    },
+    "detectability_harden": {
+      "n": 2,
+      "clean_ber_mean": 0.13499755859375,
+      "crop80_ber_mean": 0.49998779296875,
+      "auc_adaptive_mean": 0.7660416666666667
+    }
+  },
+  "n_cycles": 11
+}

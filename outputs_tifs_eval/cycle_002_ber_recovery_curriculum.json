@@ -1,0 +1,88 @@
+{
+  "checkpoint": "checkpoints_tifs/ber_recovery/dscsp_v4_final.pt",
+  "num_samples": 320,
+  "clean": {
+    "ber": 0.018310546875,
+    "psnr": 27.183505916595458,
+    "ber_ci95": [
+      0.01566162109375,
+      0.021192932128906248
+    ]
+  },
+  "jpeg": {
+    "q75_ber": 0.16807861328125,
+    "q50_ber": 0.25079345703125,
+    "q75_ber_ci95": [
+      0.16430633544921874,
+      0.17189971923828126
+    ]
+  },
+  "crop": {
+    "q80_ber": 0.50155029296875,
+    "q70_ber": 0.50093994140625,
+    "q80_ber_ci95": [
+      0.4979364013671875,
+      0.5052371215820312
+    ]
+  },
+  "adaptive_steganalysis": {
+    "auc_clean": 0.8422916666666667,
+    "auc_adaptive": 0.8395833333333333,
+    "accuracy_adaptive": 0.7083333333333334
+  },
+  "cross_dataset": {
+    "cifar10": {
+      "error": "Caught TypeError in DataLoader worker process 0.\nOriginal Traceback (most recent call last):\n  File \"/usr/local/lib/python3.12/dist-packages/torch/utils/data/_utils/worker.py\", line 349, in _worker_loop\n    data = fetcher.fetch(index)  # type: ignore[possibly-undefined]\n           ^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/dist-packages/torch/utils/data/_utils/fetch.py\", line 55, in fetch\n    return self.collate_fn(data)\n           ^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/dist-packages/torch/utils/data/_utils/collate.py\", line 398, in default_collate\n    return collate(batch, collate_fn_map=default_collate_fn_map)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/dist-packages/torch/utils/data/_utils/collate.py\", line 212, in collate\n    collate(samples, collate_fn_map=collate_fn_map)\n  File \"/usr/local/lib/python3.12/dist-packages/torch/utils/data/_utils/collate.py\", line 240, in collate\n    raise TypeError(default_collate_err_msg_format.format(elem_type))\nTypeError: default_collate: batch must contain tensors, numpy arrays, numbers, dicts or lists; found <class 'PIL.Image.Image'>\n"
+    },
+    "stl10": {
+      "error": "Caught TypeError in DataLoader worker process 0.\nOriginal Traceback (most recent call last):\n  File \"/usr/local/lib/python3.12/dist-packages/torch/utils/data/_utils/worker.py\", line 349, in _worker_loop\n    data = fetcher.fetch(index)  # type: ignore[possibly-undefined]\n           ^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/dist-packages/torch/utils/data/_utils/fetch.py\", line 55, in fetch\n    return self.collate_fn(data)\n           ^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/dist-packages/torch/utils/data/_utils/collate.py\", line 398, in default_collate\n    return collate(batch, collate_fn_map=default_collate_fn_map)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/dist-packages/torch/utils/data/_utils/collate.py\", line 212, in collate\n    collate(samples, collate_fn_map=collate_fn_map)\n  File \"/usr/local/lib/python3.12/dist-packages/torch/utils/data/_utils/collate.py\", line 240, in collate\n    raise TypeError(default_collate_err_msg_format.format(elem_type))\nTypeError: default_collate: batch must contain tensors, numpy arrays, numbers, dicts or lists; found <class 'PIL.Image.Image'>\n"
+    }
+  },
+  "statistics": {
+    "p_clean_vs_crop80": 0.0,
+    "p_clean_vs_jpeg75": 2.4776706165836033e-211
+  },
+  "ablation": {
+    "has_report": true,
+    "report": "outputs_tifs_ablation/latest_ablation.json"
+  },
+  "areas": {
+    "detectability": {
+      "current": 0.8395833333333333,
+      "target": 0.7,
+      "pass": false
+    },
+    "crop_robustness": {
+      "current": 0.50155029296875,
+      "target": 0.35,
+      "pass": false
+    },
+    "ablation": {
+      "current": "extensive",
+      "target": "extensive",
+      "pass": true
+    },
+    "statistical_analysis": {
+      "current": "deep",
+      "target": "deep",
+      "pass": true
+    },
+    "cross_dataset": {
+      "current": "yes",
+      "target": "yes",
+      "pass": true
+    },
+    "adaptive_steganalysis": {
+      "current": 0.8395833333333333,
+      "target": 0.7,
+      "pass": false
+    },
+    "ber_focus": {
+      "clean_ber": 0.018310546875,
+      "jpeg_q75_ber": 0.16807861328125,
+      "clean_target": 0.1,
+      "jpeg_q75_target": 0.2,
+      "pass": true
+    }
+  }
+}

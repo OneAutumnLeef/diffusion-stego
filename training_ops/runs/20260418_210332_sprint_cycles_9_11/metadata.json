@@ -1,0 +1,14 @@
+{
+    "run_id": "20260418_210332_sprint_cycles_9_11",
+    "run_tag": "sprint_cycles_9_11",
+    "branch": "main",
+    "commit": "47bc5d5f735a4bc417eab6c9c7d0209d9afbc0d5",
+  "dirty_count": 2,
+    "host": "84b46cf651b8",
+    "start_utc": "2026-04-18T21:03:32Z",
+    "end_utc": "2026-04-18T21:13:53Z",
+  "duration_s": 621,
+  "exit_code": 0,
+  "status": "success",
+    "command": "python3 -u training_ops/tifs_autopilot.py --max-cycles 11 --steps-per-cycle 1200 --eval-samples 200 --adaptive-train 300 --adaptive-test 100 --cross-dataset-samples 200 --cross-dataset-every 1 --min-ablation-variants 3 "
+}

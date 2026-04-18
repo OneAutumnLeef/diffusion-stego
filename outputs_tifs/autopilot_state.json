@@ -1,0 +1,145 @@
+{
+  "cycle": 11,
+  "phase": "stopped",
+  "active_variant": "robust_balance",
+  "cycle_total": 11,
+  "resume_checkpoint": "checkpoints_tifs/ber_recovery/dscsp_v4_final.pt",
+  "best": {
+    "cycle": 9,
+    "variant": "ber_recovery_clean_first",
+    "clean_ber": 1.953125e-05,
+    "crop80_ber": 0.4998828125,
+    "auc_adaptive": 0.999,
+    "checkpoint": "checkpoints_tifs/ber_recovery/dscsp_v4_final.pt"
+  },
+  "history": [
+    {
+      "cycle": 1,
+      "variant": "ber_recovery_clean_first",
+      "checkpoint": "checkpoints_tifs/ber_recovery/dscsp_v4_final.pt",
+      "clean_ber": 0.00745849609375,
+      "jpeg_q75_ber": 0.0100830078125,
+      "crop80_ber": 0.49774169921875,
+      "auc_adaptive": 0.9605555555555556,
+      "eval_path": "outputs_tifs_eval/cycle_001_ber_recovery_clean_first.json"
+    },
+    {
+      "cycle": 2,
+      "variant": "ber_recovery_curriculum",
+      "checkpoint": "checkpoints_tifs/ber_recovery/dscsp_v4_final.pt",
+      "clean_ber": 0.018310546875,
+      "jpeg_q75_ber": 0.16807861328125,
+      "crop80_ber": 0.50155029296875,
+      "auc_adaptive": 0.8395833333333333,
+      "eval_path": "outputs_tifs_eval/cycle_002_ber_recovery_curriculum.json"
+    },
+    {
+      "cycle": 3,
+      "variant": "robust_balance",
+      "checkpoint": "checkpoints_tifs/ber_recovery/dscsp_v4_final.pt",
+      "clean_ber": 0.06026611328125,
+      "jpeg_q75_ber": 0.2575439453125,
+      "crop80_ber": 0.50263671875,
+      "auc_adaptive": 0.8589583333333334,
+      "eval_path": "outputs_tifs_eval/cycle_003_robust_balance.json"
+    },
+    {
+      "cycle": 4,
+      "variant": "detectability_harden",
+      "checkpoint": "checkpoints_tifs/ber_recovery/dscsp_v4_final.pt",
+      "clean_ber": 0.11302490234375,
+      "jpeg_q75_ber": 0.2922119140625,
+      "crop80_ber": 0.4984375,
+      "auc_adaptive": 0.7829166666666667,
+      "eval_path": "outputs_tifs_eval/cycle_004_detectability_harden.json"
+    },
+    {
+      "cycle": 5,
+      "variant": "ber_recovery_clean_first",
+      "checkpoint": "checkpoints_tifs/ber_recovery/dscsp_v4_final.pt",
+      "clean_ber": 2.44140625e-05,
+      "jpeg_q75_ber": 0.0002197265625,
+      "crop80_ber": 0.5001708984375,
+      "auc_adaptive": 0.9989583333333334,
+      "eval_path": "outputs_tifs_eval/cycle_005_ber_recovery_clean_first.json"
+    },
+    {
+      "cycle": 6,
+      "variant": "ber_recovery_curriculum",
+      "checkpoint": "checkpoints_tifs/ber_recovery/dscsp_v4_final.pt",
+      "clean_ber": 0.0129150390625,
+      "jpeg_q75_ber": 0.16251220703125,
+      "crop80_ber": 0.499072265625,
+      "auc_adaptive": 0.9856944444444444,
+      "eval_path": "outputs_tifs_eval/cycle_006_ber_recovery_curriculum.json"
+    },
+    {
+      "cycle": 7,
+      "variant": "robust_balance",
+      "checkpoint": "checkpoints_tifs/ber_recovery/dscsp_v4_final.pt",
+      "clean_ber": 0.038427734375,
+      "jpeg_q75_ber": 0.2467529296875,
+      "crop80_ber": 0.49736328125,
+      "auc_adaptive": 0.843125,
+      "eval_path": "outputs_tifs_eval/cycle_007_robust_balance.json"
+    },
+    {
+      "cycle": 8,
+      "variant": "detectability_harden",
+      "checkpoint": "checkpoints_tifs/ber_recovery/dscsp_v4_final.pt",
+      "clean_ber": 0.15697021484375,
+      "jpeg_q75_ber": 0.3051513671875,
+      "crop80_ber": 0.5015380859375,
+      "auc_adaptive": 0.7491666666666668,
+      "eval_path": "outputs_tifs_eval/cycle_008_detectability_harden.json"
+    },
+    {
+      "cycle": 9,
+      "variant": "ber_recovery_clean_first",
+      "checkpoint": "checkpoints_tifs/ber_recovery/dscsp_v4_final.pt",
+      "clean_ber": 1.953125e-05,
+      "jpeg_q75_ber": 3.90625e-05,
+      "crop80_ber": 0.4998828125,
+      "auc_adaptive": 0.999,
+      "eval_path": "outputs_tifs_eval/cycle_009_ber_recovery_clean_first.json"
+    },
+    {
+      "cycle": 10,
+      "variant": "ber_recovery_curriculum",
+      "checkpoint": "checkpoints_tifs/ber_recovery/dscsp_v4_final.pt",
+      "clean_ber": 0.00896484375,
+      "jpeg_q75_ber": 0.01052734375,
+      "crop80_ber": 0.49845703125,
+      "auc_adaptive": 0.9986999999999999,
+      "eval_path": "outputs_tifs_eval/cycle_010_ber_recovery_curriculum.json"
+    },
+    {
+      "cycle": 11,
+      "variant": "robust_balance",
+      "checkpoint": "checkpoints_tifs/ber_recovery/dscsp_v4_final.pt",
+      "clean_ber": 0.02431640625,
+      "jpeg_q75_ber": 0.13697265625,
+      "crop80_ber": 0.49546875,
+      "auc_adaptive": 0.6915,
+      "eval_path": "outputs_tifs_eval/cycle_011_robust_balance.json"
+    }
+  ],
+  "tried_variants": [
+    "ber_recovery_clean_first",
+    "ber_recovery_curriculum",
+    "robust_balance",
+    "detectability_harden",
+    "ber_recovery_clean_first",
+    "ber_recovery_curriculum",
+    "robust_balance",
+    "detectability_harden",
+    "ber_recovery_clean_first",
+    "ber_recovery_curriculum",
+    "robust_balance"
+  ],
+  "finished": false,
+  "step_start": 22400,
+  "step_target": 23600,
+  "eval_output": "outputs_tifs_eval/cycle_011_robust_balance.json",
+  "stopped_reason": "max_cycles_reached"
+}

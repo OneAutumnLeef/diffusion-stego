@@ -1,0 +1,18 @@
+{
+  "step": 21200,
+  "total_steps": 21200,
+  "ber": 0.0,
+  "ber_active": 0.0,
+  "active_bits": 256,
+  "phase": "BOOT-CTRL",
+  "psnr": 30.72,
+  "best_ber": 0.0,
+  "best_ber_active": 0.0,
+  "msg_loss": 0.000117,
+  "perc_loss": 0.0,
+  "delta_rms": 0.058569,
+  "attack_prob": 0.0,
+  "lr": 7.937710782892975e-05,
+  "avg_step_time_s": 0.041,
+  "eta_min": 0.0
+}
