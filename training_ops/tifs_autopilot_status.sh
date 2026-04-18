@@ -17,7 +17,13 @@ if [[ -f "$PID_FILE" ]]; then
         echo "Autopilot status: NOT RUNNING (stale PID file)"
     fi
 else
-    echo "Autopilot status: NOT RUNNING"
+    LIVE_PID="$(pgrep -f "training_ops/tifs_autopilot.py" | head -1 || true)"
+    if [[ -n "$LIVE_PID" ]]; then
+        echo "Autopilot status: RUNNING (foreground/no pid file)"
+        echo "PID: $LIVE_PID"
+    else
+        echo "Autopilot status: NOT RUNNING"
+    fi
 fi
 
 if [[ -f "$STATE_FILE" ]]; then
