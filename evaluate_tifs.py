@@ -234,9 +234,9 @@ def _load_dataset_images(dataset_name: str, n: int) -> torch.Tensor:
     to_tensor = ToTensor()
 
     if dataset_name == "cifar10":
-        ds = datasets.CIFAR10(root=root, train=False, download=True)
+        ds = datasets.CIFAR10(root=root, train=False, download=True, transform=to_tensor)
     elif dataset_name == "stl10":
-        ds = datasets.STL10(root=root, split="test", download=True)
+        ds = datasets.STL10(root=root, split="test", download=True, transform=to_tensor)
     else:
         raise ValueError(f"Unsupported dataset: {dataset_name}")
 
@@ -244,14 +244,16 @@ def _load_dataset_images(dataset_name: str, n: int) -> torch.Tensor:
         n = len(ds)
 
     subset = Subset(ds, list(range(n)))
-    loader = DataLoader(subset, batch_size=64, shuffle=False, num_workers=2)
+    loader = DataLoader(subset, batch_size=64, shuffle=False, num_workers=0)
 
     imgs = []
     for batch in loader:
         x = batch[0] if isinstance(batch, (list, tuple)) else batch
-        if x.dtype != torch.float32:
-            x = to_tensor(x)
+        if not torch.is_tensor(x):
+            x = torch.stack([to_tensor(img) for img in x], dim=0)
         x = x.float()
+        if x.dim() == 3:
+            x = x.unsqueeze(0)
         if x.dim() != 4:
             continue
         x = F.interpolate(x, size=(256, 256), mode="bilinear", align_corners=False)
@@ -332,6 +334,14 @@ def evaluate_checkpoint(
             except Exception as exc:  # noqa: BLE001
                 cross_dataset[ds_name] = {"error": str(exc)}
 
+    cross_dataset_valid = any(
+        isinstance(v, dict)
+        and "error" not in v
+        and "clean_ber" in v
+        and "crop80_ber" in v
+        for v in cross_dataset.values()
+    )
+
     ablation_path = "outputs_tifs_ablation/latest_ablation.json"
     ablation_status = {
         "has_report": os.path.exists(ablation_path),
@@ -360,9 +370,9 @@ def evaluate_checkpoint(
             "pass": True,
         },
         "cross_dataset": {
-            "current": "yes" if cross_dataset else "no",
+            "current": "yes" if cross_dataset_valid else "no",
             "target": "yes",
-            "pass": bool(cross_dataset),
+            "pass": cross_dataset_valid,
         },
         "adaptive_steganalysis": {
             "current": adaptive["auc_adaptive"],

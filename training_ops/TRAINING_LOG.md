@@ -71,3 +71,14 @@ Use this file as the top-level chronological ledger.
 - Learnings: full 2000-step run remains near chance BER, establishing a strong baseline for configuration changes
 - Next Steps: run curriculum-first stage config, run clean-only control, then compare BER trajectory deltas vs this baseline
 - Linked Record: training_ops/records/20260418_190432_warmup_2000.md
+
+- Date (UTC): 2026-04-18
+- Run ID: 20260418_210332_sprint_cycles_9_11
+- Stage/Goal: execute 3-cycle sprint after evaluator cross-dataset/gating fixes
+- Command: `bash training_ops/run_logged.sh sprint_cycles_9_11 python3 -u training_ops/tifs_autopilot.py --max-cycles 11 --steps-per-cycle 1200 --eval-samples 200 --adaptive-train 300 --adaptive-test 100 --cross-dataset-samples 200 --cross-dataset-every 1 --min-ablation-variants 3`
+- Status: success
+- Key Metrics: cycle11 clean BER=0.024316, JPEG Q75 BER=0.136973, crop Q80 BER=0.495469, adaptive AUC=0.6915
+- Errors: cross-dataset PIL/DataLoader error resolved; non-blocking safetensors fallback warning persists
+- Learnings: evaluator fix validated (cross-dataset metrics now generated for CIFAR10/STL10), detectability can pass while crop robustness remains unresolved
+- Next Steps: crop-first objective tuning and robust-balance adversarial schedule refinement
+- Linked Record: training_ops/records/20260418_sprint_plan_execution.md
