@@ -22,13 +22,20 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 
+def _group_norm(channels: int) -> nn.GroupNorm:
+    groups = min(8, channels)
+    while groups > 1 and channels % groups != 0:
+        groups -= 1
+    return nn.GroupNorm(groups, channels)
+
+
 class ConvBlock(nn.Module):
-    """Conv + BatchNorm + ReLU block."""
+    """Conv + GroupNorm + ReLU block."""
     def __init__(self, in_ch, out_ch, kernel_size=3, stride=1, padding=1):
         super().__init__()
         self.block = nn.Sequential(
             nn.Conv2d(in_ch, out_ch, kernel_size, stride=stride, padding=padding),
-            nn.BatchNorm2d(out_ch),
+            _group_norm(out_ch),
             nn.ReLU(inplace=True),
         )
 
@@ -42,10 +49,10 @@ class DownBlock(nn.Module):
         super().__init__()
         self.block = nn.Sequential(
             nn.Conv2d(in_ch, out_ch, 4, stride=2, padding=1),
-            nn.BatchNorm2d(out_ch),
+            _group_norm(out_ch),
             nn.ReLU(inplace=True),
             nn.Conv2d(out_ch, out_ch, 3, padding=1),
-            nn.BatchNorm2d(out_ch),
+            _group_norm(out_ch),
             nn.ReLU(inplace=True),
         )
 
@@ -58,10 +65,10 @@ class UpBlock(nn.Module):
     def __init__(self, in_ch, out_ch):
         super().__init__()
         self.up = nn.ConvTranspose2d(in_ch, out_ch, 4, stride=2, padding=1)
-        self.bn_up = nn.BatchNorm2d(out_ch)
+        self.bn_up = _group_norm(out_ch)
         self.conv = nn.Sequential(
             nn.Conv2d(out_ch, out_ch, 3, padding=1),
-            nn.BatchNorm2d(out_ch),
+            _group_norm(out_ch),
             nn.ReLU(inplace=True),
         )
 
@@ -102,6 +109,13 @@ class ContentAdaptiveController(nn.Module):
         )
         # Output: (B, ch, 4, 4) -> upsampled to (B, ch, 256, 256)
 
+        # Direct payload-to-delta pathway (major BER recovery path).
+        # Gives the model an explicit, high-SNR route to carry bits even when
+        # content-adaptive U-Net path is still under-trained.
+        self.payload_direct = nn.Linear(num_bits, 3 * 16 * 16)
+        self.payload_fixed_gain = nn.Parameter(torch.tensor(0.18))
+        self.payload_grid_h, self.payload_grid_w = self._infer_payload_grid(num_bits)
+
         # Initial convolution: image (3ch) + message (ch) -> ch
         self.initial = ConvBlock(3 + ch, ch)
 
@@ -124,6 +138,14 @@ class ContentAdaptiveController(nn.Module):
             ConvBlock(ch * 2, ch),
             nn.Conv2d(ch, 3, kernel_size=1),
         )
+
+    @staticmethod
+    def _infer_payload_grid(num_bits: int):
+        side = int(num_bits ** 0.5)
+        for h in range(side, 0, -1):
+            if num_bits % h == 0:
+                return h, num_bits // h
+        return 1, num_bits
 
     def forward(self, image: torch.Tensor, payload: torch.Tensor) -> torch.Tensor:
         """
@@ -160,5 +182,24 @@ class ContentAdaptiveController(nn.Module):
 
         # Final with skip from initial
         delta = self.final(torch.cat([u1, d0], dim=1))  # (B, 3, 256, 256)
+
+        # Fixed payload carrier guarantees a message-conditioned signal path.
+        signed = payload[:, : self.payload_grid_h * self.payload_grid_w] * 2.0 - 1.0
+        carrier = signed.view(B, 1, self.payload_grid_h, self.payload_grid_w)
+        carrier = F.interpolate(carrier, size=(H, W), mode='nearest')
+
+        sh = max(1, H // max(1, 2 * self.payload_grid_h))
+        sw = max(1, W // max(1, 2 * self.payload_grid_w))
+        carrier_rgb = torch.cat([
+            carrier,
+            torch.roll(carrier, shifts=sh, dims=2),
+            torch.roll(carrier, shifts=sw, dims=3),
+        ], dim=1)
+
+        direct = self.payload_direct(payload).view(B, 3, 16, 16)
+        direct = F.interpolate(direct, size=(H, W), mode='bilinear', align_corners=False)
+
+        # Blend content-adaptive and direct payload channels.
+        delta = delta + self.payload_fixed_gain * carrier_rgb + 0.5 * direct
 
         return torch.tanh(delta) * self.max_perturbation

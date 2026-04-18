@@ -17,6 +17,7 @@ import random
 import signal
 import time
 import json
+import math
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -41,6 +42,8 @@ CONFIG = {
     "ddim_steps": 20,
     "max_perturbation": 0.08,
     "base_channels": 48,
+    "extractor_mode": "spatial_map",   # "global_fc" (legacy) or "spatial_map"
+    "extractor_grid_size": 16,
 
     # Training
     "batch_size": 4,
@@ -70,6 +73,23 @@ CONFIG = {
     "bit_curriculum_end_bits": 256,
     "bit_curriculum_steps": 0,
     "bit_curriculum_start_step": 1,
+
+    # Extractor bootstrap curriculum (major BER recovery mechanism)
+    # Trains extractor on a synthetic bit-carrying channel for early steps,
+    # then switches to normal controller-driven training.
+    "extractor_bootstrap_steps": 800,
+    "extractor_bootstrap_start_step": 1,
+    "extractor_bootstrap_perturbation": 0.18,
+    "extractor_bootstrap_attack_prob": 0.0,
+
+    # Controller bootstrap phase (after extractor bootstrap):
+    # align controller outputs to a synthetic target channel while keeping
+    # message decoding objective active.
+    "controller_bootstrap_steps": 1000,
+    "controller_bootstrap_start_step": 0,   # 0 means "right after extractor bootstrap"
+    "controller_bootstrap_align_weight": 20.0,
+    "controller_bootstrap_attack_prob": 0.0,
+    "controller_bootstrap_freeze_extractor": True,
 
     # Attack schedule — JPEG-heavy
     "robustness_start_step": 500,
@@ -123,20 +143,52 @@ CONFIG = {
 
 class GlobalExtractor(nn.Module):
     """
-    Bit extractor using ResNet-18 with global average pooling.
+        Bit extractor with selectable head type:
+            - global_fc  : legacy GAP + FC head
+            - spatial_map: high-resolution spatial head (one bit per spatial cell)
 
-    Unlike the grid-aligned v2 extractor (1x1 conv on 8x8 features),
-    this uses GAP + FC to predict all bits from global features.
-    No spatial alignment assumptions — works with content-adaptive controller.
+        The spatial_map mode preserves local embedding evidence and avoids the
+        severe compression bottleneck of forcing all bits through a single global
+        pooled vector.
     """
 
-    def __init__(self, num_bits: int = 256):
+    def __init__(self, num_bits: int = 256, mode: str = "global_fc", grid_size: int = 16):
         super().__init__()
         self.num_bits = num_bits
+        self.mode = mode
+        self.grid_size = max(1, int(grid_size))
+
         backbone = tv_models.resnet18(weights=None)
-        # Replace final FC layer
+
+        # Keep FC shape aligned with num_bits for robust checkpoint compatibility.
         backbone.fc = nn.Linear(512, num_bits)
+
+        if self.mode == "spatial_map":
+            # Preserve higher-frequency spatial details (256 -> 16 feature grid).
+            backbone.maxpool = nn.Identity()
+            self.spatial_head = nn.Conv2d(512, 1, kernel_size=1)
+            self.grid_h, self.grid_w = self._infer_grid_shape(num_bits)
+
         self.backbone = backbone
+
+    @staticmethod
+    def _infer_grid_shape(num_bits: int):
+        side = int(math.sqrt(num_bits))
+        for h in range(side, 0, -1):
+            if num_bits % h == 0:
+                return h, num_bits // h
+        return 1, num_bits
+
+    def _forward_features(self, image: torch.Tensor) -> torch.Tensor:
+        x = self.backbone.conv1(image)
+        x = self.backbone.bn1(x)
+        x = self.backbone.relu(x)
+        x = self.backbone.maxpool(x)
+        x = self.backbone.layer1(x)
+        x = self.backbone.layer2(x)
+        x = self.backbone.layer3(x)
+        x = self.backbone.layer4(x)
+        return x
 
     def forward(self, image: torch.Tensor) -> torch.Tensor:
         """
@@ -145,7 +197,26 @@ class GlobalExtractor(nn.Module):
         Returns:
             (B, num_bits) logits
         """
-        return self.backbone(image)
+        if self.mode == "global_fc":
+            return self.backbone(image)
+
+        feat = self._forward_features(image)
+        logits_map = self.spatial_head(feat)
+
+        if logits_map.shape[2] != self.grid_h or logits_map.shape[3] != self.grid_w:
+            logits_map = F.interpolate(
+                logits_map,
+                size=(self.grid_h, self.grid_w),
+                mode="bilinear",
+                align_corners=False,
+            )
+
+        logits = logits_map.flatten(1)
+        if logits.shape[1] > self.num_bits:
+            logits = logits[:, :self.num_bits]
+        elif logits.shape[1] < self.num_bits:
+            logits = F.pad(logits, (0, self.num_bits - logits.shape[1]))
+        return logits
 
 
 # ─── Spectral-Norm Discriminator ───────────────────────────────────────────
@@ -366,6 +437,51 @@ def compute_spectral_loss(x_stego, x_clean):
     return loss
 
 
+def _load_state_dict_flexible(model: nn.Module, state_dict: dict, name: str):
+    """Load checkpoint weights with shape/key filtering for architecture transitions."""
+    try:
+        model.load_state_dict(state_dict, strict=True)
+        print(f"  Loaded {name} weights (strict)")
+        return
+    except RuntimeError as exc:
+        print(f"  Strict load failed for {name}: {exc}")
+        model_state = model.state_dict()
+        compatible = {
+            k: v for k, v in state_dict.items()
+            if k in model_state and model_state[k].shape == v.shape
+        }
+        model.load_state_dict(compatible, strict=False)
+        print(
+            f"  Loaded {name} weights (flex): "
+            f"{len(compatible)}/{len(model_state)} tensors compatible"
+        )
+
+
+def _build_bootstrap_delta(payload: torch.Tensor, height: int, width: int, amplitude: float) -> torch.Tensor:
+    """
+    Deterministic synthetic channel for extractor bootstrap.
+
+    Encodes payload bits as block-wise +/- patterns so extractor can learn a
+    usable decoding prior before controller/extractor co-adaptation.
+    """
+    bsz, num_bits = payload.shape
+    grid_h, grid_w = GlobalExtractor._infer_grid_shape(num_bits)
+
+    signed = payload[:, :grid_h * grid_w] * 2.0 - 1.0
+    signed = signed.view(bsz, 1, grid_h, grid_w)
+    signed = F.interpolate(signed, size=(height, width), mode="nearest")
+
+    # Channel-shifted carriers make the bootstrap less trivially luminance-only.
+    sh = max(1, height // max(1, 2 * grid_h))
+    sw = max(1, width // max(1, 2 * grid_w))
+    d0 = signed
+    d1 = torch.roll(signed, shifts=sh, dims=2)
+    d2 = torch.roll(signed, shifts=sw, dims=3)
+
+    delta = torch.cat([d0, d1, d2], dim=1)
+    return delta.clamp(-amplitude, amplitude)
+
+
 # ─── Training ──────────────────────────────────────────────────────────────
 
 def train(config=None):
@@ -409,9 +525,13 @@ def train(config=None):
     print(f"  Controller params: {ctrl_params / 1e6:.2f}M")
 
     print("Initializing global-pool extractor...")
-    extractor = GlobalExtractor(num_bits=config["num_bits"]).to(device)
+    extractor = GlobalExtractor(
+        num_bits=config["num_bits"],
+        mode=config.get("extractor_mode", "global_fc"),
+        grid_size=config.get("extractor_grid_size", 16),
+    ).to(device)
     ext_params = sum(p.numel() for p in extractor.parameters())
-    print(f"  Extractor params: {ext_params / 1e6:.2f}M")
+    print(f"  Extractor params: {ext_params / 1e6:.2f}M ({config.get('extractor_mode', 'global_fc')})")
 
     # Discriminator with spectral normalization
     discriminator = None
@@ -458,8 +578,8 @@ def train(config=None):
     if config["resume_path"] and os.path.exists(config["resume_path"]):
         print(f"Resuming from {config['resume_path']}...")
         ckpt = torch.load(config["resume_path"], map_location=device, weights_only=False)
-        controller.load_state_dict(ckpt["controller"])
-        extractor.load_state_dict(ckpt["extractor"])
+        _load_state_dict_flexible(controller, ckpt["controller"], "controller")
+        _load_state_dict_flexible(extractor, ckpt["extractor"], "extractor")
         if config.get("resume_load_optimizer", True) and "optimizer" in ckpt:
             optimizer.load_state_dict(ckpt["optimizer"])
         if config.get("resume_load_scheduler", True) and "scheduler" in ckpt:
@@ -468,7 +588,7 @@ def train(config=None):
         best_ber = ckpt.get("best_ber", 1.0)
         best_ber_active = ckpt.get("best_ber_active", best_ber)
         if discriminator is not None and "discriminator" in ckpt:
-            discriminator.load_state_dict(ckpt["discriminator"])
+            _load_state_dict_flexible(discriminator, ckpt["discriminator"], "discriminator")
         if (
             disc_optimizer is not None
             and config.get("resume_load_disc_optimizer", True)
@@ -509,6 +629,14 @@ def train(config=None):
     )
     print(f"  Max perturbation: {config['max_perturbation']}")
     print(
+        f"  Extractor bootstrap: {config.get('extractor_bootstrap_steps', 0)} steps, "
+        f"amp={config.get('extractor_bootstrap_perturbation', 0.0)}"
+    )
+    print(
+        f"  Controller bootstrap: {config.get('controller_bootstrap_steps', 0)} steps, "
+        f"align_w={config.get('controller_bootstrap_align_weight', 0.0)}"
+    )
+    print(
         f"  Lambda perc: {config['lambda_perc']}, "
         f"spec: {config['lambda_spec']}, adv: {config['lambda_adv']}"
     )
@@ -520,6 +648,19 @@ def train(config=None):
     print()
 
     step_times = []
+    ext_bootstrap_start = start_step + int(config.get("extractor_bootstrap_start_step", 1))
+    ext_bootstrap_steps = int(config.get("extractor_bootstrap_steps", 0))
+    ext_bootstrap_end = ext_bootstrap_start + ext_bootstrap_steps - 1
+
+    ctrl_bootstrap_steps = int(config.get("controller_bootstrap_steps", 0))
+    ctrl_bootstrap_start_cfg = int(config.get("controller_bootstrap_start_step", 0))
+    if ctrl_bootstrap_start_cfg > 0:
+        ctrl_bootstrap_start = start_step + ctrl_bootstrap_start_cfg
+    else:
+        ctrl_bootstrap_start = ext_bootstrap_end + 1
+    ctrl_bootstrap_end = ctrl_bootstrap_start + ctrl_bootstrap_steps - 1
+
+    extractor_frozen = False
 
     for step in range(start_step + 1, config["total_steps"] + 1):
         t0 = time.time()
@@ -542,72 +683,205 @@ def train(config=None):
             0, 2, (config["batch_size"], config["num_bits"]), device=device
         ).float()
 
-        # Controller forward: content-adaptive perturbation
-        delta = controller(x_clean, payload)
-        x_stego = (x_clean + delta).clamp(-1, 1)
-        delta_norms = delta.pow(2).mean()
+        in_extractor_bootstrap = (
+            ext_bootstrap_steps > 0
+            and step >= ext_bootstrap_start
+            and step <= ext_bootstrap_end
+        )
+        in_controller_bootstrap = (
+            ctrl_bootstrap_steps > 0
+            and step >= ctrl_bootstrap_start
+            and step <= ctrl_bootstrap_end
+        )
 
-        # ── Discriminator update ──
-        disc_loss_val = 0.0
-        disc_acc_val = 0.0
-        if discriminator is not None and step >= config["adv_start_step"]:
-            for _ in range(config["disc_steps_per_gen_step"]):
-                disc_loss_val, disc_acc_val = train_discriminator_step(
-                    discriminator, disc_optimizer,
-                    x_clean, x_stego,
-                    label_smoothing=config["disc_label_smoothing"],
+        freeze_extractor_now = bool(
+            in_controller_bootstrap
+            and config.get("controller_bootstrap_freeze_extractor", True)
+        )
+        if freeze_extractor_now != extractor_frozen:
+            for p in extractor.parameters():
+                p.requires_grad_(not freeze_extractor_now)
+            extractor_frozen = freeze_extractor_now
+
+        if in_extractor_bootstrap:
+            # Bootstrap phase: train extractor on a deterministic synthetic channel
+            # to break the random-guess deadlock before joint training.
+            optimizer.zero_grad()
+
+            active_bits = get_active_bits(step, config)
+            delta = _build_bootstrap_delta(
+                payload,
+                x_clean.shape[2],
+                x_clean.shape[3],
+                float(config.get("extractor_bootstrap_perturbation", 0.18)),
+            )
+            x_stego = (x_clean + delta).clamp(-1, 1)
+            delta_norms = delta.pow(2).mean()
+
+            boot_attack_prob = float(config.get("extractor_bootstrap_attack_prob", 0.0))
+            if boot_attack_prob > 0:
+                x_for_extraction = attack_layer(
+                    x_stego, attack_prob=boot_attack_prob, combined=False, n_combined=1
                 )
+            else:
+                x_for_extraction = x_stego
 
-        # ── Generator (Controller + Extractor) update ──
-        optimizer.zero_grad()
+            bits_pred = extractor(x_for_extraction)
+            bits_pred_loss = bits_pred[:, :active_bits]
+            payload_loss = payload[:, :active_bits]
 
-        # Recompute stego (discriminator step used detached copy)
-        delta = controller(x_clean, payload)
-        x_stego = (x_clean + delta).clamp(-1, 1)
-        delta_norms = delta.pow(2).mean()
+            loss = F.binary_cross_entropy_with_logits(bits_pred_loss, payload_loss)
+            loss_dict = {
+                "msg": loss.item(),
+                "perc": 0.0,
+                "ctrl": delta_norms.item(),
+                "adv": 0.0,
+                "spec": 0.0,
+            }
+            disc_loss_val = 0.0
+            disc_acc_val = 0.0
+            attack_prob = boot_attack_prob
+            disc_logits_stego = None
 
-        # Apply JPEG-heavy differentiable attack
-        attack_prob = get_attack_prob(step, config)
-        use_combined = should_use_combined_attack(step, config)
-        x_for_extraction = attack_layer(
-            x_stego, attack_prob=attack_prob,
-            combined=use_combined, n_combined=config["n_combined"],
-        )
+            loss.backward()
+            torch.nn.utils.clip_grad_norm_(extractor.parameters(), max_norm=config["grad_clip"])
+            optimizer.step()
+            scheduler.step()
 
-        # Extract bits
-        bits_pred = extractor(x_for_extraction)
-        active_bits = get_active_bits(step, config)
-        bits_pred_loss = bits_pred[:, :active_bits]
-        payload_loss = payload[:, :active_bits]
+        elif in_controller_bootstrap:
+            # Bridge phase: teach controller to emit a decodable structure while
+            # maintaining payload supervision through the real extractor path.
+            optimizer.zero_grad()
 
-        # Compute adversarial logits
-        disc_logits_stego = None
-        if (
-            discriminator is not None
-            and config["lambda_adv"] > 0
-            and step >= config["adv_start_step"]
-        ):
-            disc_logits_stego = discriminator(x_stego)
+            active_bits = get_active_bits(step, config)
+            target_amp = min(
+                float(config.get("extractor_bootstrap_perturbation", 0.18)),
+                float(config["max_perturbation"]),
+            )
+            target_delta = _build_bootstrap_delta(
+                payload,
+                x_clean.shape[2],
+                x_clean.shape[3],
+                target_amp,
+            )
 
-        # Compute composite loss
-        loss, loss_dict = criterion(
-            bits_pred_loss, payload_loss, x_stego, x_clean, delta_norms,
-            step=step, disc_logits_stego=disc_logits_stego,
-        )
+            delta = controller(x_clean, payload)
+            x_stego = (x_clean + delta).clamp(-1, 1)
+            delta_norms = delta.pow(2).mean()
 
-        # Spectral loss (penalize frequency-domain differences)
-        spec_loss = compute_spectral_loss(x_stego, x_clean)
-        loss = loss + config["lambda_spec"] * spec_loss
-        loss_dict["spec"] = spec_loss.item()
+            ctrl_boot_attack = float(config.get("controller_bootstrap_attack_prob", 0.0))
+            if ctrl_boot_attack > 0:
+                x_for_extraction = attack_layer(
+                    x_stego, attack_prob=ctrl_boot_attack, combined=False, n_combined=1
+                )
+            else:
+                x_for_extraction = x_stego
 
-        loss.backward()
+            bits_pred = extractor(x_for_extraction)
+            bits_pred_loss = bits_pred[:, :active_bits]
+            payload_loss = payload[:, :active_bits]
 
-        torch.nn.utils.clip_grad_norm_(
-            list(controller.parameters()) + list(extractor.parameters()),
-            max_norm=config["grad_clip"],
-        )
-        optimizer.step()
-        scheduler.step()
+            loss_msg = F.binary_cross_entropy_with_logits(bits_pred_loss, payload_loss)
+            loss_align = F.mse_loss(delta, target_delta)
+            align_w = float(config.get("controller_bootstrap_align_weight", 6.0))
+            if extractor_frozen:
+                # First make controller emit a decodable signal shape.
+                # Message gradients are unreliable while extractor is frozen.
+                loss = align_w * loss_align
+            else:
+                loss = loss_msg + align_w * loss_align
+
+            loss_dict = {
+                "msg": loss_msg.item(),
+                "perc": 0.0,
+                "ctrl": delta_norms.item(),
+                "adv": 0.0,
+                "spec": 0.0,
+                "align": loss_align.item(),
+            }
+            disc_loss_val = 0.0
+            disc_acc_val = 0.0
+            attack_prob = ctrl_boot_attack
+            disc_logits_stego = None
+
+            loss.backward()
+            if extractor_frozen:
+                torch.nn.utils.clip_grad_norm_(controller.parameters(), max_norm=config["grad_clip"])
+            else:
+                torch.nn.utils.clip_grad_norm_(
+                    list(controller.parameters()) + list(extractor.parameters()),
+                    max_norm=config["grad_clip"],
+                )
+            optimizer.step()
+            scheduler.step()
+
+        else:
+            # Controller forward: content-adaptive perturbation
+            delta = controller(x_clean, payload)
+            x_stego = (x_clean + delta).clamp(-1, 1)
+            delta_norms = delta.pow(2).mean()
+
+            # ── Discriminator update ──
+            disc_loss_val = 0.0
+            disc_acc_val = 0.0
+            if discriminator is not None and step >= config["adv_start_step"]:
+                for _ in range(config["disc_steps_per_gen_step"]):
+                    disc_loss_val, disc_acc_val = train_discriminator_step(
+                        discriminator, disc_optimizer,
+                        x_clean, x_stego,
+                        label_smoothing=config["disc_label_smoothing"],
+                    )
+
+            # ── Generator (Controller + Extractor) update ──
+            optimizer.zero_grad()
+
+            # Recompute stego (discriminator step used detached copy)
+            delta = controller(x_clean, payload)
+            x_stego = (x_clean + delta).clamp(-1, 1)
+            delta_norms = delta.pow(2).mean()
+
+            # Apply JPEG-heavy differentiable attack
+            attack_prob = get_attack_prob(step, config)
+            use_combined = should_use_combined_attack(step, config)
+            x_for_extraction = attack_layer(
+                x_stego, attack_prob=attack_prob,
+                combined=use_combined, n_combined=config["n_combined"],
+            )
+
+            # Extract bits
+            bits_pred = extractor(x_for_extraction)
+            active_bits = get_active_bits(step, config)
+            bits_pred_loss = bits_pred[:, :active_bits]
+            payload_loss = payload[:, :active_bits]
+
+            # Compute adversarial logits
+            disc_logits_stego = None
+            if (
+                discriminator is not None
+                and config["lambda_adv"] > 0
+                and step >= config["adv_start_step"]
+            ):
+                disc_logits_stego = discriminator(x_stego)
+
+            # Compute composite loss
+            loss, loss_dict = criterion(
+                bits_pred_loss, payload_loss, x_stego, x_clean, delta_norms,
+                step=step, disc_logits_stego=disc_logits_stego,
+            )
+
+            # Spectral loss (penalize frequency-domain differences)
+            spec_loss = compute_spectral_loss(x_stego, x_clean)
+            loss = loss + config["lambda_spec"] * spec_loss
+            loss_dict["spec"] = spec_loss.item()
+
+            loss.backward()
+
+            torch.nn.utils.clip_grad_norm_(
+                list(controller.parameters()) + list(extractor.parameters()),
+                max_norm=config["grad_clip"],
+            )
+            optimizer.step()
+            scheduler.step()
 
         step_time = time.time() - t0
         step_times.append(step_time)
@@ -622,8 +896,14 @@ def train(config=None):
             remaining = avg_time * (config["total_steps"] - step)
             cur_lr = scheduler.get_last_lr()[0]
 
+            if in_extractor_bootstrap:
+                phase = "BOOT-EXT"
+            elif in_controller_bootstrap:
+                phase = "BOOT-CTRL"
+            else:
+                phase = "TRAIN"
             log_line = (
-                f"Step {step:5d}/{config['total_steps']} | "
+                f"{phase} Step {step:5d}/{config['total_steps']} | "
                 f"BER: {ber:.4f} | "
                 f"A-BER({active_bits}): {ber_active:.4f} | "
                 f"PSNR: {psnr:.1f}dB | "
@@ -634,7 +914,7 @@ def train(config=None):
                 f"lr: {cur_lr:.1e} | "
                 f"{avg_time:.2f}s/step | ETA: {remaining/60:.0f}min"
             )
-            if config["use_adversarial"] and step >= config["adv_start_step"]:
+            if (phase == "TRAIN") and config["use_adversarial"] and step >= config["adv_start_step"]:
                 log_line += (
                     f" | D_loss: {disc_loss_val:.3f} D_acc: {disc_acc_val:.2f}"
                     f" adv: {loss_dict.get('adv', 0):.4f}"
@@ -654,6 +934,7 @@ def train(config=None):
                 "ber": round(ber, 6),
                 "ber_active": round(ber_active, 6),
                 "active_bits": active_bits,
+                "phase": phase,
                 "psnr": round(psnr, 2),
                 "best_ber": round(best_ber, 6),
                 "best_ber_active": round(best_ber_active, 6),

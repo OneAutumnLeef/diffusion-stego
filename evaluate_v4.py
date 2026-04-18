@@ -39,6 +39,20 @@ from dscsp.utils.metrics import compute_ber, compute_psnr
 
 def load_v4_model(ckpt_path, device):
     """Load v4 controller + extractor from checkpoint."""
+    def _load_flexible(model, state_dict, name):
+        try:
+            model.load_state_dict(state_dict, strict=True)
+            return
+        except RuntimeError as exc:
+            print(f"  Warning: strict load failed for {name}: {exc}")
+            model_state = model.state_dict()
+            compatible = {
+                k: v for k, v in state_dict.items()
+                if k in model_state and model_state[k].shape == v.shape
+            }
+            model.load_state_dict(compatible, strict=False)
+            print(f"  Loaded {name} with flexible mapping: {len(compatible)}/{len(model_state)} tensors")
+
     ckpt = torch.load(ckpt_path, map_location=device, weights_only=False)
     config = ckpt["config"]
 
@@ -47,13 +61,17 @@ def load_v4_model(ckpt_path, device):
         max_perturbation=config["max_perturbation"],
         base_channels=config.get("base_channels", 48),
     ).to(device)
-    controller.load_state_dict(ckpt["controller"])
+    _load_flexible(controller, ckpt["controller"], "controller")
     controller.eval()
 
     # Import GlobalExtractor from train_v4
     from train_v4 import GlobalExtractor
-    extractor = GlobalExtractor(num_bits=config["num_bits"]).to(device)
-    extractor.load_state_dict(ckpt["extractor"])
+    extractor = GlobalExtractor(
+        num_bits=config["num_bits"],
+        mode=config.get("extractor_mode", "global_fc"),
+        grid_size=config.get("extractor_grid_size", 16),
+    ).to(device)
+    _load_flexible(extractor, ckpt["extractor"], "extractor")
     extractor.eval()
 
     return controller, extractor, config
