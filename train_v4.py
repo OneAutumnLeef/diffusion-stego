@@ -955,6 +955,7 @@ def train(config=None):
 
         # ── Save images ──
         if step % config["save_image_interval"] == 0:
+            os.makedirs(config["output_dir"], exist_ok=True)
             save_comparison(
                 x_stego.detach(), x_clean.detach(),
                 step=step, output_dir=config["output_dir"],
@@ -962,6 +963,7 @@ def train(config=None):
 
         # ── Checkpoint ──
         if step % config["checkpoint_interval"] == 0:
+            os.makedirs(config["checkpoint_dir"], exist_ok=True)
             ckpt_path = os.path.join(
                 config["checkpoint_dir"], f"dscsp_v4_step_{step:06d}.pt"
             )
@@ -984,6 +986,7 @@ def train(config=None):
 
         # ── Signal-triggered emergency checkpoint ──
         if _interrupted[0]:
+            os.makedirs(config["checkpoint_dir"], exist_ok=True)
             interrupt_path = os.path.join(
                 config["checkpoint_dir"], f"dscsp_v4_interrupt_step_{step:06d}.pt"
             )
@@ -1075,6 +1078,7 @@ def train(config=None):
         print("  WARNING: Clean BER not yet at target")
 
     # Save final checkpoint
+    os.makedirs(config["checkpoint_dir"], exist_ok=True)
     final_path = os.path.join(config["checkpoint_dir"], "dscsp_v4_final.pt")
     final_data = {
         "step": config["total_steps"],
@@ -1106,6 +1110,7 @@ def train(config=None):
         "config": {k: str(v) if isinstance(v, tuple) else v for k, v in config.items()},
     }
     results_path = os.path.join(config["output_dir"], "train_v4_results.json")
+    os.makedirs(config["output_dir"], exist_ok=True)
     with open(results_path, "w") as f:
         json.dump(results, f, indent=2)
     print(f"  Saved results: {results_path}")
