@@ -65,9 +65,9 @@ Use this file as the top-level chronological ledger.
 - Run ID: 20260418_190432_warmup_2000
 - Stage/Goal: substantive warmup training (2000 steps)
 - Command: `bash training_ops/run_logged.sh warmup_2000 ... train_v4.train(cfg)`
-- Status: running
-- Key Metrics: live snapshot to step 1390: BER still around ~0.50, PSNR peaked near 50.8 dB before settling mid-40s under stronger attacks/adversarial phase
-- Errors: none so far (non-fatal diffusers warning only)
-- Learnings: training is stable but BER stagnation persists through adversarial phase start
-- Next Steps: monitor first metrics/checkpoint events and update with trend data
+- Status: success
+- Key Metrics: final BER=0.493496, best BER=0.458008, final PSNR=47.4 dB, disc_acc=0.5150
+- Errors: none fatal; startup safetensors fallback warning persisted
+- Learnings: full 2000-step run remains near chance BER, establishing a strong baseline for configuration changes
+- Next Steps: run curriculum-first stage config, run clean-only control, then compare BER trajectory deltas vs this baseline
 - Linked Record: training_ops/records/20260418_190432_warmup_2000.md
