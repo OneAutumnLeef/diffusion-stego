@@ -60,3 +60,14 @@ Use this file as the top-level chronological ledger.
 - Learnings: training pipeline executes correctly on RTX 5090 in this environment
 - Next Steps: launch longer staged run and track trend metrics beyond random-guess regime
 - Linked Record: training_ops/records/20260418_190133_initial_probe_after_deps.md
+
+- Date (UTC): 2026-04-18
+- Run ID: 20260418_190432_warmup_2000
+- Stage/Goal: substantive warmup training (2000 steps)
+- Command: `bash training_ops/run_logged.sh warmup_2000 ... train_v4.train(cfg)`
+- Status: running
+- Key Metrics: pending first periodic logging line
+- Errors: none so far (non-fatal diffusers warning only)
+- Learnings: process is stable enough to start long-form logged training
+- Next Steps: monitor first metrics/checkpoint events and update with trend data
+- Linked Record: training_ops/records/20260418_190432_warmup_2000.md
