@@ -1,5 +1,19 @@
 # DSCSP Project Context
 
+## Required Post-Clone Artifact Restore
+
+Large artifacts are intentionally not tracked in git. After cloning this repository, restore checkpoints and outputs from Hugging Face before training or evaluation.
+
+1. Install dependencies (`pip install -r requirements.txt`)
+2. Run `bash pull_artifacts_from_hf.sh .` from repo root
+3. Verify key folders are populated (`checkpoints_v5/`, `checkpoints_v5_clean/`, `checkpoints_v5_quality/`, `outputs_v5_ablation/`)
+
+Hugging Face artifact source:
+- Dataset repo: `OneAutumnLeef/dscsp-checkpoints`
+- Repo type: `dataset`
+
+If private access is needed, authenticate first with `hf auth login`.
+
 ## Project Overview
 DSCSP (Diffusion-Stego with Conditional Sampling Paths) - Deep steganography framework using diffusion-generated cover images. Building toward IEEE TIFS journal publication.
 
