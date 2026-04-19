@@ -1,0 +1,765 @@
+{
+  "nodes": [
+    {
+      "id": "dscsp",
+      "label": "DSCSP: Diffusion-Stego with Conditional Sampling Paths",
+      "file_type": "document"
+    },
+    {
+      "id": "controller_module",
+      "label": "Controller: Payload-to-Sampling-Path Mapping Network",
+      "file_type": "code"
+    },
+    {
+      "id": "extractor_module",
+      "label": "Extractor: Bit Recovery from Stego Images",
+      "file_type": "code"
+    },
+    {
+      "id": "discriminator_module",
+      "label": "Discriminator: Stego Detection Adversary",
+      "file_type": "code"
+    },
+    {
+      "id": "diffusion_frozen",
+      "label": "Frozen Diffusion Model: Base Image Generator",
+      "file_type": "code"
+    },
+    {
+      "id": "train_v4_py",
+      "label": "train_v4.py: Main Training Script",
+      "file_type": "code"
+    },
+    {
+      "id": "train_v4_final_iterated_py",
+      "label": "train_v4_final_iterated.py: Staged Training Variant",
+      "file_type": "code"
+    },
+    {
+      "id": "evaluate_v4_py",
+      "label": "evaluate_v4.py: Core Evaluation Pipeline",
+      "file_type": "code"
+    },
+    {
+      "id": "evaluate_tifs_py",
+      "label": "evaluate_tifs.py: TIFS Evaluation with Cross-Dataset",
+      "file_type": "code"
+    },
+    {
+      "id": "tifs_autopilot_py",
+      "label": "tifs_autopilot.py: Automated Multi-Cycle Training Orchestration",
+      "file_type": "code"
+    },
+    {
+      "id": "run_logged_sh",
+      "label": "run_logged.sh: Execution Wrapper with Metadata Capture",
+      "file_type": "code"
+    },
+    {
+      "id": "requirements_txt",
+      "label": "requirements.txt: Python Dependencies",
+      "file_type": "code"
+    },
+    {
+      "id": "probe_run_failed",
+      "label": "initial_probe: Failed Startup Run (Missing diffusers)",
+      "file_type": "document"
+    },
+    {
+      "id": "deps_install_run",
+      "label": "deps_install: Successful Dependency Installation",
+      "file_type": "document"
+    },
+    {
+      "id": "probe_after_deps_run",
+      "label": "initial_probe_after_deps: One-Step Validation Run",
+      "file_type": "document"
+    },
+    {
+      "id": "warmup_2000_run",
+      "label": "warmup_2000: 2000-Step Baseline Training Run",
+      "file_type": "document"
+    },
+    {
+      "id": "sprint_cycles_9_11_run",
+      "label": "sprint_cycles_9_11: 11-Cycle Autopilot Sprint",
+      "file_type": "document"
+    },
+    {
+      "id": "metric_clean_ber",
+      "label": "Clean BER: Bit Error Rate on Unattacked Images",
+      "file_type": "document"
+    },
+    {
+      "id": "metric_jpeg_q75_ber",
+      "label": "JPEG Q75 BER: Robustness to JPEG Q75 Compression",
+      "file_type": "document"
+    },
+    {
+      "id": "metric_crop_q80_ber",
+      "label": "Crop Q80 BER: Robustness to Crop and Recompression",
+      "file_type": "document"
+    },
+    {
+      "id": "metric_adaptive_auc",
+      "label": "Adaptive AUC: Detectability via Steganalysis",
+      "file_type": "document"
+    },
+    {
+      "id": "metric_psnr",
+      "label": "PSNR: Peak Signal-to-Noise Ratio for Perceptual Quality",
+      "file_type": "document"
+    },
+    {
+      "id": "metric_ssim",
+      "label": "SSIM: Structural Similarity Index",
+      "file_type": "document"
+    },
+    {
+      "id": "metric_lpips",
+      "label": "LPIPS: Learned Perceptual Image Patch Similarity",
+      "file_type": "document"
+    },
+    {
+      "id": "phase_ber_recovery_clean",
+      "label": "ber_recovery_clean_first: Clean-First Training Phase",
+      "file_type": "document"
+    },
+    {
+      "id": "phase_ber_recovery_curriculum",
+      "label": "ber_recovery_curriculum: Curriculum-Based Training Phase",
+      "file_type": "document"
+    },
+    {
+      "id": "phase_robust_balance",
+      "label": "robust_balance: Robustness Balancing Phase",
+      "file_type": "document"
+    },
+    {
+      "id": "phase_detectability_harden",
+      "label": "detectability_harden: Anti-Detection Adversarial Phase",
+      "file_type": "document"
+    },
+    {
+      "id": "context_manual_2026_04_18",
+      "label": "PROJECT_CONTEXT_MANUAL_2026-04-18.md: Full Handover Document",
+      "file_type": "document"
+    },
+    {
+      "id": "major_log_tifs",
+      "label": "outputs_tifs/MAJOR_LOG.md: Autopilot Milestone Log",
+      "file_type": "document"
+    },
+    {
+      "id": "training_ops_readme",
+      "label": "training_ops/README.md: Operations Workflow Documentation",
+      "file_type": "document"
+    },
+    {
+      "id": "training_log_md",
+      "label": "training_ops/TRAINING_LOG.md: Chronological Training Ledger",
+      "file_type": "document"
+    },
+    {
+      "id": "idea_md",
+      "label": "Idea.md: DSCSP Research Design and Novelty Claims",
+      "file_type": "document"
+    },
+    {
+      "id": "record_initial_probe",
+      "label": "20260418_190031_initial_probe.md: Probe Failure Record",
+      "file_type": "document"
+    },
+    {
+      "id": "record_deps_install",
+      "label": "20260418_190108_deps_install.md: Dependency Installation Record",
+      "file_type": "document"
+    },
+    {
+      "id": "record_probe_after_deps",
+      "label": "20260418_190133_initial_probe_after_deps.md: Validation Run Record",
+      "file_type": "document"
+    },
+    {
+      "id": "record_warmup_2000",
+      "label": "20260418_190432_warmup_2000.md: Warmup Training Record",
+      "file_type": "document"
+    },
+    {
+      "id": "record_bootstrap_logging",
+      "label": "20260418_bootstrap_logging_setup.md: Logging Infrastructure Record",
+      "file_type": "document"
+    },
+    {
+      "id": "record_sprint_plan",
+      "label": "20260418_sprint_plan_execution.md: Sprint Execution Record",
+      "file_type": "document"
+    },
+    {
+      "id": "chat_history_archive",
+      "label": "training_ops/chat_history_archive: Copilot Transcript Archive",
+      "file_type": "document"
+    },
+    {
+      "id": "img_step_500",
+      "label": "outputs_v4/step_000500.png: Training Visualization at Step 500",
+      "file_type": "image"
+    },
+    {
+      "id": "img_step_1000",
+      "label": "outputs_v4/step_001000.png: Training Visualization at Step 1000",
+      "file_type": "image"
+    },
+    {
+      "id": "img_step_1500",
+      "label": "outputs_v4/step_001500.png: Training Visualization at Step 1500",
+      "file_type": "image"
+    },
+    {
+      "id": "img_step_2000",
+      "label": "outputs_v4/step_002000.png: Training Visualization at Step 2000",
+      "file_type": "image"
+    },
+    {
+      "id": "blocker_crop_robustness",
+      "label": "Crop Robustness Blocker: Near-Random ~0.50 BER",
+      "file_type": "document"
+    },
+    {
+      "id": "blocker_jpeg_ber",
+      "label": "JPEG Q75 BER Blocker: 0.136973 vs Target 0.20",
+      "file_type": "document"
+    },
+    {
+      "id": "date_2026_04_18",
+      "label": "2026-04-18: Sprint Execution Date",
+      "file_type": "document"
+    },
+    {
+      "id": "checkpoint_cycle_11",
+      "label": "major_cycle_011_robust_balance.pt: Best Checkpoint from Cycle 11",
+      "file_type": "document"
+    },
+    {
+      "id": "torch_lib",
+      "label": "PyTorch 2.0+: Deep Learning Framework",
+      "file_type": "document"
+    },
+    {
+      "id": "diffusers_lib",
+      "label": "Diffusers 0.25+: Diffusion Model Library",
+      "file_type": "document"
+    },
+    {
+      "id": "hardware_rtx5090",
+      "label": "NVIDIA GeForce RTX 5090: Training Hardware (31.4GB VRAM)",
+      "file_type": "document"
+    }
+  ],
+  "edges": [
+    {
+      "source": "dscsp",
+      "target": "controller_module",
+      "relation": "comprises core component",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "dscsp",
+      "target": "extractor_module",
+      "relation": "comprises core component",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "dscsp",
+      "target": "discriminator_module",
+      "relation": "comprises core component",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "dscsp",
+      "target": "diffusion_frozen",
+      "relation": "builds upon frozen base generator",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "controller_module",
+      "target": "extractor_module",
+      "relation": "paired during training",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "train_v4_py",
+      "target": "controller_module",
+      "relation": "trains and optimizes",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "train_v4_py",
+      "target": "extractor_module",
+      "relation": "trains and optimizes",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "train_v4_py",
+      "target": "discriminator_module",
+      "relation": "trains adversarially",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "train_v4_final_iterated_py",
+      "target": "train_v4_py",
+      "relation": "extends with staged training variant",
+      "confidence": "INFERRED"
+    },
+    {
+      "source": "tifs_autopilot_py",
+      "target": "train_v4_py",
+      "relation": "orchestrates execution across multiple cycles",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "tifs_autopilot_py",
+      "target": "evaluate_tifs_py",
+      "relation": "invokes for metric evaluation",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "evaluate_tifs_py",
+      "target": "evaluate_v4_py",
+      "relation": "extends with cross-dataset validation",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "evaluate_v4_py",
+      "target": "metric_clean_ber",
+      "relation": "computes",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "evaluate_v4_py",
+      "target": "metric_jpeg_q75_ber",
+      "relation": "computes",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "evaluate_v4_py",
+      "target": "metric_crop_q80_ber",
+      "relation": "computes",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "evaluate_v4_py",
+      "target": "metric_adaptive_auc",
+      "relation": "computes",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "evaluate_v4_py",
+      "target": "metric_psnr",
+      "relation": "computes",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "train_v4_py",
+      "target": "requirements_txt",
+      "relation": "depends on dependencies specified in",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "tifs_autopilot_py",
+      "target": "requirements_txt",
+      "relation": "depends on dependencies specified in",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "run_logged_sh",
+      "target": "train_v4_py",
+      "relation": "executes with logging",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "run_logged_sh",
+      "target": "tifs_autopilot_py",
+      "relation": "executes with logging",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "probe_run_failed",
+      "target": "requirements_txt",
+      "relation": "revealed missing dependencies from",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "probe_run_failed",
+      "target": "train_v4_py",
+      "relation": "attempted to execute",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "deps_install_run",
+      "target": "requirements_txt",
+      "relation": "installed all packages from",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "deps_install_run",
+      "target": "probe_run_failed",
+      "relation": "resolved blocker for",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "probe_after_deps_run",
+      "target": "deps_install_run",
+      "relation": "validated environment after",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "probe_after_deps_run",
+      "target": "train_v4_py",
+      "relation": "ran single-step test of",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "warmup_2000_run",
+      "target": "probe_after_deps_run",
+      "relation": "extended baseline from",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "warmup_2000_run",
+      "target": "train_v4_py",
+      "relation": "executed 2000-step training with",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "sprint_cycles_9_11_run",
+      "target": "tifs_autopilot_py",
+      "relation": "executed automated pipeline from",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "sprint_cycles_9_11_run",
+      "target": "warmup_2000_run",
+      "relation": "continued work from",
+      "confidence": "INFERRED"
+    },
+    {
+      "source": "sprint_cycles_9_11_run",
+      "target": "phase_ber_recovery_clean",
+      "relation": "ran variant in cycle 9",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "sprint_cycles_9_11_run",
+      "target": "phase_ber_recovery_curriculum",
+      "relation": "ran variant in cycle 10",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "sprint_cycles_9_11_run",
+      "target": "phase_robust_balance",
+      "relation": "ran variant in cycle 11",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "context_manual_2026_04_18",
+      "target": "dscsp",
+      "relation": "documents full system state of",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "context_manual_2026_04_18",
+      "target": "sprint_cycles_9_11_run",
+      "relation": "summarizes outcomes from",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "major_log_tifs",
+      "target": "sprint_cycles_9_11_run",
+      "relation": "logs milestone progress of",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "training_log_md",
+      "target": "probe_run_failed",
+      "relation": "chronicles",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "training_log_md",
+      "target": "deps_install_run",
+      "relation": "chronicles",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "training_log_md",
+      "target": "probe_after_deps_run",
+      "relation": "chronicles",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "training_log_md",
+      "target": "warmup_2000_run",
+      "relation": "chronicles",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "training_log_md",
+      "target": "sprint_cycles_9_11_run",
+      "relation": "chronicles",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "idea_md",
+      "target": "dscsp",
+      "relation": "articulates research design and novelty of",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "idea_md",
+      "target": "controller_module",
+      "relation": "describes architecture of",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "idea_md",
+      "target": "extractor_module",
+      "relation": "describes architecture of",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "record_initial_probe",
+      "target": "probe_run_failed",
+      "relation": "is detailed record of",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "record_deps_install",
+      "target": "deps_install_run",
+      "relation": "is detailed record of",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "record_probe_after_deps",
+      "target": "probe_after_deps_run",
+      "relation": "is detailed record of",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "record_warmup_2000",
+      "target": "warmup_2000_run",
+      "relation": "is detailed record of",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "record_sprint_plan",
+      "target": "sprint_cycles_9_11_run",
+      "relation": "is detailed record of",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "warmup_2000_run",
+      "target": "img_step_500",
+      "relation": "generated visualization",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "warmup_2000_run",
+      "target": "img_step_1000",
+      "relation": "generated visualization",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "warmup_2000_run",
+      "target": "img_step_1500",
+      "relation": "generated visualization",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "warmup_2000_run",
+      "target": "img_step_2000",
+      "relation": "generated visualization",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "blocker_crop_robustness",
+      "target": "phase_robust_balance",
+      "relation": "unresolved in variant",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "blocker_jpeg_ber",
+      "target": "sprint_cycles_9_11_run",
+      "relation": "persists after",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "date_2026_04_18",
+      "target": "sprint_cycles_9_11_run",
+      "relation": "is execution date of",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "date_2026_04_18",
+      "target": "context_manual_2026_04_18",
+      "relation": "is snapshot date of",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "checkpoint_cycle_11",
+      "target": "sprint_cycles_9_11_run",
+      "relation": "checkpoint saved by",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "checkpoint_cycle_11",
+      "target": "phase_robust_balance",
+      "relation": "resulted from variant",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "torch_lib",
+      "target": "requirements_txt",
+      "relation": "is required dependency in",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "diffusers_lib",
+      "target": "requirements_txt",
+      "relation": "is required dependency in",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "diffusers_lib",
+      "target": "probe_run_failed",
+      "relation": "missing package caused failure in",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "hardware_rtx5090",
+      "target": "probe_after_deps_run",
+      "relation": "executed on",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "hardware_rtx5090",
+      "target": "warmup_2000_run",
+      "relation": "executed on",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "hardware_rtx5090",
+      "target": "sprint_cycles_9_11_run",
+      "relation": "executed on",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "phase_ber_recovery_clean",
+      "target": "metric_clean_ber",
+      "relation": "optimizes priority",
+      "confidence": "INFERRED"
+    },
+    {
+      "source": "phase_ber_recovery_curriculum",
+      "target": "metric_jpeg_q75_ber",
+      "relation": "uses curriculum for robustness training",
+      "confidence": "INFERRED"
+    },
+    {
+      "source": "phase_robust_balance",
+      "target": "metric_crop_q80_ber",
+      "relation": "targets improvement in",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "phase_detectability_harden",
+      "target": "metric_adaptive_auc",
+      "relation": "targets adversarial minimization of",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "training_ops_readme",
+      "target": "run_logged_sh",
+      "relation": "documents workflow for",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "source": "training_ops_readme",
+      "target": "training_log_md",
+      "relation": "establishes protocol for maintaining",
+      "confidence": "EXTRACTED"
+    }
+  ],
+  "hyperedges": [
+    {
+      "id": "training_pipeline_stack",
+      "nodes": [
+        "run_logged_sh",
+        "train_v4_py",
+        "tifs_autopilot_py",
+        "evaluate_tifs_py",
+        "training_log_md"
+      ],
+      "relation": "integrated training and evaluation pipeline",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "id": "model_architecture_group",
+      "nodes": [
+        "controller_module",
+        "extractor_module",
+        "discriminator_module"
+      ],
+      "relation": "learnable components of DSCSP system",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "id": "metric_suite",
+      "nodes": [
+        "metric_clean_ber",
+        "metric_jpeg_q75_ber",
+        "metric_crop_q80_ber",
+        "metric_adaptive_auc",
+        "metric_psnr",
+        "metric_ssim",
+        "metric_lpips"
+      ],
+      "relation": "comprehensive evaluation metric set",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "id": "training_phase_variants",
+      "nodes": [
+        "phase_ber_recovery_clean",
+        "phase_ber_recovery_curriculum",
+        "phase_robust_balance",
+        "phase_detectability_harden"
+      ],
+      "relation": "four distinct training phase configurations",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "id": "sprint_execution_record",
+      "nodes": [
+        "record_initial_probe",
+        "record_deps_install",
+        "record_probe_after_deps",
+        "record_warmup_2000",
+        "record_bootstrap_logging",
+        "record_sprint_plan"
+      ],
+      "relation": "chronological training run records from 2026-04-18",
+      "confidence": "EXTRACTED"
+    },
+    {
+      "id": "dependency_framework",
+      "nodes": [
+        "torch_lib",
+        "diffusers_lib",
+        "requirements_txt"
+      ],
+      "relation": "core framework and library dependencies",
+      "confidence": "EXTRACTED"
+    }
+  ]
+}

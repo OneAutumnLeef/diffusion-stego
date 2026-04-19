@@ -1,0 +1,17 @@
+PROJECT_CONTEXT_MANUAL_2026-04-18.md
+requirements.txt
+outputs_tifs\MAJOR_LOG.md
+training_ops\README.md
+training_ops\TRAINING_LOG.md
+training_ops\chat_history_archive\README.md
+training_ops\records\20260418_190031_initial_probe.md
+training_ops\records\20260418_190108_deps_install.md
+training_ops\records\20260418_190133_initial_probe_after_deps.md
+training_ops\records\20260418_190432_warmup_2000.md
+training_ops\records\20260418_bootstrap_logging_setup.md
+training_ops\records\20260418_sprint_plan_execution.md
+Idea.md
+outputs_v4\step_000500.png
+outputs_v4\step_001000.png
+outputs_v4\step_001500.png
+outputs_v4\step_002000.png
