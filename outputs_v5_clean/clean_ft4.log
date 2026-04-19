@@ -1,0 +1,462 @@
+============================================================
+DSCSP v5 Clean-Domain Calibration
+============================================================
+Checkpoint: checkpoints_v5_clean/dscsp_v5_final.pt (step 74000)
+Steps: 4000 clean-only → total_steps=78000
+max_perturbation: 0.04  attacks: NONE  adv: OFF
+
+DSCSP v5 Training
+Device: cuda
+GPU: NVIDIA GeForce RTX 5090
+VRAM: 31.4 GB
+
+RedundantCoder: 128 message bits → 256 physical slots (R=2)
+
+Loading diffusion model...
+Loading pipeline components...:   0%|          | 0/2 [00:00<?, ?it/s]An error occurred while trying to fetch /workspace/.cache/huggingface/hub/models--google--ddpm-celebahq-256/snapshots/cd5c944777ea2668051904ead6cc120739b86c4d: Error no file named diffusion_pytorch_model.safetensors found in directory /workspace/.cache/huggingface/hub/models--google--ddpm-celebahq-256/snapshots/cd5c944777ea2668051904ead6cc120739b86c4d.
+Defaulting to unsafe serialization. Pass `allow_pickle=False` to raise an error instead.
+Loading pipeline components...: 100%|██████████| 2/2 [00:12<00:00,  6.34s/it]Loading pipeline components...: 100%|██████████| 2/2 [00:12<00:00,  6.34s/it]
+/root/diffusion-stego/dscsp/models/diffusion_wrapper.py:37: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.detach().clone() or sourceTensor.detach().clone().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  self.final_alpha_cumprod = torch.tensor(
+  UNet params: 113.7M (frozen)
+
+Initializing content-adaptive controller...
+  Controller params: 4.39M
+Initializing global-pool extractor...
+  Extractor params: 11.31M
+Setting up [LPIPS] perceptual loss: trunk [vgg], v[0.1], spatial [off]
+/usr/local/lib/python3.12/dist-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+  warnings.warn(
+/usr/local/lib/python3.12/dist-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=VGG16_Weights.IMAGENET1K_V1`. You can also use `weights=VGG16_Weights.DEFAULT` to get the most up-to-date weights.
+  warnings.warn(msg)
+Loading model from: /usr/local/lib/python3.12/dist-packages/lpips/weights/v0.1/vgg.pth
+  Attack layer: JPEG weight 0.8, quality (70, 92)
+Resuming from checkpoints_v5_clean/dscsp_v5_final.pt...
+  Loaded controller weights (strict)
+  Loaded extractor weights (strict)
+  Resumed at step 74000, best BER: 0.0000
+Generating image pool...
+  Generating 128 clean images...
+    4/128    8/128    12/128    16/128    20/128    24/128    28/128    32/128    36/128    40/128    44/128    48/128    52/128    56/128    60/128    64/128    68/128    72/128    76/128    80/128    84/128    88/128    92/128    96/128    100/128    104/128    108/128    112/128    116/128    120/128    124/128    128/128
+  Image pool: torch.Size([128, 3, 256, 256]), range: [-1.000, 1.000]
+
+Starting DSCSP v5 training for 78000 steps (from step 74000)
+  Payload: 128 message bits → 256 physical bits (R=2)
+  JPEG: weight=0.8, quality=(70, 92)
+  Adv: start=500, D_steps=4
+  Compound attacks: start step 5000
+
+TRAIN 74010/78000 | BER(msg): 0.0215 | BER(phys): 0.0332 | PSNR: 34.8dB | msg: 0.0147 | perc: 0.0276 | spec: 0.0036 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.21s/step | ETA: 14min
+TRAIN 74020/78000 | BER(msg): 0.0156 | BER(phys): 0.0225 | PSNR: 34.7dB | msg: 0.0011 | perc: 0.0157 | spec: 0.0019 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 9min
+TRAIN 74030/78000 | BER(msg): 0.0000 | BER(phys): 0.0107 | PSNR: 34.8dB | msg: 0.0010 | perc: 0.0164 | spec: 0.0017 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 9min
+TRAIN 74040/78000 | BER(msg): 0.0078 | BER(phys): 0.0156 | PSNR: 34.7dB | msg: 0.0002 | perc: 0.0164 | spec: 0.0018 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 9min
+TRAIN 74050/78000 | BER(msg): 0.0059 | BER(phys): 0.0166 | PSNR: 34.8dB | msg: 0.0036 | perc: 0.0168 | spec: 0.0035 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 9min
+TRAIN 74060/78000 | BER(msg): 0.0039 | BER(phys): 0.0195 | PSNR: 34.9dB | msg: 0.0026 | perc: 0.0209 | spec: 0.0046 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.16s/step | ETA: 11min
+TRAIN 74070/78000 | BER(msg): 0.0117 | BER(phys): 0.0205 | PSNR: 34.8dB | msg: 0.0057 | perc: 0.0150 | spec: 0.0033 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 9min
+TRAIN 74080/78000 | BER(msg): 0.0059 | BER(phys): 0.0068 | PSNR: 34.7dB | msg: 0.0005 | perc: 0.0245 | spec: 0.0023 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 9min
+TRAIN 74090/78000 | BER(msg): 0.0020 | BER(phys): 0.0166 | PSNR: 34.8dB | msg: 0.0001 | perc: 0.0126 | spec: 0.0027 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 9min
+TRAIN 74100/78000 | BER(msg): 0.0059 | BER(phys): 0.0146 | PSNR: 34.8dB | msg: 0.0011 | perc: 0.0128 | spec: 0.0029 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 9min
+TRAIN 74110/78000 | BER(msg): 0.0273 | BER(phys): 0.0352 | PSNR: 34.8dB | msg: 0.0185 | perc: 0.0160 | spec: 0.0028 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 9min
+TRAIN 74120/78000 | BER(msg): 0.0059 | BER(phys): 0.0166 | PSNR: 34.8dB | msg: 0.0009 | perc: 0.0134 | spec: 0.0023 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 9min
+TRAIN 74130/78000 | BER(msg): 0.0176 | BER(phys): 0.0166 | PSNR: 34.7dB | msg: 0.0002 | perc: 0.0228 | spec: 0.0022 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 9min
+TRAIN 74140/78000 | BER(msg): 0.0078 | BER(phys): 0.0186 | PSNR: 34.9dB | msg: 0.0001 | perc: 0.0167 | spec: 0.0036 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 9min
+TRAIN 74150/78000 | BER(msg): 0.0234 | BER(phys): 0.0303 | PSNR: 34.8dB | msg: 0.0033 | perc: 0.0219 | spec: 0.0022 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 9min
+TRAIN 74160/78000 | BER(msg): 0.0156 | BER(phys): 0.0107 | PSNR: 34.7dB | msg: 0.0013 | perc: 0.0178 | spec: 0.0018 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 9min
+TRAIN 74170/78000 | BER(msg): 0.0137 | BER(phys): 0.0195 | PSNR: 34.7dB | msg: 0.0101 | perc: 0.0198 | spec: 0.0025 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 9min
+TRAIN 74180/78000 | BER(msg): 0.0020 | BER(phys): 0.0166 | PSNR: 34.8dB | msg: 0.0002 | perc: 0.0200 | spec: 0.0021 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 9min
+TRAIN 74190/78000 | BER(msg): 0.0059 | BER(phys): 0.0312 | PSNR: 34.8dB | msg: 0.0015 | perc: 0.0179 | spec: 0.0017 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 9min
+TRAIN 74200/78000 | BER(msg): 0.0098 | BER(phys): 0.0166 | PSNR: 34.8dB | msg: 0.0012 | perc: 0.0134 | spec: 0.0016 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 9min
+TRAIN 74210/78000 | BER(msg): 0.0078 | BER(phys): 0.0107 | PSNR: 34.8dB | msg: 0.0001 | perc: 0.0192 | spec: 0.0037 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 9min
+TRAIN 74220/78000 | BER(msg): 0.0137 | BER(phys): 0.0156 | PSNR: 34.7dB | msg: 0.0009 | perc: 0.0186 | spec: 0.0028 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 9min
+TRAIN 74230/78000 | BER(msg): 0.0117 | BER(phys): 0.0205 | PSNR: 34.8dB | msg: 0.0002 | perc: 0.0240 | spec: 0.0018 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 9min
+TRAIN 74240/78000 | BER(msg): 0.0039 | BER(phys): 0.0146 | PSNR: 34.8dB | msg: 0.0001 | perc: 0.0174 | spec: 0.0031 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 9min
+TRAIN 74250/78000 | BER(msg): 0.0098 | BER(phys): 0.0176 | PSNR: 34.8dB | msg: 0.0004 | perc: 0.0140 | spec: 0.0022 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 9min
+TRAIN 74260/78000 | BER(msg): 0.0273 | BER(phys): 0.0283 | PSNR: 34.7dB | msg: 0.0019 | perc: 0.0211 | spec: 0.0022 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 9min
+TRAIN 74270/78000 | BER(msg): 0.0176 | BER(phys): 0.0283 | PSNR: 34.9dB | msg: 0.0007 | perc: 0.0136 | spec: 0.0065 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 9min
+TRAIN 74280/78000 | BER(msg): 0.0117 | BER(phys): 0.0146 | PSNR: 34.7dB | msg: 0.0003 | perc: 0.0117 | spec: 0.0026 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 9min
+TRAIN 74290/78000 | BER(msg): 0.0059 | BER(phys): 0.0127 | PSNR: 34.8dB | msg: 0.0001 | perc: 0.0185 | spec: 0.0022 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 9min
+TRAIN 74300/78000 | BER(msg): 0.0137 | BER(phys): 0.0283 | PSNR: 34.8dB | msg: 0.0038 | perc: 0.0183 | spec: 0.0041 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 9min
+TRAIN 74310/78000 | BER(msg): 0.0098 | BER(phys): 0.0176 | PSNR: 34.8dB | msg: 0.0009 | perc: 0.0156 | spec: 0.0021 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 9min
+TRAIN 74320/78000 | BER(msg): 0.0078 | BER(phys): 0.0176 | PSNR: 34.8dB | msg: 0.0018 | perc: 0.0117 | spec: 0.0016 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 9min
+TRAIN 74330/78000 | BER(msg): 0.0098 | BER(phys): 0.0146 | PSNR: 34.8dB | msg: 0.0011 | perc: 0.0205 | spec: 0.0018 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 9min
+TRAIN 74340/78000 | BER(msg): 0.0098 | BER(phys): 0.0186 | PSNR: 34.8dB | msg: 0.0011 | perc: 0.0195 | spec: 0.0044 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 9min
+TRAIN 74350/78000 | BER(msg): 0.0039 | BER(phys): 0.0107 | PSNR: 34.8dB | msg: 0.0000 | perc: 0.0175 | spec: 0.0032 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 9min
+TRAIN 74360/78000 | BER(msg): 0.0176 | BER(phys): 0.0234 | PSNR: 34.7dB | msg: 0.0003 | perc: 0.0208 | spec: 0.0018 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 8min
+TRAIN 74370/78000 | BER(msg): 0.0293 | BER(phys): 0.0322 | PSNR: 34.8dB | msg: 0.0013 | perc: 0.0223 | spec: 0.0044 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 8min
+TRAIN 74380/78000 | BER(msg): 0.0176 | BER(phys): 0.0195 | PSNR: 34.8dB | msg: 0.0005 | perc: 0.0175 | spec: 0.0032 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 8min
+TRAIN 74390/78000 | BER(msg): 0.0059 | BER(phys): 0.0098 | PSNR: 34.7dB | msg: 0.0002 | perc: 0.0189 | spec: 0.0026 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 8min
+TRAIN 74400/78000 | BER(msg): 0.0000 | BER(phys): 0.0078 | PSNR: 34.7dB | msg: 0.0001 | perc: 0.0250 | spec: 0.0017 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 8min
+TRAIN 74410/78000 | BER(msg): 0.0059 | BER(phys): 0.0088 | PSNR: 34.8dB | msg: 0.0001 | perc: 0.0318 | spec: 0.0038 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 8min
+TRAIN 74420/78000 | BER(msg): 0.0020 | BER(phys): 0.0078 | PSNR: 34.8dB | msg: 0.0005 | perc: 0.0135 | spec: 0.0033 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 8min
+TRAIN 74430/78000 | BER(msg): 0.0078 | BER(phys): 0.0137 | PSNR: 34.8dB | msg: 0.0002 | perc: 0.0198 | spec: 0.0037 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 8min
+TRAIN 74440/78000 | BER(msg): 0.0293 | BER(phys): 0.0361 | PSNR: 34.7dB | msg: 0.0007 | perc: 0.0149 | spec: 0.0017 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 8min
+TRAIN 74450/78000 | BER(msg): 0.0059 | BER(phys): 0.0166 | PSNR: 34.7dB | msg: 0.0001 | perc: 0.0171 | spec: 0.0017 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 8min
+TRAIN 74460/78000 | BER(msg): 0.0039 | BER(phys): 0.0059 | PSNR: 34.8dB | msg: 0.0000 | perc: 0.0221 | spec: 0.0030 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 8min
+TRAIN 74470/78000 | BER(msg): 0.0605 | BER(phys): 0.0479 | PSNR: 34.7dB | msg: 0.0049 | perc: 0.0111 | spec: 0.0033 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 8min
+TRAIN 74480/78000 | BER(msg): 0.0293 | BER(phys): 0.0342 | PSNR: 34.7dB | msg: 0.0015 | perc: 0.0195 | spec: 0.0017 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 8min
+TRAIN 74490/78000 | BER(msg): 0.0293 | BER(phys): 0.0283 | PSNR: 34.7dB | msg: 0.0015 | perc: 0.0123 | spec: 0.0028 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 8min
+TRAIN 74500/78000 | BER(msg): 0.0137 | BER(phys): 0.0273 | PSNR: 34.8dB | msg: 0.0005 | perc: 0.0163 | spec: 0.0031 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 8min
+TRAIN 74510/78000 | BER(msg): 0.0078 | BER(phys): 0.0088 | PSNR: 34.7dB | msg: 0.0002 | perc: 0.0209 | spec: 0.0015 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 8min
+TRAIN 74520/78000 | BER(msg): 0.0117 | BER(phys): 0.0234 | PSNR: 34.7dB | msg: 0.0004 | perc: 0.0155 | spec: 0.0014 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 8min
+TRAIN 74530/78000 | BER(msg): 0.0059 | BER(phys): 0.0127 | PSNR: 34.7dB | msg: 0.0003 | perc: 0.0159 | spec: 0.0016 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 8min
+TRAIN 74540/78000 | BER(msg): 0.0137 | BER(phys): 0.0234 | PSNR: 34.7dB | msg: 0.0005 | perc: 0.0172 | spec: 0.0020 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 8min
+TRAIN 74550/78000 | BER(msg): 0.0059 | BER(phys): 0.0117 | PSNR: 34.7dB | msg: 0.0004 | perc: 0.0185 | spec: 0.0019 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 8min
+TRAIN 74560/78000 | BER(msg): 0.0195 | BER(phys): 0.0166 | PSNR: 34.7dB | msg: 0.0017 | perc: 0.0150 | spec: 0.0026 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 8min
+TRAIN 74570/78000 | BER(msg): 0.0352 | BER(phys): 0.0332 | PSNR: 34.7dB | msg: 0.0026 | perc: 0.0150 | spec: 0.0025 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 8min
+TRAIN 74580/78000 | BER(msg): 0.0117 | BER(phys): 0.0117 | PSNR: 34.7dB | msg: 0.0001 | perc: 0.0227 | spec: 0.0015 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 8min
+TRAIN 74590/78000 | BER(msg): 0.0059 | BER(phys): 0.0215 | PSNR: 34.7dB | msg: 0.0001 | perc: 0.0165 | spec: 0.0020 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 8min
+TRAIN 74600/78000 | BER(msg): 0.0059 | BER(phys): 0.0146 | PSNR: 34.8dB | msg: 0.0004 | perc: 0.0191 | spec: 0.0037 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 8min
+TRAIN 74610/78000 | BER(msg): 0.0059 | BER(phys): 0.0127 | PSNR: 34.8dB | msg: 0.0003 | perc: 0.0154 | spec: 0.0028 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 8min
+TRAIN 74620/78000 | BER(msg): 0.0469 | BER(phys): 0.0381 | PSNR: 34.7dB | msg: 0.0018 | perc: 0.0134 | spec: 0.0027 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 8min
+TRAIN 74630/78000 | BER(msg): 0.0059 | BER(phys): 0.0166 | PSNR: 34.8dB | msg: 0.0001 | perc: 0.0183 | spec: 0.0017 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 8min
+TRAIN 74640/78000 | BER(msg): 0.0195 | BER(phys): 0.0264 | PSNR: 34.7dB | msg: 0.0004 | perc: 0.0194 | spec: 0.0019 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 8min
+TRAIN 74650/78000 | BER(msg): 0.0176 | BER(phys): 0.0186 | PSNR: 34.7dB | msg: 0.0007 | perc: 0.0181 | spec: 0.0017 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 8min
+TRAIN 74660/78000 | BER(msg): 0.0020 | BER(phys): 0.0059 | PSNR: 34.8dB | msg: 0.0001 | perc: 0.0192 | spec: 0.0022 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 8min
+TRAIN 74670/78000 | BER(msg): 0.0234 | BER(phys): 0.0312 | PSNR: 34.8dB | msg: 0.0006 | perc: 0.0135 | spec: 0.0021 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 8min
+TRAIN 74680/78000 | BER(msg): 0.0117 | BER(phys): 0.0127 | PSNR: 34.7dB | msg: 0.0001 | perc: 0.0148 | spec: 0.0019 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 8min
+TRAIN 74690/78000 | BER(msg): 0.0176 | BER(phys): 0.0225 | PSNR: 34.8dB | msg: 0.0007 | perc: 0.0161 | spec: 0.0036 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 8min
+TRAIN 74700/78000 | BER(msg): 0.0488 | BER(phys): 0.0508 | PSNR: 34.7dB | msg: 0.0025 | perc: 0.0123 | spec: 0.0027 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 8min
+TRAIN 74710/78000 | BER(msg): 0.0156 | BER(phys): 0.0186 | PSNR: 34.7dB | msg: 0.0002 | perc: 0.0217 | spec: 0.0015 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 8min
+TRAIN 74720/78000 | BER(msg): 0.0059 | BER(phys): 0.0146 | PSNR: 34.7dB | msg: 0.0002 | perc: 0.0219 | spec: 0.0019 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 8min
+TRAIN 74730/78000 | BER(msg): 0.0098 | BER(phys): 0.0137 | PSNR: 34.7dB | msg: 0.0009 | perc: 0.0179 | spec: 0.0018 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 8min
+TRAIN 74740/78000 | BER(msg): 0.0195 | BER(phys): 0.0312 | PSNR: 34.8dB | msg: 0.0009 | perc: 0.0178 | spec: 0.0037 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 8min
+TRAIN 74750/78000 | BER(msg): 0.0039 | BER(phys): 0.0098 | PSNR: 34.7dB | msg: 0.0004 | perc: 0.0215 | spec: 0.0019 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 8min
+TRAIN 74760/78000 | BER(msg): 0.0000 | BER(phys): 0.0088 | PSNR: 34.7dB | msg: 0.0001 | perc: 0.0192 | spec: 0.0030 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 8min
+TRAIN 74770/78000 | BER(msg): 0.0293 | BER(phys): 0.0244 | PSNR: 34.7dB | msg: 0.0041 | perc: 0.0173 | spec: 0.0032 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 7min
+TRAIN 74780/78000 | BER(msg): 0.0078 | BER(phys): 0.0127 | PSNR: 34.7dB | msg: 0.0001 | perc: 0.0161 | spec: 0.0018 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 7min
+TRAIN 74790/78000 | BER(msg): 0.0059 | BER(phys): 0.0176 | PSNR: 34.7dB | msg: 0.0002 | perc: 0.0111 | spec: 0.0018 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 8min
+TRAIN 74800/78000 | BER(msg): 0.0215 | BER(phys): 0.0352 | PSNR: 34.7dB | msg: 0.0006 | perc: 0.0154 | spec: 0.0027 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 7min
+TRAIN 74810/78000 | BER(msg): 0.0625 | BER(phys): 0.0430 | PSNR: 34.7dB | msg: 0.0017 | perc: 0.0163 | spec: 0.0020 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 7min
+TRAIN 74820/78000 | BER(msg): 0.0078 | BER(phys): 0.0127 | PSNR: 34.8dB | msg: 0.0003 | perc: 0.0160 | spec: 0.0021 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 7min
+TRAIN 74830/78000 | BER(msg): 0.0176 | BER(phys): 0.0156 | PSNR: 34.7dB | msg: 0.0006 | perc: 0.0211 | spec: 0.0023 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 7min
+TRAIN 74840/78000 | BER(msg): 0.0020 | BER(phys): 0.0273 | PSNR: 34.8dB | msg: 0.0004 | perc: 0.0141 | spec: 0.0022 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 7min
+TRAIN 74850/78000 | BER(msg): 0.0117 | BER(phys): 0.0156 | PSNR: 34.8dB | msg: 0.0003 | perc: 0.0151 | spec: 0.0044 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 7min
+TRAIN 74860/78000 | BER(msg): 0.0039 | BER(phys): 0.0117 | PSNR: 34.8dB | msg: 0.0003 | perc: 0.0127 | spec: 0.0027 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 7min
+TRAIN 74870/78000 | BER(msg): 0.0059 | BER(phys): 0.0127 | PSNR: 34.8dB | msg: 0.0002 | perc: 0.0148 | spec: 0.0021 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 7min
+TRAIN 74880/78000 | BER(msg): 0.0332 | BER(phys): 0.0342 | PSNR: 34.7dB | msg: 0.0009 | perc: 0.0126 | spec: 0.0015 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 7min
+TRAIN 74890/78000 | BER(msg): 0.0059 | BER(phys): 0.0088 | PSNR: 34.8dB | msg: 0.0001 | perc: 0.0138 | spec: 0.0031 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 7min
+TRAIN 74900/78000 | BER(msg): 0.0195 | BER(phys): 0.0176 | PSNR: 34.8dB | msg: 0.0004 | perc: 0.0150 | spec: 0.0030 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 7min
+TRAIN 74910/78000 | BER(msg): 0.0098 | BER(phys): 0.0098 | PSNR: 34.6dB | msg: 0.0001 | perc: 0.0197 | spec: 0.0021 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 7min
+TRAIN 74920/78000 | BER(msg): 0.0137 | BER(phys): 0.0137 | PSNR: 34.7dB | msg: 0.0005 | perc: 0.0180 | spec: 0.0023 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 7min
+TRAIN 74930/78000 | BER(msg): 0.0098 | BER(phys): 0.0195 | PSNR: 34.8dB | msg: 0.0002 | perc: 0.0171 | spec: 0.0019 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 7min
+TRAIN 74940/78000 | BER(msg): 0.0059 | BER(phys): 0.0107 | PSNR: 34.7dB | msg: 0.0001 | perc: 0.0204 | spec: 0.0019 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 7min
+TRAIN 74950/78000 | BER(msg): 0.0664 | BER(phys): 0.0664 | PSNR: 34.7dB | msg: 0.0036 | perc: 0.0192 | spec: 0.0030 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 7min
+TRAIN 74960/78000 | BER(msg): 0.0137 | BER(phys): 0.0215 | PSNR: 34.7dB | msg: 0.0006 | perc: 0.0154 | spec: 0.0024 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 7min
+TRAIN 74970/78000 | BER(msg): 0.0293 | BER(phys): 0.0342 | PSNR: 34.7dB | msg: 0.0006 | perc: 0.0115 | spec: 0.0024 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 7min
+TRAIN 74980/78000 | BER(msg): 0.0059 | BER(phys): 0.0205 | PSNR: 34.8dB | msg: 0.0007 | perc: 0.0157 | spec: 0.0048 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 7min
+TRAIN 74990/78000 | BER(msg): 0.0215 | BER(phys): 0.0303 | PSNR: 34.8dB | msg: 0.0004 | perc: 0.0196 | spec: 0.0021 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 7min
+TRAIN 75000/78000 | BER(msg): 0.0098 | BER(phys): 0.0117 | PSNR: 34.7dB | msg: 0.0002 | perc: 0.0229 | spec: 0.0031 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 7min
+  Saved checkpoint: checkpoints_v5_clean/dscsp_v5_step_075000.pt
+TRAIN 75010/78000 | BER(msg): 0.0039 | BER(phys): 0.0068 | PSNR: 34.7dB | msg: 0.0001 | perc: 0.0204 | spec: 0.0019 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 7min
+TRAIN 75020/78000 | BER(msg): 0.0137 | BER(phys): 0.0117 | PSNR: 34.7dB | msg: 0.0005 | perc: 0.0223 | spec: 0.0014 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 7min
+TRAIN 75030/78000 | BER(msg): 0.0195 | BER(phys): 0.0186 | PSNR: 34.7dB | msg: 0.0011 | perc: 0.0190 | spec: 0.0020 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 7min
+TRAIN 75040/78000 | BER(msg): 0.0156 | BER(phys): 0.0225 | PSNR: 34.7dB | msg: 0.0006 | perc: 0.0158 | spec: 0.0019 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 7min
+TRAIN 75050/78000 | BER(msg): 0.0098 | BER(phys): 0.0176 | PSNR: 34.7dB | msg: 0.0002 | perc: 0.0173 | spec: 0.0024 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 7min
+TRAIN 75060/78000 | BER(msg): 0.0039 | BER(phys): 0.0078 | PSNR: 34.8dB | msg: 0.0000 | perc: 0.0191 | spec: 0.0046 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 7min
+TRAIN 75070/78000 | BER(msg): 0.0039 | BER(phys): 0.0137 | PSNR: 34.8dB | msg: 0.0006 | perc: 0.0184 | spec: 0.0014 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 7min
+TRAIN 75080/78000 | BER(msg): 0.0078 | BER(phys): 0.0176 | PSNR: 34.9dB | msg: 0.0002 | perc: 0.0176 | spec: 0.0045 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 7min
+TRAIN 75090/78000 | BER(msg): 0.0273 | BER(phys): 0.0244 | PSNR: 34.7dB | msg: 0.0005 | perc: 0.0155 | spec: 0.0021 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 7min
+TRAIN 75100/78000 | BER(msg): 0.0039 | BER(phys): 0.0166 | PSNR: 34.8dB | msg: 0.0003 | perc: 0.0210 | spec: 0.0016 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 7min
+TRAIN 75110/78000 | BER(msg): 0.0059 | BER(phys): 0.0117 | PSNR: 34.7dB | msg: 0.0002 | perc: 0.0210 | spec: 0.0017 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 7min
+TRAIN 75120/78000 | BER(msg): 0.0039 | BER(phys): 0.0117 | PSNR: 34.9dB | msg: 0.0006 | perc: 0.0185 | spec: 0.0059 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 7min
+TRAIN 75130/78000 | BER(msg): 0.0059 | BER(phys): 0.0215 | PSNR: 34.9dB | msg: 0.0004 | perc: 0.0193 | spec: 0.0062 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 7min
+TRAIN 75140/78000 | BER(msg): 0.0039 | BER(phys): 0.0049 | PSNR: 34.7dB | msg: 0.0000 | perc: 0.0167 | spec: 0.0020 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 7min
+TRAIN 75150/78000 | BER(msg): 0.0254 | BER(phys): 0.0215 | PSNR: 34.7dB | msg: 0.0006 | perc: 0.0192 | spec: 0.0013 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 7min
+TRAIN 75160/78000 | BER(msg): 0.0117 | BER(phys): 0.0107 | PSNR: 34.8dB | msg: 0.0001 | perc: 0.0203 | spec: 0.0018 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 7min
+TRAIN 75170/78000 | BER(msg): 0.0156 | BER(phys): 0.0205 | PSNR: 34.7dB | msg: 0.0003 | perc: 0.0156 | spec: 0.0015 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 6min
+TRAIN 75180/78000 | BER(msg): 0.0254 | BER(phys): 0.0166 | PSNR: 34.7dB | msg: 0.0015 | perc: 0.0167 | spec: 0.0023 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 6min
+TRAIN 75190/78000 | BER(msg): 0.0195 | BER(phys): 0.0186 | PSNR: 34.8dB | msg: 0.0001 | perc: 0.0136 | spec: 0.0026 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 6min
+TRAIN 75200/78000 | BER(msg): 0.0098 | BER(phys): 0.0137 | PSNR: 34.7dB | msg: 0.0001 | perc: 0.0164 | spec: 0.0016 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 7min
+TRAIN 75210/78000 | BER(msg): 0.0098 | BER(phys): 0.0156 | PSNR: 34.7dB | msg: 0.0003 | perc: 0.0153 | spec: 0.0035 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 6min
+TRAIN 75220/78000 | BER(msg): 0.0156 | BER(phys): 0.0127 | PSNR: 34.6dB | msg: 0.0002 | perc: 0.0251 | spec: 0.0014 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 6min
+TRAIN 75230/78000 | BER(msg): 0.0273 | BER(phys): 0.0361 | PSNR: 34.7dB | msg: 0.0009 | perc: 0.0160 | spec: 0.0033 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 6min
+TRAIN 75240/78000 | BER(msg): 0.0059 | BER(phys): 0.0146 | PSNR: 34.7dB | msg: 0.0001 | perc: 0.0218 | spec: 0.0022 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 6min
+TRAIN 75250/78000 | BER(msg): 0.0098 | BER(phys): 0.0117 | PSNR: 34.7dB | msg: 0.0001 | perc: 0.0207 | spec: 0.0020 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 6min
+TRAIN 75260/78000 | BER(msg): 0.0254 | BER(phys): 0.0273 | PSNR: 34.7dB | msg: 0.0004 | perc: 0.0156 | spec: 0.0031 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 6min
+TRAIN 75270/78000 | BER(msg): 0.0488 | BER(phys): 0.0566 | PSNR: 34.7dB | msg: 0.0059 | perc: 0.0167 | spec: 0.0019 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 6min
+TRAIN 75280/78000 | BER(msg): 0.0195 | BER(phys): 0.0205 | PSNR: 34.7dB | msg: 0.0002 | perc: 0.0238 | spec: 0.0016 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 6min
+TRAIN 75290/78000 | BER(msg): 0.0352 | BER(phys): 0.0303 | PSNR: 34.7dB | msg: 0.0031 | perc: 0.0149 | spec: 0.0016 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 6min
+TRAIN 75300/78000 | BER(msg): 0.0117 | BER(phys): 0.0146 | PSNR: 34.8dB | msg: 0.0001 | perc: 0.0200 | spec: 0.0029 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 6min
+TRAIN 75310/78000 | BER(msg): 0.0078 | BER(phys): 0.0117 | PSNR: 34.7dB | msg: 0.0001 | perc: 0.0196 | spec: 0.0032 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 6min
+TRAIN 75320/78000 | BER(msg): 0.0000 | BER(phys): 0.0078 | PSNR: 34.8dB | msg: 0.0001 | perc: 0.0223 | spec: 0.0035 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 6min
+TRAIN 75330/78000 | BER(msg): 0.0117 | BER(phys): 0.0186 | PSNR: 34.7dB | msg: 0.0011 | perc: 0.0121 | spec: 0.0015 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.44s/step | ETA: 20min
+TRAIN 75340/78000 | BER(msg): 0.0020 | BER(phys): 0.0146 | PSNR: 34.8dB | msg: 0.0001 | perc: 0.0174 | spec: 0.0038 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.50s/step | ETA: 22min
+TRAIN 75350/78000 | BER(msg): 0.0059 | BER(phys): 0.0137 | PSNR: 34.7dB | msg: 0.0001 | perc: 0.0196 | spec: 0.0019 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.43s/step | ETA: 19min
+TRAIN 75360/78000 | BER(msg): 0.0098 | BER(phys): 0.0205 | PSNR: 34.7dB | msg: 0.0002 | perc: 0.0150 | spec: 0.0014 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.56s/step | ETA: 25min
+TRAIN 75370/78000 | BER(msg): 0.0098 | BER(phys): 0.0195 | PSNR: 34.8dB | msg: 0.0010 | perc: 0.0109 | spec: 0.0039 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.34s/step | ETA: 15min
+TRAIN 75380/78000 | BER(msg): 0.0254 | BER(phys): 0.0205 | PSNR: 34.7dB | msg: 0.0003 | perc: 0.0195 | spec: 0.0032 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.09s/step | ETA: 4min
+TRAIN 75390/78000 | BER(msg): 0.0000 | BER(phys): 0.0059 | PSNR: 34.7dB | msg: 0.0000 | perc: 0.0161 | spec: 0.0028 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.09s/step | ETA: 4min
+TRAIN 75400/78000 | BER(msg): 0.0156 | BER(phys): 0.0127 | PSNR: 34.7dB | msg: 0.0002 | perc: 0.0125 | spec: 0.0017 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.09s/step | ETA: 4min
+TRAIN 75410/78000 | BER(msg): 0.0098 | BER(phys): 0.0225 | PSNR: 34.7dB | msg: 0.0004 | perc: 0.0134 | spec: 0.0020 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.10s/step | ETA: 4min
+TRAIN 75420/78000 | BER(msg): 0.0117 | BER(phys): 0.0234 | PSNR: 34.7dB | msg: 0.0001 | perc: 0.0156 | spec: 0.0020 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.10s/step | ETA: 4min
+TRAIN 75430/78000 | BER(msg): 0.0000 | BER(phys): 0.0146 | PSNR: 34.8dB | msg: 0.0005 | perc: 0.0128 | spec: 0.0039 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.10s/step | ETA: 4min
+TRAIN 75440/78000 | BER(msg): 0.0195 | BER(phys): 0.0254 | PSNR: 34.7dB | msg: 0.0018 | perc: 0.0143 | spec: 0.0030 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.10s/step | ETA: 4min
+TRAIN 75450/78000 | BER(msg): 0.0020 | BER(phys): 0.0156 | PSNR: 34.8dB | msg: 0.0001 | perc: 0.0235 | spec: 0.0027 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.10s/step | ETA: 4min
+TRAIN 75460/78000 | BER(msg): 0.0059 | BER(phys): 0.0166 | PSNR: 34.8dB | msg: 0.0002 | perc: 0.0135 | spec: 0.0021 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.10s/step | ETA: 4min
+TRAIN 75470/78000 | BER(msg): 0.0137 | BER(phys): 0.0146 | PSNR: 34.8dB | msg: 0.0013 | perc: 0.0187 | spec: 0.0033 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.10s/step | ETA: 4min
+TRAIN 75480/78000 | BER(msg): 0.0195 | BER(phys): 0.0146 | PSNR: 34.7dB | msg: 0.0002 | perc: 0.0142 | spec: 0.0020 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.10s/step | ETA: 4min
+TRAIN 75490/78000 | BER(msg): 0.0215 | BER(phys): 0.0166 | PSNR: 34.7dB | msg: 0.0006 | perc: 0.0235 | spec: 0.0019 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.10s/step | ETA: 4min
+TRAIN 75500/78000 | BER(msg): 0.0078 | BER(phys): 0.0176 | PSNR: 34.8dB | msg: 0.0002 | perc: 0.0203 | spec: 0.0026 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.11s/step | ETA: 5min
+TRAIN 75510/78000 | BER(msg): 0.0059 | BER(phys): 0.0088 | PSNR: 34.7dB | msg: 0.0002 | perc: 0.0203 | spec: 0.0019 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.12s/step | ETA: 5min
+TRAIN 75520/78000 | BER(msg): 0.0078 | BER(phys): 0.0098 | PSNR: 34.7dB | msg: 0.0001 | perc: 0.0187 | spec: 0.0018 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.12s/step | ETA: 5min
+TRAIN 75530/78000 | BER(msg): 0.0078 | BER(phys): 0.0107 | PSNR: 34.7dB | msg: 0.0001 | perc: 0.0194 | spec: 0.0023 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.12s/step | ETA: 5min
+TRAIN 75540/78000 | BER(msg): 0.0176 | BER(phys): 0.0234 | PSNR: 34.7dB | msg: 0.0003 | perc: 0.0217 | spec: 0.0016 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.12s/step | ETA: 5min
+TRAIN 75550/78000 | BER(msg): 0.0098 | BER(phys): 0.0293 | PSNR: 34.7dB | msg: 0.0004 | perc: 0.0181 | spec: 0.0020 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.07s/step | ETA: 3min
+TRAIN 75560/78000 | BER(msg): 0.0039 | BER(phys): 0.0195 | PSNR: 34.8dB | msg: 0.0006 | perc: 0.0210 | spec: 0.0016 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.12s/step | ETA: 5min
+TRAIN 75570/78000 | BER(msg): 0.0039 | BER(phys): 0.0156 | PSNR: 34.7dB | msg: 0.0001 | perc: 0.0185 | spec: 0.0016 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.13s/step | ETA: 5min
+TRAIN 75580/78000 | BER(msg): 0.0098 | BER(phys): 0.0244 | PSNR: 34.7dB | msg: 0.0004 | perc: 0.0160 | spec: 0.0021 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.13s/step | ETA: 5min
+TRAIN 75590/78000 | BER(msg): 0.0371 | BER(phys): 0.0518 | PSNR: 34.7dB | msg: 0.0021 | perc: 0.0135 | spec: 0.0016 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.13s/step | ETA: 5min
+TRAIN 75600/78000 | BER(msg): 0.0039 | BER(phys): 0.0117 | PSNR: 34.8dB | msg: 0.0001 | perc: 0.0216 | spec: 0.0031 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.13s/step | ETA: 5min
+TRAIN 75610/78000 | BER(msg): 0.0137 | BER(phys): 0.0225 | PSNR: 34.7dB | msg: 0.0002 | perc: 0.0127 | spec: 0.0016 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.13s/step | ETA: 5min
+TRAIN 75620/78000 | BER(msg): 0.0117 | BER(phys): 0.0264 | PSNR: 34.7dB | msg: 0.0010 | perc: 0.0146 | spec: 0.0019 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.13s/step | ETA: 5min
+TRAIN 75630/78000 | BER(msg): 0.0117 | BER(phys): 0.0107 | PSNR: 34.7dB | msg: 0.0004 | perc: 0.0178 | spec: 0.0019 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.13s/step | ETA: 5min
+TRAIN 75640/78000 | BER(msg): 0.0176 | BER(phys): 0.0215 | PSNR: 34.7dB | msg: 0.0008 | perc: 0.0200 | spec: 0.0020 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.13s/step | ETA: 5min
+TRAIN 75650/78000 | BER(msg): 0.0137 | BER(phys): 0.0234 | PSNR: 34.7dB | msg: 0.0003 | perc: 0.0148 | spec: 0.0020 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.13s/step | ETA: 5min
+TRAIN 75660/78000 | BER(msg): 0.0176 | BER(phys): 0.0166 | PSNR: 34.7dB | msg: 0.0006 | perc: 0.0176 | spec: 0.0014 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.13s/step | ETA: 5min
+TRAIN 75670/78000 | BER(msg): 0.0117 | BER(phys): 0.0098 | PSNR: 34.7dB | msg: 0.0001 | perc: 0.0145 | spec: 0.0034 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.13s/step | ETA: 5min
+TRAIN 75680/78000 | BER(msg): 0.0430 | BER(phys): 0.0420 | PSNR: 34.7dB | msg: 0.0009 | perc: 0.0142 | spec: 0.0011 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.13s/step | ETA: 5min
+TRAIN 75690/78000 | BER(msg): 0.0039 | BER(phys): 0.0146 | PSNR: 34.8dB | msg: 0.0002 | perc: 0.0151 | spec: 0.0041 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.12s/step | ETA: 5min
+TRAIN 75700/78000 | BER(msg): 0.0195 | BER(phys): 0.0264 | PSNR: 34.8dB | msg: 0.0013 | perc: 0.0116 | spec: 0.0027 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.07s/step | ETA: 3min
+TRAIN 75710/78000 | BER(msg): 0.0293 | BER(phys): 0.0225 | PSNR: 34.7dB | msg: 0.0005 | perc: 0.0125 | spec: 0.0017 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.07s/step | ETA: 3min
+TRAIN 75720/78000 | BER(msg): 0.0254 | BER(phys): 0.0264 | PSNR: 34.7dB | msg: 0.0011 | perc: 0.0121 | spec: 0.0030 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.08s/step | ETA: 3min
+TRAIN 75730/78000 | BER(msg): 0.0156 | BER(phys): 0.0195 | PSNR: 34.7dB | msg: 0.0002 | perc: 0.0157 | spec: 0.0015 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.07s/step | ETA: 2min
+TRAIN 75740/78000 | BER(msg): 0.0117 | BER(phys): 0.0156 | PSNR: 34.7dB | msg: 0.0001 | perc: 0.0189 | spec: 0.0023 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.07s/step | ETA: 3min
+TRAIN 75750/78000 | BER(msg): 0.0039 | BER(phys): 0.0049 | PSNR: 34.8dB | msg: 0.0000 | perc: 0.0248 | spec: 0.0030 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.07s/step | ETA: 3min
+TRAIN 75760/78000 | BER(msg): 0.0137 | BER(phys): 0.0166 | PSNR: 34.7dB | msg: 0.0003 | perc: 0.0121 | spec: 0.0015 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.07s/step | ETA: 3min
+TRAIN 75770/78000 | BER(msg): 0.0273 | BER(phys): 0.0322 | PSNR: 34.7dB | msg: 0.0007 | perc: 0.0136 | spec: 0.0029 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.07s/step | ETA: 2min
+TRAIN 75780/78000 | BER(msg): 0.0234 | BER(phys): 0.0176 | PSNR: 34.8dB | msg: 0.0008 | perc: 0.0218 | spec: 0.0043 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.07s/step | ETA: 2min
+TRAIN 75790/78000 | BER(msg): 0.0098 | BER(phys): 0.0127 | PSNR: 34.8dB | msg: 0.0002 | perc: 0.0154 | spec: 0.0035 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.07s/step | ETA: 2min
+TRAIN 75800/78000 | BER(msg): 0.0039 | BER(phys): 0.0117 | PSNR: 34.7dB | msg: 0.0001 | perc: 0.0175 | spec: 0.0018 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.07s/step | ETA: 2min
+TRAIN 75810/78000 | BER(msg): 0.0078 | BER(phys): 0.0254 | PSNR: 34.8dB | msg: 0.0021 | perc: 0.0134 | spec: 0.0019 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.07s/step | ETA: 3min
+TRAIN 75820/78000 | BER(msg): 0.0195 | BER(phys): 0.0186 | PSNR: 34.7dB | msg: 0.0001 | perc: 0.0149 | spec: 0.0014 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.07s/step | ETA: 3min
+TRAIN 75830/78000 | BER(msg): 0.0215 | BER(phys): 0.0312 | PSNR: 34.8dB | msg: 0.0014 | perc: 0.0151 | spec: 0.0022 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.24s/step | ETA: 9min
+TRAIN 75840/78000 | BER(msg): 0.0176 | BER(phys): 0.0146 | PSNR: 34.7dB | msg: 0.0003 | perc: 0.0112 | spec: 0.0017 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.43s/step | ETA: 15min
+TRAIN 75850/78000 | BER(msg): 0.0039 | BER(phys): 0.0176 | PSNR: 34.7dB | msg: 0.0001 | perc: 0.0190 | spec: 0.0017 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.40s/step | ETA: 14min
+TRAIN 75860/78000 | BER(msg): 0.0117 | BER(phys): 0.0098 | PSNR: 34.7dB | msg: 0.0002 | perc: 0.0201 | spec: 0.0018 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.40s/step | ETA: 14min
+TRAIN 75870/78000 | BER(msg): 0.0020 | BER(phys): 0.0039 | PSNR: 34.7dB | msg: 0.0000 | perc: 0.0215 | spec: 0.0015 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.07s/step | ETA: 3min
+TRAIN 75880/78000 | BER(msg): 0.0137 | BER(phys): 0.0146 | PSNR: 34.8dB | msg: 0.0002 | perc: 0.0166 | spec: 0.0023 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.09s/step | ETA: 3min
+TRAIN 75890/78000 | BER(msg): 0.0098 | BER(phys): 0.0215 | PSNR: 34.8dB | msg: 0.0001 | perc: 0.0169 | spec: 0.0017 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.13s/step | ETA: 5min
+TRAIN 75900/78000 | BER(msg): 0.0078 | BER(phys): 0.0098 | PSNR: 34.7dB | msg: 0.0001 | perc: 0.0225 | spec: 0.0018 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.13s/step | ETA: 5min
+TRAIN 75910/78000 | BER(msg): 0.0059 | BER(phys): 0.0156 | PSNR: 34.8dB | msg: 0.0002 | perc: 0.0122 | spec: 0.0016 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 5min
+TRAIN 75920/78000 | BER(msg): 0.0215 | BER(phys): 0.0322 | PSNR: 34.8dB | msg: 0.0006 | perc: 0.0133 | spec: 0.0042 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 5min
+TRAIN 75930/78000 | BER(msg): 0.0059 | BER(phys): 0.0117 | PSNR: 34.7dB | msg: 0.0001 | perc: 0.0207 | spec: 0.0014 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 5min
+TRAIN 75940/78000 | BER(msg): 0.0195 | BER(phys): 0.0195 | PSNR: 34.8dB | msg: 0.0003 | perc: 0.0181 | spec: 0.0042 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 5min
+TRAIN 75950/78000 | BER(msg): 0.0273 | BER(phys): 0.0293 | PSNR: 34.8dB | msg: 0.0005 | perc: 0.0104 | spec: 0.0024 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 5min
+TRAIN 75960/78000 | BER(msg): 0.0098 | BER(phys): 0.0186 | PSNR: 34.7dB | msg: 0.0001 | perc: 0.0138 | spec: 0.0016 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 5min
+TRAIN 75970/78000 | BER(msg): 0.0117 | BER(phys): 0.0166 | PSNR: 34.8dB | msg: 0.0001 | perc: 0.0200 | spec: 0.0015 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 5min
+TRAIN 75980/78000 | BER(msg): 0.0156 | BER(phys): 0.0166 | PSNR: 34.8dB | msg: 0.0002 | perc: 0.0211 | spec: 0.0037 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 5min
+TRAIN 75990/78000 | BER(msg): 0.0098 | BER(phys): 0.0205 | PSNR: 34.7dB | msg: 0.0004 | perc: 0.0163 | spec: 0.0020 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 5min
+TRAIN 76000/78000 | BER(msg): 0.0039 | BER(phys): 0.0186 | PSNR: 34.7dB | msg: 0.0004 | perc: 0.0140 | spec: 0.0014 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 5min
+  Saved checkpoint: checkpoints_v5_clean/dscsp_v5_step_076000.pt
+TRAIN 76010/78000 | BER(msg): 0.0156 | BER(phys): 0.0205 | PSNR: 34.7dB | msg: 0.0005 | perc: 0.0227 | spec: 0.0020 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 5min
+TRAIN 76020/78000 | BER(msg): 0.0156 | BER(phys): 0.0156 | PSNR: 34.7dB | msg: 0.0003 | perc: 0.0162 | spec: 0.0012 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 5min
+TRAIN 76030/78000 | BER(msg): 0.0391 | BER(phys): 0.0293 | PSNR: 34.7dB | msg: 0.0007 | perc: 0.0126 | spec: 0.0040 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 4min
+TRAIN 76040/78000 | BER(msg): 0.0098 | BER(phys): 0.0264 | PSNR: 34.7dB | msg: 0.0005 | perc: 0.0133 | spec: 0.0018 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 4min
+TRAIN 76050/78000 | BER(msg): 0.0117 | BER(phys): 0.0166 | PSNR: 34.7dB | msg: 0.0003 | perc: 0.0134 | spec: 0.0017 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 4min
+TRAIN 76060/78000 | BER(msg): 0.0234 | BER(phys): 0.0176 | PSNR: 34.7dB | msg: 0.0002 | perc: 0.0122 | spec: 0.0021 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 4min
+TRAIN 76070/78000 | BER(msg): 0.0176 | BER(phys): 0.0225 | PSNR: 34.8dB | msg: 0.0002 | perc: 0.0159 | spec: 0.0053 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 4min
+TRAIN 76080/78000 | BER(msg): 0.0098 | BER(phys): 0.0137 | PSNR: 34.7dB | msg: 0.0003 | perc: 0.0161 | spec: 0.0015 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 4min
+TRAIN 76090/78000 | BER(msg): 0.0156 | BER(phys): 0.0117 | PSNR: 34.7dB | msg: 0.0001 | perc: 0.0218 | spec: 0.0018 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 4min
+TRAIN 76100/78000 | BER(msg): 0.0098 | BER(phys): 0.0088 | PSNR: 34.7dB | msg: 0.0007 | perc: 0.0289 | spec: 0.0014 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 4min
+TRAIN 76110/78000 | BER(msg): 0.0098 | BER(phys): 0.0293 | PSNR: 34.9dB | msg: 0.0013 | perc: 0.0149 | spec: 0.0032 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.13s/step | ETA: 4min
+TRAIN 76120/78000 | BER(msg): 0.0059 | BER(phys): 0.0098 | PSNR: 34.7dB | msg: 0.0001 | perc: 0.0123 | spec: 0.0015 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 4min
+TRAIN 76130/78000 | BER(msg): 0.0234 | BER(phys): 0.0283 | PSNR: 34.7dB | msg: 0.0018 | perc: 0.0134 | spec: 0.0016 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 4min
+TRAIN 76140/78000 | BER(msg): 0.0078 | BER(phys): 0.0166 | PSNR: 34.7dB | msg: 0.0002 | perc: 0.0177 | spec: 0.0032 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.13s/step | ETA: 4min
+TRAIN 76150/78000 | BER(msg): 0.0039 | BER(phys): 0.0078 | PSNR: 34.7dB | msg: 0.0002 | perc: 0.0202 | spec: 0.0022 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 4min
+TRAIN 76160/78000 | BER(msg): 0.0176 | BER(phys): 0.0176 | PSNR: 34.7dB | msg: 0.0001 | perc: 0.0213 | spec: 0.0020 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 4min
+TRAIN 76170/78000 | BER(msg): 0.0410 | BER(phys): 0.0391 | PSNR: 34.7dB | msg: 0.0016 | perc: 0.0166 | spec: 0.0032 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 4min
+TRAIN 76180/78000 | BER(msg): 0.0098 | BER(phys): 0.0137 | PSNR: 34.7dB | msg: 0.0002 | perc: 0.0158 | spec: 0.0023 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 4min
+TRAIN 76190/78000 | BER(msg): 0.0078 | BER(phys): 0.0078 | PSNR: 34.7dB | msg: 0.0002 | perc: 0.0237 | spec: 0.0019 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 4min
+TRAIN 76200/78000 | BER(msg): 0.0156 | BER(phys): 0.0234 | PSNR: 34.8dB | msg: 0.0003 | perc: 0.0233 | spec: 0.0024 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 4min
+TRAIN 76210/78000 | BER(msg): 0.0137 | BER(phys): 0.0137 | PSNR: 34.7dB | msg: 0.0003 | perc: 0.0183 | spec: 0.0009 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 4min
+TRAIN 76220/78000 | BER(msg): 0.0176 | BER(phys): 0.0205 | PSNR: 34.7dB | msg: 0.0002 | perc: 0.0162 | spec: 0.0019 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 4min
+TRAIN 76230/78000 | BER(msg): 0.0059 | BER(phys): 0.0215 | PSNR: 34.8dB | msg: 0.0002 | perc: 0.0151 | spec: 0.0022 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 4min
+TRAIN 76240/78000 | BER(msg): 0.0137 | BER(phys): 0.0205 | PSNR: 34.7dB | msg: 0.0001 | perc: 0.0199 | spec: 0.0028 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 4min
+TRAIN 76250/78000 | BER(msg): 0.0137 | BER(phys): 0.0195 | PSNR: 34.8dB | msg: 0.0002 | perc: 0.0120 | spec: 0.0040 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 4min
+TRAIN 76260/78000 | BER(msg): 0.0098 | BER(phys): 0.0137 | PSNR: 34.8dB | msg: 0.0002 | perc: 0.0177 | spec: 0.0018 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 4min
+TRAIN 76270/78000 | BER(msg): 0.0137 | BER(phys): 0.0176 | PSNR: 34.7dB | msg: 0.0004 | perc: 0.0146 | spec: 0.0014 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 4min
+TRAIN 76280/78000 | BER(msg): 0.0078 | BER(phys): 0.0098 | PSNR: 34.7dB | msg: 0.0001 | perc: 0.0128 | spec: 0.0015 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 4min
+TRAIN 76290/78000 | BER(msg): 0.0137 | BER(phys): 0.0146 | PSNR: 34.8dB | msg: 0.0007 | perc: 0.0192 | spec: 0.0038 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 4min
+TRAIN 76300/78000 | BER(msg): 0.0234 | BER(phys): 0.0322 | PSNR: 34.8dB | msg: 0.0014 | perc: 0.0159 | spec: 0.0043 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 4min
+TRAIN 76310/78000 | BER(msg): 0.0059 | BER(phys): 0.0107 | PSNR: 34.7dB | msg: 0.0001 | perc: 0.0162 | spec: 0.0015 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 4min
+TRAIN 76320/78000 | BER(msg): 0.0020 | BER(phys): 0.0068 | PSNR: 34.7dB | msg: 0.0000 | perc: 0.0174 | spec: 0.0017 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 4min
+TRAIN 76330/78000 | BER(msg): 0.0254 | BER(phys): 0.0215 | PSNR: 34.7dB | msg: 0.0010 | perc: 0.0186 | spec: 0.0027 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 4min
+TRAIN 76340/78000 | BER(msg): 0.0371 | BER(phys): 0.0439 | PSNR: 34.7dB | msg: 0.0013 | perc: 0.0094 | spec: 0.0010 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 4min
+TRAIN 76350/78000 | BER(msg): 0.0273 | BER(phys): 0.0186 | PSNR: 34.7dB | msg: 0.0007 | perc: 0.0145 | spec: 0.0017 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.13s/step | ETA: 4min
+TRAIN 76360/78000 | BER(msg): 0.0039 | BER(phys): 0.0059 | PSNR: 34.7dB | msg: 0.0001 | perc: 0.0217 | spec: 0.0022 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 4min
+TRAIN 76370/78000 | BER(msg): 0.0020 | BER(phys): 0.0068 | PSNR: 34.7dB | msg: 0.0001 | perc: 0.0194 | spec: 0.0016 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 4min
+TRAIN 76380/78000 | BER(msg): 0.0293 | BER(phys): 0.0303 | PSNR: 34.7dB | msg: 0.0004 | perc: 0.0111 | spec: 0.0017 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 4min
+TRAIN 76390/78000 | BER(msg): 0.0176 | BER(phys): 0.0176 | PSNR: 34.7dB | msg: 0.0004 | perc: 0.0139 | spec: 0.0013 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 4min
+TRAIN 76400/78000 | BER(msg): 0.0352 | BER(phys): 0.0400 | PSNR: 34.7dB | msg: 0.0020 | perc: 0.0116 | spec: 0.0016 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 4min
+TRAIN 76410/78000 | BER(msg): 0.0039 | BER(phys): 0.0127 | PSNR: 34.8dB | msg: 0.0001 | perc: 0.0145 | spec: 0.0023 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 4min
+TRAIN 76420/78000 | BER(msg): 0.0020 | BER(phys): 0.0107 | PSNR: 34.7dB | msg: 0.0001 | perc: 0.0144 | spec: 0.0018 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 4min
+TRAIN 76430/78000 | BER(msg): 0.0098 | BER(phys): 0.0088 | PSNR: 34.7dB | msg: 0.0002 | perc: 0.0171 | spec: 0.0018 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.13s/step | ETA: 3min
+TRAIN 76440/78000 | BER(msg): 0.0078 | BER(phys): 0.0156 | PSNR: 34.7dB | msg: 0.0001 | perc: 0.0147 | spec: 0.0018 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.13s/step | ETA: 3min
+TRAIN 76450/78000 | BER(msg): 0.0059 | BER(phys): 0.0078 | PSNR: 34.7dB | msg: 0.0002 | perc: 0.0237 | spec: 0.0016 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.13s/step | ETA: 3min
+TRAIN 76460/78000 | BER(msg): 0.0039 | BER(phys): 0.0117 | PSNR: 34.8dB | msg: 0.0001 | perc: 0.0194 | spec: 0.0017 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.13s/step | ETA: 3min
+TRAIN 76470/78000 | BER(msg): 0.0312 | BER(phys): 0.0342 | PSNR: 34.8dB | msg: 0.0031 | perc: 0.0141 | spec: 0.0032 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.13s/step | ETA: 3min
+TRAIN 76480/78000 | BER(msg): 0.0137 | BER(phys): 0.0078 | PSNR: 34.7dB | msg: 0.0004 | perc: 0.0180 | spec: 0.0036 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.13s/step | ETA: 3min
+TRAIN 76490/78000 | BER(msg): 0.0078 | BER(phys): 0.0049 | PSNR: 34.7dB | msg: 0.0002 | perc: 0.0140 | spec: 0.0013 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.13s/step | ETA: 3min
+TRAIN 76500/78000 | BER(msg): 0.0176 | BER(phys): 0.0166 | PSNR: 34.7dB | msg: 0.0003 | perc: 0.0126 | spec: 0.0021 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.13s/step | ETA: 3min
+TRAIN 76510/78000 | BER(msg): 0.0234 | BER(phys): 0.0293 | PSNR: 34.8dB | msg: 0.0013 | perc: 0.0125 | spec: 0.0024 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 3min
+TRAIN 76520/78000 | BER(msg): 0.0098 | BER(phys): 0.0186 | PSNR: 34.8dB | msg: 0.0003 | perc: 0.0157 | spec: 0.0028 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 3min
+TRAIN 76530/78000 | BER(msg): 0.0234 | BER(phys): 0.0410 | PSNR: 34.7dB | msg: 0.0003 | perc: 0.0139 | spec: 0.0017 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 3min
+TRAIN 76540/78000 | BER(msg): 0.0078 | BER(phys): 0.0078 | PSNR: 34.7dB | msg: 0.0001 | perc: 0.0243 | spec: 0.0013 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 3min
+TRAIN 76550/78000 | BER(msg): 0.0059 | BER(phys): 0.0117 | PSNR: 34.7dB | msg: 0.0001 | perc: 0.0139 | spec: 0.0014 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 3min
+TRAIN 76560/78000 | BER(msg): 0.0020 | BER(phys): 0.0107 | PSNR: 34.8dB | msg: 0.0002 | perc: 0.0146 | spec: 0.0027 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 3min
+TRAIN 76570/78000 | BER(msg): 0.0078 | BER(phys): 0.0166 | PSNR: 34.7dB | msg: 0.0002 | perc: 0.0163 | spec: 0.0019 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 3min
+TRAIN 76580/78000 | BER(msg): 0.0195 | BER(phys): 0.0166 | PSNR: 34.7dB | msg: 0.0006 | perc: 0.0191 | spec: 0.0014 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 3min
+TRAIN 76590/78000 | BER(msg): 0.0137 | BER(phys): 0.0107 | PSNR: 34.7dB | msg: 0.0001 | perc: 0.0165 | spec: 0.0017 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 3min
+TRAIN 76600/78000 | BER(msg): 0.0312 | BER(phys): 0.0303 | PSNR: 34.7dB | msg: 0.0003 | perc: 0.0164 | spec: 0.0010 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 3min
+TRAIN 76610/78000 | BER(msg): 0.0117 | BER(phys): 0.0166 | PSNR: 34.8dB | msg: 0.0025 | perc: 0.0172 | spec: 0.0021 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 3min
+TRAIN 76620/78000 | BER(msg): 0.0469 | BER(phys): 0.0342 | PSNR: 34.7dB | msg: 0.0008 | perc: 0.0189 | spec: 0.0017 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 3min
+TRAIN 76630/78000 | BER(msg): 0.0098 | BER(phys): 0.0176 | PSNR: 34.8dB | msg: 0.0003 | perc: 0.0187 | spec: 0.0027 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 3min
+TRAIN 76640/78000 | BER(msg): 0.0195 | BER(phys): 0.0205 | PSNR: 34.8dB | msg: 0.0003 | perc: 0.0135 | spec: 0.0016 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 3min
+TRAIN 76650/78000 | BER(msg): 0.0059 | BER(phys): 0.0098 | PSNR: 34.8dB | msg: 0.0001 | perc: 0.0127 | spec: 0.0033 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 3min
+TRAIN 76660/78000 | BER(msg): 0.0137 | BER(phys): 0.0127 | PSNR: 34.7dB | msg: 0.0001 | perc: 0.0188 | spec: 0.0016 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 3min
+TRAIN 76670/78000 | BER(msg): 0.0137 | BER(phys): 0.0098 | PSNR: 34.7dB | msg: 0.0001 | perc: 0.0195 | spec: 0.0018 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 3min
+TRAIN 76680/78000 | BER(msg): 0.0156 | BER(phys): 0.0176 | PSNR: 34.7dB | msg: 0.0008 | perc: 0.0186 | spec: 0.0017 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 3min
+TRAIN 76690/78000 | BER(msg): 0.0254 | BER(phys): 0.0215 | PSNR: 34.7dB | msg: 0.0005 | perc: 0.0128 | spec: 0.0020 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 3min
+TRAIN 76700/78000 | BER(msg): 0.0059 | BER(phys): 0.0068 | PSNR: 34.7dB | msg: 0.0001 | perc: 0.0190 | spec: 0.0014 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 3min
+TRAIN 76710/78000 | BER(msg): 0.0098 | BER(phys): 0.0264 | PSNR: 34.7dB | msg: 0.0006 | perc: 0.0153 | spec: 0.0015 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 3min
+TRAIN 76720/78000 | BER(msg): 0.0020 | BER(phys): 0.0059 | PSNR: 34.7dB | msg: 0.0001 | perc: 0.0235 | spec: 0.0020 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 3min
+TRAIN 76730/78000 | BER(msg): 0.0391 | BER(phys): 0.0430 | PSNR: 34.7dB | msg: 0.0004 | perc: 0.0133 | spec: 0.0018 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 3min
+TRAIN 76740/78000 | BER(msg): 0.0176 | BER(phys): 0.0186 | PSNR: 34.7dB | msg: 0.0008 | perc: 0.0222 | spec: 0.0018 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 3min
+TRAIN 76750/78000 | BER(msg): 0.0195 | BER(phys): 0.0322 | PSNR: 34.7dB | msg: 0.0017 | perc: 0.0119 | spec: 0.0017 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 3min
+TRAIN 76760/78000 | BER(msg): 0.0117 | BER(phys): 0.0205 | PSNR: 34.8dB | msg: 0.0004 | perc: 0.0150 | spec: 0.0017 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 3min
+TRAIN 76770/78000 | BER(msg): 0.0059 | BER(phys): 0.0078 | PSNR: 34.7dB | msg: 0.0001 | perc: 0.0151 | spec: 0.0019 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 3min
+TRAIN 76780/78000 | BER(msg): 0.0020 | BER(phys): 0.0029 | PSNR: 34.7dB | msg: 0.0000 | perc: 0.0300 | spec: 0.0019 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 3min
+TRAIN 76790/78000 | BER(msg): 0.0117 | BER(phys): 0.0127 | PSNR: 34.7dB | msg: 0.0006 | perc: 0.0164 | spec: 0.0016 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 3min
+TRAIN 76800/78000 | BER(msg): 0.0391 | BER(phys): 0.0342 | PSNR: 34.7dB | msg: 0.0004 | perc: 0.0155 | spec: 0.0015 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 3min
+TRAIN 76810/78000 | BER(msg): 0.0020 | BER(phys): 0.0117 | PSNR: 34.8dB | msg: 0.0005 | perc: 0.0159 | spec: 0.0017 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 3min
+TRAIN 76820/78000 | BER(msg): 0.0078 | BER(phys): 0.0098 | PSNR: 34.7dB | msg: 0.0001 | perc: 0.0169 | spec: 0.0015 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 3min
+TRAIN 76830/78000 | BER(msg): 0.0078 | BER(phys): 0.0156 | PSNR: 34.7dB | msg: 0.0001 | perc: 0.0215 | spec: 0.0011 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 3min
+TRAIN 76840/78000 | BER(msg): 0.0078 | BER(phys): 0.0195 | PSNR: 34.8dB | msg: 0.0006 | perc: 0.0127 | spec: 0.0011 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 3min
+TRAIN 76850/78000 | BER(msg): 0.0000 | BER(phys): 0.0039 | PSNR: 34.7dB | msg: 0.0000 | perc: 0.0227 | spec: 0.0013 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 3min
+TRAIN 76860/78000 | BER(msg): 0.0254 | BER(phys): 0.0244 | PSNR: 34.7dB | msg: 0.0011 | perc: 0.0136 | spec: 0.0016 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 3min
+TRAIN 76870/78000 | BER(msg): 0.0039 | BER(phys): 0.0029 | PSNR: 34.7dB | msg: 0.0001 | perc: 0.0197 | spec: 0.0018 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 3min
+TRAIN 76880/78000 | BER(msg): 0.0020 | BER(phys): 0.0039 | PSNR: 34.7dB | msg: 0.0001 | perc: 0.0163 | spec: 0.0016 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 3min
+TRAIN 76890/78000 | BER(msg): 0.0020 | BER(phys): 0.0029 | PSNR: 34.7dB | msg: 0.0000 | perc: 0.0188 | spec: 0.0021 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 3min
+TRAIN 76900/78000 | BER(msg): 0.0137 | BER(phys): 0.0137 | PSNR: 34.7dB | msg: 0.0002 | perc: 0.0191 | spec: 0.0014 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 3min
+TRAIN 76910/78000 | BER(msg): 0.0000 | BER(phys): 0.0088 | PSNR: 34.8dB | msg: 0.0002 | perc: 0.0245 | spec: 0.0032 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 3min
+TRAIN 76920/78000 | BER(msg): 0.0332 | BER(phys): 0.0273 | PSNR: 34.7dB | msg: 0.0003 | perc: 0.0176 | spec: 0.0032 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 3min
+TRAIN 76930/78000 | BER(msg): 0.0000 | BER(phys): 0.0117 | PSNR: 34.7dB | msg: 0.0002 | perc: 0.0193 | spec: 0.0014 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 2min
+TRAIN 76940/78000 | BER(msg): 0.0137 | BER(phys): 0.0244 | PSNR: 34.7dB | msg: 0.0004 | perc: 0.0120 | spec: 0.0018 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 2min
+TRAIN 76950/78000 | BER(msg): 0.0156 | BER(phys): 0.0137 | PSNR: 34.7dB | msg: 0.0002 | perc: 0.0118 | spec: 0.0012 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 2min
+TRAIN 76960/78000 | BER(msg): 0.0059 | BER(phys): 0.0195 | PSNR: 34.7dB | msg: 0.0002 | perc: 0.0167 | spec: 0.0015 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 2min
+TRAIN 76970/78000 | BER(msg): 0.0020 | BER(phys): 0.0020 | PSNR: 34.8dB | msg: 0.0000 | perc: 0.0164 | spec: 0.0017 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 2min
+TRAIN 76980/78000 | BER(msg): 0.0059 | BER(phys): 0.0098 | PSNR: 34.7dB | msg: 0.0020 | perc: 0.0117 | spec: 0.0018 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 2min
+TRAIN 76990/78000 | BER(msg): 0.0020 | BER(phys): 0.0127 | PSNR: 34.8dB | msg: 0.0002 | perc: 0.0136 | spec: 0.0028 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 2min
+TRAIN 77000/78000 | BER(msg): 0.0137 | BER(phys): 0.0146 | PSNR: 34.8dB | msg: 0.0001 | perc: 0.0192 | spec: 0.0023 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 2min
+  Saved checkpoint: checkpoints_v5_clean/dscsp_v5_step_077000.pt
+TRAIN 77010/78000 | BER(msg): 0.0098 | BER(phys): 0.0205 | PSNR: 34.7dB | msg: 0.0002 | perc: 0.0181 | spec: 0.0018 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 2min
+TRAIN 77020/78000 | BER(msg): 0.0117 | BER(phys): 0.0127 | PSNR: 34.7dB | msg: 0.0005 | perc: 0.0181 | spec: 0.0018 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 2min
+TRAIN 77030/78000 | BER(msg): 0.0254 | BER(phys): 0.0322 | PSNR: 34.9dB | msg: 0.0003 | perc: 0.0145 | spec: 0.0037 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 2min
+TRAIN 77040/78000 | BER(msg): 0.0098 | BER(phys): 0.0352 | PSNR: 34.8dB | msg: 0.0072 | perc: 0.0091 | spec: 0.0018 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 2min
+TRAIN 77050/78000 | BER(msg): 0.0020 | BER(phys): 0.0098 | PSNR: 34.8dB | msg: 0.0002 | perc: 0.0151 | spec: 0.0017 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 2min
+TRAIN 77060/78000 | BER(msg): 0.0020 | BER(phys): 0.0088 | PSNR: 34.8dB | msg: 0.0007 | perc: 0.0167 | spec: 0.0015 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 2min
+TRAIN 77070/78000 | BER(msg): 0.0156 | BER(phys): 0.0186 | PSNR: 34.7dB | msg: 0.0007 | perc: 0.0159 | spec: 0.0019 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 2min
+TRAIN 77080/78000 | BER(msg): 0.0234 | BER(phys): 0.0244 | PSNR: 34.7dB | msg: 0.0006 | perc: 0.0173 | spec: 0.0016 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 2min
+TRAIN 77090/78000 | BER(msg): 0.0176 | BER(phys): 0.0225 | PSNR: 34.8dB | msg: 0.0004 | perc: 0.0161 | spec: 0.0011 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 2min
+TRAIN 77100/78000 | BER(msg): 0.0117 | BER(phys): 0.0195 | PSNR: 34.7dB | msg: 0.0002 | perc: 0.0197 | spec: 0.0016 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 2min
+TRAIN 77110/78000 | BER(msg): 0.0098 | BER(phys): 0.0059 | PSNR: 34.7dB | msg: 0.0000 | perc: 0.0160 | spec: 0.0016 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 2min
+TRAIN 77120/78000 | BER(msg): 0.0391 | BER(phys): 0.0312 | PSNR: 34.7dB | msg: 0.0021 | perc: 0.0156 | spec: 0.0012 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 2min
+TRAIN 77130/78000 | BER(msg): 0.0234 | BER(phys): 0.0234 | PSNR: 34.7dB | msg: 0.0005 | perc: 0.0193 | spec: 0.0020 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 2min
+TRAIN 77140/78000 | BER(msg): 0.0098 | BER(phys): 0.0107 | PSNR: 34.7dB | msg: 0.0004 | perc: 0.0187 | spec: 0.0013 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 2min
+TRAIN 77150/78000 | BER(msg): 0.0020 | BER(phys): 0.0127 | PSNR: 34.7dB | msg: 0.0000 | perc: 0.0190 | spec: 0.0019 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 2min
+TRAIN 77160/78000 | BER(msg): 0.0195 | BER(phys): 0.0166 | PSNR: 34.7dB | msg: 0.0007 | perc: 0.0149 | spec: 0.0024 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 2min
+TRAIN 77170/78000 | BER(msg): 0.0000 | BER(phys): 0.0039 | PSNR: 34.7dB | msg: 0.0000 | perc: 0.0205 | spec: 0.0013 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 2min
+TRAIN 77180/78000 | BER(msg): 0.0078 | BER(phys): 0.0117 | PSNR: 34.7dB | msg: 0.0002 | perc: 0.0151 | spec: 0.0037 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 2min
+TRAIN 77190/78000 | BER(msg): 0.0039 | BER(phys): 0.0049 | PSNR: 34.7dB | msg: 0.0000 | perc: 0.0129 | spec: 0.0014 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 2min
+TRAIN 77200/78000 | BER(msg): 0.0098 | BER(phys): 0.0244 | PSNR: 34.7dB | msg: 0.0002 | perc: 0.0107 | spec: 0.0021 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 2min
+TRAIN 77210/78000 | BER(msg): 0.0449 | BER(phys): 0.0332 | PSNR: 34.7dB | msg: 0.0040 | perc: 0.0189 | spec: 0.0013 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 2min
+TRAIN 77220/78000 | BER(msg): 0.0176 | BER(phys): 0.0254 | PSNR: 34.7dB | msg: 0.0003 | perc: 0.0125 | spec: 0.0017 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 2min
+TRAIN 77230/78000 | BER(msg): 0.0098 | BER(phys): 0.0088 | PSNR: 34.7dB | msg: 0.0002 | perc: 0.0146 | spec: 0.0023 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 2min
+TRAIN 77240/78000 | BER(msg): 0.0156 | BER(phys): 0.0186 | PSNR: 34.7dB | msg: 0.0003 | perc: 0.0194 | spec: 0.0018 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 2min
+TRAIN 77250/78000 | BER(msg): 0.0059 | BER(phys): 0.0107 | PSNR: 34.8dB | msg: 0.0001 | perc: 0.0209 | spec: 0.0031 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 2min
+TRAIN 77260/78000 | BER(msg): 0.0195 | BER(phys): 0.0244 | PSNR: 34.7dB | msg: 0.0004 | perc: 0.0135 | spec: 0.0012 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 2min
+TRAIN 77270/78000 | BER(msg): 0.0117 | BER(phys): 0.0283 | PSNR: 34.8dB | msg: 0.0005 | perc: 0.0183 | spec: 0.0025 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 2min
+TRAIN 77280/78000 | BER(msg): 0.0176 | BER(phys): 0.0176 | PSNR: 34.7dB | msg: 0.0003 | perc: 0.0125 | spec: 0.0015 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 2min
+TRAIN 77290/78000 | BER(msg): 0.0195 | BER(phys): 0.0215 | PSNR: 34.7dB | msg: 0.0008 | perc: 0.0203 | spec: 0.0009 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 2min
+TRAIN 77300/78000 | BER(msg): 0.0020 | BER(phys): 0.0049 | PSNR: 34.7dB | msg: 0.0001 | perc: 0.0245 | spec: 0.0011 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 2min
+TRAIN 77310/78000 | BER(msg): 0.0117 | BER(phys): 0.0156 | PSNR: 34.7dB | msg: 0.0003 | perc: 0.0129 | spec: 0.0026 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 2min
+TRAIN 77320/78000 | BER(msg): 0.0098 | BER(phys): 0.0137 | PSNR: 34.7dB | msg: 0.0001 | perc: 0.0213 | spec: 0.0017 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 2min
+TRAIN 77330/78000 | BER(msg): 0.0098 | BER(phys): 0.0127 | PSNR: 34.7dB | msg: 0.0002 | perc: 0.0122 | spec: 0.0018 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 2min
+TRAIN 77340/78000 | BER(msg): 0.0098 | BER(phys): 0.0176 | PSNR: 34.9dB | msg: 0.0002 | perc: 0.0185 | spec: 0.0035 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 2min
+TRAIN 77350/78000 | BER(msg): 0.0000 | BER(phys): 0.0059 | PSNR: 34.8dB | msg: 0.0001 | perc: 0.0198 | spec: 0.0035 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 1min
+TRAIN 77360/78000 | BER(msg): 0.0137 | BER(phys): 0.0127 | PSNR: 34.7dB | msg: 0.0002 | perc: 0.0144 | spec: 0.0015 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 1min
+TRAIN 77370/78000 | BER(msg): 0.0195 | BER(phys): 0.0146 | PSNR: 34.7dB | msg: 0.0007 | perc: 0.0191 | spec: 0.0015 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 1min
+TRAIN 77380/78000 | BER(msg): 0.0117 | BER(phys): 0.0225 | PSNR: 34.7dB | msg: 0.0004 | perc: 0.0148 | spec: 0.0014 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 1min
+TRAIN 77390/78000 | BER(msg): 0.0176 | BER(phys): 0.0166 | PSNR: 34.7dB | msg: 0.0005 | perc: 0.0139 | spec: 0.0017 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 1min
+TRAIN 77400/78000 | BER(msg): 0.0156 | BER(phys): 0.0205 | PSNR: 34.7dB | msg: 0.0002 | perc: 0.0156 | spec: 0.0016 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 1min
+TRAIN 77410/78000 | BER(msg): 0.0059 | BER(phys): 0.0176 | PSNR: 34.8dB | msg: 0.0004 | perc: 0.0117 | spec: 0.0016 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 1min
+TRAIN 77420/78000 | BER(msg): 0.0293 | BER(phys): 0.0303 | PSNR: 34.8dB | msg: 0.0013 | perc: 0.0141 | spec: 0.0028 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 1min
+TRAIN 77430/78000 | BER(msg): 0.0020 | BER(phys): 0.0107 | PSNR: 34.7dB | msg: 0.0003 | perc: 0.0169 | spec: 0.0020 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 1min
+TRAIN 77440/78000 | BER(msg): 0.0098 | BER(phys): 0.0117 | PSNR: 34.7dB | msg: 0.0002 | perc: 0.0173 | spec: 0.0015 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 1min
+TRAIN 77450/78000 | BER(msg): 0.0039 | BER(phys): 0.0049 | PSNR: 34.8dB | msg: 0.0001 | perc: 0.0182 | spec: 0.0020 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 1min
+TRAIN 77460/78000 | BER(msg): 0.0098 | BER(phys): 0.0107 | PSNR: 34.8dB | msg: 0.0004 | perc: 0.0196 | spec: 0.0027 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 1min
+TRAIN 77470/78000 | BER(msg): 0.0098 | BER(phys): 0.0186 | PSNR: 34.8dB | msg: 0.0004 | perc: 0.0111 | spec: 0.0016 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 1min
+TRAIN 77480/78000 | BER(msg): 0.0117 | BER(phys): 0.0098 | PSNR: 34.8dB | msg: 0.0001 | perc: 0.0161 | spec: 0.0020 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 1min
+TRAIN 77490/78000 | BER(msg): 0.0059 | BER(phys): 0.0088 | PSNR: 34.8dB | msg: 0.0001 | perc: 0.0165 | spec: 0.0036 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 1min
+TRAIN 77500/78000 | BER(msg): 0.0137 | BER(phys): 0.0107 | PSNR: 34.8dB | msg: 0.0001 | perc: 0.0214 | spec: 0.0054 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 1min
+TRAIN 77510/78000 | BER(msg): 0.0117 | BER(phys): 0.0078 | PSNR: 34.8dB | msg: 0.0004 | perc: 0.0130 | spec: 0.0016 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-05 | 0.14s/step | ETA: 1min
+TRAIN 77520/78000 | BER(msg): 0.0195 | BER(phys): 0.0186 | PSNR: 34.8dB | msg: 0.0002 | perc: 0.0150 | spec: 0.0032 | srm_m: 0.0000 | atk: 0.00 | lr: 9.9e-06 | 0.14s/step | ETA: 1min
+TRAIN 77530/78000 | BER(msg): 0.0020 | BER(phys): 0.0088 | PSNR: 34.8dB | msg: 0.0003 | perc: 0.0139 | spec: 0.0017 | srm_m: 0.0000 | atk: 0.00 | lr: 9.9e-06 | 0.14s/step | ETA: 1min
+TRAIN 77540/78000 | BER(msg): 0.0039 | BER(phys): 0.0059 | PSNR: 34.7dB | msg: 0.0002 | perc: 0.0178 | spec: 0.0015 | srm_m: 0.0000 | atk: 0.00 | lr: 9.9e-06 | 0.14s/step | ETA: 1min
+TRAIN 77550/78000 | BER(msg): 0.0000 | BER(phys): 0.0059 | PSNR: 34.8dB | msg: 0.0001 | perc: 0.0215 | spec: 0.0030 | srm_m: 0.0000 | atk: 0.00 | lr: 9.9e-06 | 0.14s/step | ETA: 1min
+TRAIN 77560/78000 | BER(msg): 0.0078 | BER(phys): 0.0156 | PSNR: 34.8dB | msg: 0.0003 | perc: 0.0175 | spec: 0.0034 | srm_m: 0.0000 | atk: 0.00 | lr: 9.9e-06 | 0.14s/step | ETA: 1min
+TRAIN 77570/78000 | BER(msg): 0.0020 | BER(phys): 0.0020 | PSNR: 34.8dB | msg: 0.0000 | perc: 0.0136 | spec: 0.0013 | srm_m: 0.0000 | atk: 0.00 | lr: 9.9e-06 | 0.14s/step | ETA: 1min
+TRAIN 77580/78000 | BER(msg): 0.0176 | BER(phys): 0.0137 | PSNR: 34.8dB | msg: 0.0007 | perc: 0.0167 | spec: 0.0019 | srm_m: 0.0000 | atk: 0.00 | lr: 9.9e-06 | 0.14s/step | ETA: 1min
+TRAIN 77590/78000 | BER(msg): 0.0059 | BER(phys): 0.0068 | PSNR: 34.8dB | msg: 0.0001 | perc: 0.0191 | spec: 0.0032 | srm_m: 0.0000 | atk: 0.00 | lr: 9.9e-06 | 0.14s/step | ETA: 1min
+TRAIN 77600/78000 | BER(msg): 0.0039 | BER(phys): 0.0049 | PSNR: 34.9dB | msg: 0.0001 | perc: 0.0221 | spec: 0.0033 | srm_m: 0.0000 | atk: 0.00 | lr: 9.9e-06 | 0.14s/step | ETA: 1min
+TRAIN 77610/78000 | BER(msg): 0.0137 | BER(phys): 0.0156 | PSNR: 34.8dB | msg: 0.0001 | perc: 0.0138 | spec: 0.0026 | srm_m: 0.0000 | atk: 0.00 | lr: 9.9e-06 | 0.14s/step | ETA: 1min
+TRAIN 77620/78000 | BER(msg): 0.0020 | BER(phys): 0.0049 | PSNR: 34.8dB | msg: 0.0001 | perc: 0.0218 | spec: 0.0031 | srm_m: 0.0000 | atk: 0.00 | lr: 9.9e-06 | 0.14s/step | ETA: 1min
+TRAIN 77630/78000 | BER(msg): 0.0078 | BER(phys): 0.0117 | PSNR: 34.8dB | msg: 0.0004 | perc: 0.0250 | spec: 0.0014 | srm_m: 0.0000 | atk: 0.00 | lr: 9.9e-06 | 0.14s/step | ETA: 1min
+TRAIN 77640/78000 | BER(msg): 0.0293 | BER(phys): 0.0283 | PSNR: 34.8dB | msg: 0.0055 | perc: 0.0208 | spec: 0.0023 | srm_m: 0.0000 | atk: 0.00 | lr: 9.9e-06 | 0.14s/step | ETA: 1min
+TRAIN 77650/78000 | BER(msg): 0.0059 | BER(phys): 0.0127 | PSNR: 34.8dB | msg: 0.0001 | perc: 0.0169 | spec: 0.0030 | srm_m: 0.0000 | atk: 0.00 | lr: 9.9e-06 | 0.14s/step | ETA: 1min
+TRAIN 77660/78000 | BER(msg): 0.0156 | BER(phys): 0.0176 | PSNR: 34.7dB | msg: 0.0003 | perc: 0.0147 | spec: 0.0021 | srm_m: 0.0000 | atk: 0.00 | lr: 9.9e-06 | 0.14s/step | ETA: 1min
+TRAIN 77670/78000 | BER(msg): 0.0156 | BER(phys): 0.0293 | PSNR: 34.7dB | msg: 0.0009 | perc: 0.0190 | spec: 0.0014 | srm_m: 0.0000 | atk: 0.00 | lr: 9.9e-06 | 0.14s/step | ETA: 1min
+TRAIN 77680/78000 | BER(msg): 0.0059 | BER(phys): 0.0049 | PSNR: 34.7dB | msg: 0.0000 | perc: 0.0184 | spec: 0.0016 | srm_m: 0.0000 | atk: 0.00 | lr: 9.9e-06 | 0.14s/step | ETA: 1min
+TRAIN 77690/78000 | BER(msg): 0.0059 | BER(phys): 0.0127 | PSNR: 34.8dB | msg: 0.0003 | perc: 0.0127 | spec: 0.0028 | srm_m: 0.0000 | atk: 0.00 | lr: 9.9e-06 | 0.14s/step | ETA: 1min
+TRAIN 77700/78000 | BER(msg): 0.0176 | BER(phys): 0.0146 | PSNR: 34.7dB | msg: 0.0002 | perc: 0.0169 | spec: 0.0015 | srm_m: 0.0000 | atk: 0.00 | lr: 9.9e-06 | 0.14s/step | ETA: 1min
+TRAIN 77710/78000 | BER(msg): 0.0078 | BER(phys): 0.0234 | PSNR: 34.8dB | msg: 0.0004 | perc: 0.0102 | spec: 0.0030 | srm_m: 0.0000 | atk: 0.00 | lr: 9.9e-06 | 0.14s/step | ETA: 1min
+TRAIN 77720/78000 | BER(msg): 0.0156 | BER(phys): 0.0117 | PSNR: 34.7dB | msg: 0.0003 | perc: 0.0264 | spec: 0.0020 | srm_m: 0.0000 | atk: 0.00 | lr: 9.9e-06 | 0.14s/step | ETA: 1min
+TRAIN 77730/78000 | BER(msg): 0.0078 | BER(phys): 0.0117 | PSNR: 34.7dB | msg: 0.0001 | perc: 0.0106 | spec: 0.0021 | srm_m: 0.0000 | atk: 0.00 | lr: 9.9e-06 | 0.14s/step | ETA: 1min
+TRAIN 77740/78000 | BER(msg): 0.0098 | BER(phys): 0.0088 | PSNR: 34.7dB | msg: 0.0001 | perc: 0.0173 | spec: 0.0019 | srm_m: 0.0000 | atk: 0.00 | lr: 9.9e-06 | 0.14s/step | ETA: 1min
+TRAIN 77750/78000 | BER(msg): 0.0039 | BER(phys): 0.0059 | PSNR: 34.7dB | msg: 0.0001 | perc: 0.0121 | spec: 0.0017 | srm_m: 0.0000 | atk: 0.00 | lr: 9.9e-06 | 0.14s/step | ETA: 1min
+TRAIN 77760/78000 | BER(msg): 0.0215 | BER(phys): 0.0215 | PSNR: 34.7dB | msg: 0.0003 | perc: 0.0164 | spec: 0.0022 | srm_m: 0.0000 | atk: 0.00 | lr: 9.9e-06 | 0.14s/step | ETA: 1min
+TRAIN 77770/78000 | BER(msg): 0.0234 | BER(phys): 0.0225 | PSNR: 34.8dB | msg: 0.0014 | perc: 0.0164 | spec: 0.0021 | srm_m: 0.0000 | atk: 0.00 | lr: 9.9e-06 | 0.14s/step | ETA: 1min
+TRAIN 77780/78000 | BER(msg): 0.0117 | BER(phys): 0.0146 | PSNR: 34.7dB | msg: 0.0001 | perc: 0.0211 | spec: 0.0015 | srm_m: 0.0000 | atk: 0.00 | lr: 9.9e-06 | 0.14s/step | ETA: 1min
+TRAIN 77790/78000 | BER(msg): 0.0156 | BER(phys): 0.0205 | PSNR: 34.7dB | msg: 0.0003 | perc: 0.0167 | spec: 0.0011 | srm_m: 0.0000 | atk: 0.00 | lr: 9.9e-06 | 0.14s/step | ETA: 0min
+TRAIN 77800/78000 | BER(msg): 0.0469 | BER(phys): 0.0361 | PSNR: 34.8dB | msg: 0.0006 | perc: 0.0213 | spec: 0.0034 | srm_m: 0.0000 | atk: 0.00 | lr: 9.9e-06 | 0.14s/step | ETA: 0min
+TRAIN 77810/78000 | BER(msg): 0.0547 | BER(phys): 0.0381 | PSNR: 34.6dB | msg: 0.0062 | perc: 0.0120 | spec: 0.0023 | srm_m: 0.0000 | atk: 0.00 | lr: 9.9e-06 | 0.14s/step | ETA: 0min
+TRAIN 77820/78000 | BER(msg): 0.0078 | BER(phys): 0.0146 | PSNR: 34.7dB | msg: 0.0002 | perc: 0.0140 | spec: 0.0019 | srm_m: 0.0000 | atk: 0.00 | lr: 9.9e-06 | 0.14s/step | ETA: 0min
+TRAIN 77830/78000 | BER(msg): 0.0137 | BER(phys): 0.0166 | PSNR: 34.7dB | msg: 0.0009 | perc: 0.0137 | spec: 0.0020 | srm_m: 0.0000 | atk: 0.00 | lr: 9.9e-06 | 0.14s/step | ETA: 0min
+TRAIN 77840/78000 | BER(msg): 0.0098 | BER(phys): 0.0117 | PSNR: 34.7dB | msg: 0.0005 | perc: 0.0160 | spec: 0.0019 | srm_m: 0.0000 | atk: 0.00 | lr: 9.9e-06 | 0.14s/step | ETA: 0min
+TRAIN 77850/78000 | BER(msg): 0.0215 | BER(phys): 0.0322 | PSNR: 34.7dB | msg: 0.0003 | perc: 0.0154 | spec: 0.0018 | srm_m: 0.0000 | atk: 0.00 | lr: 9.9e-06 | 0.33s/step | ETA: 1min
+TRAIN 77860/78000 | BER(msg): 0.0117 | BER(phys): 0.0127 | PSNR: 34.7dB | msg: 0.0002 | perc: 0.0201 | spec: 0.0016 | srm_m: 0.0000 | atk: 0.00 | lr: 9.9e-06 | 0.39s/step | ETA: 1min
+TRAIN 77870/78000 | BER(msg): 0.0273 | BER(phys): 0.0264 | PSNR: 34.7dB | msg: 0.0009 | perc: 0.0152 | spec: 0.0016 | srm_m: 0.0000 | atk: 0.00 | lr: 9.9e-06 | 0.32s/step | ETA: 1min
+TRAIN 77880/78000 | BER(msg): 0.0078 | BER(phys): 0.0068 | PSNR: 34.7dB | msg: 0.0001 | perc: 0.0219 | spec: 0.0017 | srm_m: 0.0000 | atk: 0.00 | lr: 9.9e-06 | 0.30s/step | ETA: 1min
+TRAIN 77890/78000 | BER(msg): 0.0078 | BER(phys): 0.0225 | PSNR: 34.8dB | msg: 0.0003 | perc: 0.0175 | spec: 0.0014 | srm_m: 0.0000 | atk: 0.00 | lr: 9.9e-06 | 0.39s/step | ETA: 1min
+TRAIN 77900/78000 | BER(msg): 0.0000 | BER(phys): 0.0029 | PSNR: 34.8dB | msg: 0.0001 | perc: 0.0217 | spec: 0.0017 | srm_m: 0.0000 | atk: 0.00 | lr: 9.9e-06 | 0.43s/step | ETA: 1min
+TRAIN 77910/78000 | BER(msg): 0.0605 | BER(phys): 0.0459 | PSNR: 34.7dB | msg: 0.0053 | perc: 0.0114 | spec: 0.0035 | srm_m: 0.0000 | atk: 0.00 | lr: 9.9e-06 | 0.19s/step | ETA: 0min
+TRAIN 77920/78000 | BER(msg): 0.0117 | BER(phys): 0.0107 | PSNR: 34.7dB | msg: 0.0001 | perc: 0.0185 | spec: 0.0012 | srm_m: 0.0000 | atk: 0.00 | lr: 9.9e-06 | 0.09s/step | ETA: 0min
+TRAIN 77930/78000 | BER(msg): 0.0039 | BER(phys): 0.0117 | PSNR: 34.8dB | msg: 0.0001 | perc: 0.0227 | spec: 0.0024 | srm_m: 0.0000 | atk: 0.00 | lr: 9.9e-06 | 0.09s/step | ETA: 0min
+TRAIN 77940/78000 | BER(msg): 0.0137 | BER(phys): 0.0137 | PSNR: 34.8dB | msg: 0.0001 | perc: 0.0178 | spec: 0.0032 | srm_m: 0.0000 | atk: 0.00 | lr: 9.9e-06 | 0.09s/step | ETA: 0min
+TRAIN 77950/78000 | BER(msg): 0.0039 | BER(phys): 0.0098 | PSNR: 34.9dB | msg: 0.0002 | perc: 0.0223 | spec: 0.0037 | srm_m: 0.0000 | atk: 0.00 | lr: 9.9e-06 | 0.10s/step | ETA: 0min
+TRAIN 77960/78000 | BER(msg): 0.0020 | BER(phys): 0.0059 | PSNR: 34.8dB | msg: 0.0000 | perc: 0.0206 | spec: 0.0011 | srm_m: 0.0000 | atk: 0.00 | lr: 9.9e-06 | 0.10s/step | ETA: 0min
+TRAIN 77970/78000 | BER(msg): 0.0078 | BER(phys): 0.0078 | PSNR: 34.8dB | msg: 0.0001 | perc: 0.0234 | spec: 0.0031 | srm_m: 0.0000 | atk: 0.00 | lr: 9.9e-06 | 0.10s/step | ETA: 0min
+TRAIN 77980/78000 | BER(msg): 0.0020 | BER(phys): 0.0078 | PSNR: 34.8dB | msg: 0.0001 | perc: 0.0170 | spec: 0.0021 | srm_m: 0.0000 | atk: 0.00 | lr: 9.9e-06 | 0.10s/step | ETA: 0min
+TRAIN 77990/78000 | BER(msg): 0.0117 | BER(phys): 0.0127 | PSNR: 34.8dB | msg: 0.0014 | perc: 0.0148 | spec: 0.0020 | srm_m: 0.0000 | atk: 0.00 | lr: 9.9e-06 | 0.10s/step | ETA: 0min
+TRAIN 78000/78000 | BER(msg): 0.0078 | BER(phys): 0.0127 | PSNR: 34.7dB | msg: 0.0001 | perc: 0.0141 | spec: 0.0013 | srm_m: 0.0000 | atk: 0.00 | lr: 9.9e-06 | 0.10s/step | ETA: 0min
+  Saved checkpoint: checkpoints_v5_clean/dscsp_v5_step_078000.pt
+
+============================================================
+FINAL EVALUATION (200 samples) — v5
+============================================================
+  Clean BER (message): 0.010234 (target: 0.0000)
+  PSNR:                34.7 dB (target: >= 35)
+  Best BER during training: 0.000000
+  WARNING: Clean BER not yet at target
+  Saved final model: checkpoints_v5_clean/dscsp_v5_final.pt
+  Saved results: outputs_v5_clean/train_v5_results.json

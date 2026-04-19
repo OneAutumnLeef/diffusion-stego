@@ -1,0 +1,17 @@
+{
+  "step": 80000,
+  "total_steps": 80000,
+  "ber": 0.005859,
+  "ber_phys": 0.003906,
+  "psnr": 34.8,
+  "best_ber": 0.0,
+  "phase": "TRAIN",
+  "msg_loss": 2.8e-05,
+  "perc_loss": 0.015913,
+  "spec_loss": 0.002014,
+  "srm_match_loss": 0.0,
+  "attack_prob": 0.0,
+  "lr": 9.98460208199697e-06,
+  "avg_step_time_s": 0.117,
+  "eta_min": 0.0
+}

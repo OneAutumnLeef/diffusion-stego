@@ -2,3 +2,20 @@
 __pycache__/
 *.pyc
 *.pyo
+
+# Intermediate training checkpoints (keep only final.pt)
+checkpoints_v5/
+checkpoints_v5_quality/
+checkpoints_v5_clean/dscsp_v5_step_*.pt
+
+# Ablation intermediate checkpoints (keep logs/JSON, not weights)
+outputs_v5_ablation/warmstart/
+outputs_v5_ablation/full/
+outputs_v5_ablation/no_adv/
+outputs_v5_ablation/no_spectral/
+outputs_v5_ablation/no_srm_match/
+outputs_v5_ablation/uniform_attacks/
+outputs_v5_ablation/no_redundant/
+
+# Scheduled task lock
+.claude/scheduled_tasks.lock

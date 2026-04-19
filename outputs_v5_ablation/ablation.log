@@ -1,0 +1,863 @@
+Training warm-start for 5000 steps...
+
+============================================================
+ABLATION VARIANT: warmstart
+============================================================
+  OVERRIDE: total_steps = 5000
+  OVERRIDE: pool_refresh_interval = 99999
+  OVERRIDE: log_interval = 50
+  OVERRIDE: save_image_interval = 5000
+  OVERRIDE: checkpoint_interval = 5000
+  OVERRIDE: output_dir = outputs_v5_ablation/warmstart
+  OVERRIDE: checkpoint_dir = outputs_v5_ablation/warmstart
+
+DSCSP v5 Training
+Device: cuda
+GPU: NVIDIA GeForce RTX 5090
+VRAM: 31.4 GB
+
+RedundantCoder: 128 message bits → 256 physical slots (R=2)
+
+Loading diffusion model...
+Loading pipeline components...:   0%|          | 0/2 [00:00<?, ?it/s]An error occurred while trying to fetch /workspace/.cache/huggingface/hub/models--google--ddpm-celebahq-256/snapshots/cd5c944777ea2668051904ead6cc120739b86c4d: Error no file named diffusion_pytorch_model.safetensors found in directory /workspace/.cache/huggingface/hub/models--google--ddpm-celebahq-256/snapshots/cd5c944777ea2668051904ead6cc120739b86c4d.
+Defaulting to unsafe serialization. Pass `allow_pickle=False` to raise an error instead.
+Loading pipeline components...:  50%|█████     | 1/2 [00:13<00:13, 13.29s/it]Loading pipeline components...: 100%|██████████| 2/2 [00:13<00:00,  6.65s/it]
+/root/diffusion-stego/dscsp/models/diffusion_wrapper.py:37: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.detach().clone() or sourceTensor.detach().clone().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  self.final_alpha_cumprod = torch.tensor(
+  UNet params: 113.7M (frozen)
+
+Initializing content-adaptive controller...
+  Controller params: 4.39M
+Initializing global-pool extractor...
+  Extractor params: 11.31M
+Initializing SN-discriminator...
+  Discriminator params: 2.76M
+  SRM feature-matching loss enabled (λ=0.05)
+Setting up [LPIPS] perceptual loss: trunk [vgg], v[0.1], spatial [off]
+/usr/local/lib/python3.12/dist-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+  warnings.warn(
+/usr/local/lib/python3.12/dist-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=VGG16_Weights.IMAGENET1K_V1`. You can also use `weights=VGG16_Weights.DEFAULT` to get the most up-to-date weights.
+  warnings.warn(msg)
+Loading model from: /usr/local/lib/python3.12/dist-packages/lpips/weights/v0.1/vgg.pth
+  Attack layer: JPEG weight 0.8, quality (70, 92)
+Generating image pool...
+  Generating 128 clean images...
+    4/128    8/128    12/128    16/128    20/128    24/128    28/128    32/128    36/128    40/128    44/128    48/128    52/128    56/128    60/128    64/128    68/128    72/128    76/128    80/128    84/128    88/128    92/128    96/128    100/128    104/128    108/128    112/128    116/128    120/128    124/128    128/128
+  Image pool: torch.Size([128, 3, 256, 256]), range: [-1.000, 1.000]
+
+Starting DSCSP v5 training for 5000 steps (from step 0)
+  Payload: 128 message bits → 256 physical bits (R=2)
+  JPEG: weight=0.8, quality=(70, 92)
+  Adv: start=500, D_steps=4
+  Compound attacks: start step 5000
+
+BOOT-EXT    50/5000 | BER(msg): 0.0020 | BER(phys): 0.0010 | PSNR: 21.0dB | msg: 0.0026 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-04 | 0.01s/step | ETA: 1min
+BOOT-EXT   100/5000 | BER(msg): 0.0000 | BER(phys): 0.0000 | PSNR: 20.9dB | msg: 0.0003 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-04 | 0.01s/step | ETA: 1min
+BOOT-EXT   150/5000 | BER(msg): 0.0000 | BER(phys): 0.0000 | PSNR: 21.0dB | msg: 0.0001 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-04 | 0.01s/step | ETA: 1min
+BOOT-EXT   200/5000 | BER(msg): 0.0000 | BER(phys): 0.0000 | PSNR: 20.9dB | msg: 0.0002 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-04 | 0.01s/step | ETA: 1min
+BOOT-EXT   250/5000 | BER(msg): 0.0000 | BER(phys): 0.0000 | PSNR: 21.0dB | msg: 0.0000 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 9.9e-05 | 0.01s/step | ETA: 1min
+BOOT-EXT   300/5000 | BER(msg): 0.0020 | BER(phys): 0.0010 | PSNR: 21.0dB | msg: 0.0019 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 9.9e-05 | 0.01s/step | ETA: 1min
+BOOT-EXT   350/5000 | BER(msg): 0.0000 | BER(phys): 0.0000 | PSNR: 21.0dB | msg: 0.0001 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 9.9e-05 | 0.01s/step | ETA: 1min
+BOOT-EXT   400/5000 | BER(msg): 0.0000 | BER(phys): 0.0000 | PSNR: 21.1dB | msg: 0.0001 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 9.8e-05 | 0.01s/step | ETA: 1min
+BOOT-EXT   450/5000 | BER(msg): 0.0000 | BER(phys): 0.0000 | PSNR: 20.9dB | msg: 0.0001 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 9.8e-05 | 0.01s/step | ETA: 1min
+BOOT-EXT   500/5000 | BER(msg): 0.0000 | BER(phys): 0.0010 | PSNR: 20.9dB | msg: 0.0015 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 9.8e-05 | 0.01s/step | ETA: 1min
+BOOT-EXT   550/5000 | BER(msg): 0.0000 | BER(phys): 0.0000 | PSNR: 20.9dB | msg: 0.0000 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 9.7e-05 | 0.01s/step | ETA: 1min
+BOOT-EXT   600/5000 | BER(msg): 0.0000 | BER(phys): 0.0000 | PSNR: 21.0dB | msg: 0.0002 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 9.7e-05 | 0.01s/step | ETA: 1min
+BOOT-EXT   650/5000 | BER(msg): 0.0000 | BER(phys): 0.0000 | PSNR: 21.0dB | msg: 0.0000 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 9.6e-05 | 0.01s/step | ETA: 1min
+BOOT-EXT   700/5000 | BER(msg): 0.0000 | BER(phys): 0.0059 | PSNR: 21.0dB | msg: 0.0147 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 9.5e-05 | 0.01s/step | ETA: 1min
+BOOT-EXT   750/5000 | BER(msg): 0.0000 | BER(phys): 0.0000 | PSNR: 21.0dB | msg: 0.0001 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 9.5e-05 | 0.01s/step | ETA: 1min
+BOOT-EXT   800/5000 | BER(msg): 0.0000 | BER(phys): 0.0000 | PSNR: 21.0dB | msg: 0.0000 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 9.4e-05 | 0.01s/step | ETA: 1min
+BOOT-CTRL   850/5000 | BER(msg): 0.2031 | BER(phys): 0.1787 | PSNR: 41.2dB | msg: 0.9192 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 9.3e-05 | 0.04s/step | ETA: 3min
+BOOT-CTRL   900/5000 | BER(msg): 0.1680 | BER(phys): 0.1826 | PSNR: 41.2dB | msg: 1.0287 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 9.2e-05 | 0.04s/step | ETA: 3min
+BOOT-CTRL   950/5000 | BER(msg): 0.1523 | BER(phys): 0.1621 | PSNR: 41.1dB | msg: 0.8735 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 9.1e-05 | 0.05s/step | ETA: 3min
+BOOT-CTRL  1000/5000 | BER(msg): 0.1582 | BER(phys): 0.1680 | PSNR: 40.9dB | msg: 0.9587 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 9.1e-05 | 0.04s/step | ETA: 3min
+BOOT-CTRL  1050/5000 | BER(msg): 0.1152 | BER(phys): 0.1123 | PSNR: 40.7dB | msg: 0.5376 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 9.0e-05 | 0.04s/step | ETA: 3min
+BOOT-CTRL  1100/5000 | BER(msg): 0.1211 | BER(phys): 0.0996 | PSNR: 40.1dB | msg: 0.4886 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 8.9e-05 | 0.04s/step | ETA: 3min
+BOOT-CTRL  1150/5000 | BER(msg): 0.1328 | BER(phys): 0.1475 | PSNR: 39.3dB | msg: 0.8805 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 8.8e-05 | 0.04s/step | ETA: 3min
+BOOT-CTRL  1200/5000 | BER(msg): 0.1543 | BER(phys): 0.1504 | PSNR: 39.6dB | msg: 0.8058 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 8.7e-05 | 0.04s/step | ETA: 3min
+BOOT-CTRL  1250/5000 | BER(msg): 0.1445 | BER(phys): 0.1348 | PSNR: 39.4dB | msg: 0.6133 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 8.6e-05 | 0.04s/step | ETA: 3min
+BOOT-CTRL  1300/5000 | BER(msg): 0.1465 | BER(phys): 0.1221 | PSNR: 39.1dB | msg: 0.6478 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 8.4e-05 | 0.04s/step | ETA: 3min
+BOOT-CTRL  1350/5000 | BER(msg): 0.0859 | BER(phys): 0.1152 | PSNR: 38.8dB | msg: 0.5423 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 8.3e-05 | 0.04s/step | ETA: 3min
+BOOT-CTRL  1400/5000 | BER(msg): 0.1387 | BER(phys): 0.1367 | PSNR: 38.8dB | msg: 0.6773 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 8.2e-05 | 0.04s/step | ETA: 3min
+BOOT-CTRL  1450/5000 | BER(msg): 0.1309 | BER(phys): 0.1201 | PSNR: 38.4dB | msg: 0.6282 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 8.1e-05 | 0.04s/step | ETA: 3min
+BOOT-CTRL  1500/5000 | BER(msg): 0.0781 | BER(phys): 0.0840 | PSNR: 38.4dB | msg: 0.3916 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 8.0e-05 | 0.04s/step | ETA: 3min
+BOOT-CTRL  1550/5000 | BER(msg): 0.1016 | BER(phys): 0.1104 | PSNR: 38.1dB | msg: 0.5943 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 7.8e-05 | 0.04s/step | ETA: 3min
+BOOT-CTRL  1600/5000 | BER(msg): 0.1152 | BER(phys): 0.1172 | PSNR: 37.8dB | msg: 0.5393 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 7.7e-05 | 0.04s/step | ETA: 2min
+BOOT-CTRL  1650/5000 | BER(msg): 0.0859 | BER(phys): 0.0918 | PSNR: 37.9dB | msg: 0.4798 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 7.6e-05 | 0.04s/step | ETA: 2min
+BOOT-CTRL  1700/5000 | BER(msg): 0.0801 | BER(phys): 0.0908 | PSNR: 37.9dB | msg: 0.4345 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 7.4e-05 | 0.04s/step | ETA: 2min
+BOOT-CTRL  1750/5000 | BER(msg): 0.0938 | BER(phys): 0.0928 | PSNR: 37.6dB | msg: 0.4271 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 7.3e-05 | 0.04s/step | ETA: 2min
+BOOT-CTRL  1800/5000 | BER(msg): 0.0859 | BER(phys): 0.1084 | PSNR: 37.5dB | msg: 0.5228 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 7.2e-05 | 0.04s/step | ETA: 2min
+TRAIN  1850/5000 | BER(msg): 0.0137 | BER(phys): 0.0264 | PSNR: 38.7dB | msg: 0.0141 | perc: 0.0628 | spec: 0.0166 | srm_m: 0.0000 | atk: 0.57 | lr: 7.0e-05 | 0.11s/step | ETA: 6min | D: 0.660/0.88 adv: 0.9244
+TRAIN  1900/5000 | BER(msg): 0.0449 | BER(phys): 0.0410 | PSNR: 38.0dB | msg: 0.0263 | perc: 0.0521 | spec: 0.0125 | srm_m: 0.0000 | atk: 0.59 | lr: 6.9e-05 | 0.11s/step | ETA: 6min | D: 0.604/1.00 adv: 0.9357
+TRAIN  1950/5000 | BER(msg): 0.0469 | BER(phys): 0.0449 | PSNR: 31.7dB | msg: 0.0212 | perc: 0.0272 | spec: 0.0074 | srm_m: 0.0000 | atk: 0.62 | lr: 6.7e-05 | 0.11s/step | ETA: 5min | D: 0.543/1.00 adv: 0.9732
+TRAIN  2000/5000 | BER(msg): 0.0586 | BER(phys): 0.0527 | PSNR: 30.2dB | msg: 0.0333 | perc: 0.0236 | spec: 0.0076 | srm_m: 0.0000 | atk: 0.64 | lr: 6.6e-05 | 0.11s/step | ETA: 5min | D: 0.511/1.00 adv: 0.9892
+TRAIN  2050/5000 | BER(msg): 0.1133 | BER(phys): 0.0957 | PSNR: 29.5dB | msg: 0.0884 | perc: 0.0186 | spec: 0.0057 | srm_m: 0.0001 | atk: 0.66 | lr: 6.4e-05 | 0.11s/step | ETA: 5min | D: 0.537/0.88 adv: 0.7262
+TRAIN  2100/5000 | BER(msg): 0.0723 | BER(phys): 0.0654 | PSNR: 29.6dB | msg: 0.0523 | perc: 0.0145 | spec: 0.0065 | srm_m: 0.0000 | atk: 0.68 | lr: 6.3e-05 | 0.10s/step | ETA: 5min | D: 0.535/1.00 adv: 0.9779
+TRAIN  2150/5000 | BER(msg): 0.0605 | BER(phys): 0.0547 | PSNR: 29.4dB | msg: 0.0370 | perc: 0.0173 | spec: 0.0044 | srm_m: 0.0000 | atk: 0.70 | lr: 6.1e-05 | 0.10s/step | ETA: 5min | D: 0.542/0.88 adv: 1.4745
+TRAIN  2200/5000 | BER(msg): 0.1758 | BER(phys): 0.1777 | PSNR: 29.3dB | msg: 0.2752 | perc: 0.0187 | spec: 0.0044 | srm_m: 0.0000 | atk: 0.72 | lr: 6.0e-05 | 0.11s/step | ETA: 5min | D: 0.623/0.50 adv: 1.0937
+TRAIN  2250/5000 | BER(msg): 0.0879 | BER(phys): 0.1006 | PSNR: 29.4dB | msg: 0.0988 | perc: 0.0155 | spec: 0.0062 | srm_m: 0.0000 | atk: 0.74 | lr: 5.8e-05 | 0.10s/step | ETA: 5min | D: 0.540/1.00 adv: 0.8547
+TRAIN  2300/5000 | BER(msg): 0.0352 | BER(phys): 0.0508 | PSNR: 29.3dB | msg: 0.0335 | perc: 0.0108 | spec: 0.0048 | srm_m: 0.0001 | atk: 0.77 | lr: 5.7e-05 | 0.10s/step | ETA: 5min | D: 0.496/1.00 adv: 0.9186
+TRAIN  2350/5000 | BER(msg): 0.0723 | BER(phys): 0.0918 | PSNR: 29.4dB | msg: 0.1005 | perc: 0.0168 | spec: 0.0029 | srm_m: 0.0000 | atk: 0.79 | lr: 5.5e-05 | 0.10s/step | ETA: 5min | D: 0.625/0.50 adv: 1.1068
+TRAIN  2400/5000 | BER(msg): 0.0801 | BER(phys): 0.0693 | PSNR: 29.2dB | msg: 0.0469 | perc: 0.0133 | spec: 0.0028 | srm_m: 0.0000 | atk: 0.81 | lr: 5.4e-05 | 0.10s/step | ETA: 5min | D: 0.583/0.62 adv: 1.0412
+TRAIN  2450/5000 | BER(msg): 0.0234 | BER(phys): 0.0391 | PSNR: 29.3dB | msg: 0.0478 | perc: 0.0147 | spec: 0.0024 | srm_m: 0.0000 | atk: 0.83 | lr: 5.2e-05 | 0.10s/step | ETA: 4min | D: 0.504/1.00 adv: 1.0570
+TRAIN  2500/5000 | BER(msg): 0.1406 | BER(phys): 0.1357 | PSNR: 29.2dB | msg: 0.1233 | perc: 0.0114 | spec: 0.0032 | srm_m: 0.0000 | atk: 0.85 | lr: 5.0e-05 | 0.11s/step | ETA: 5min | D: 0.567/1.00 adv: 0.9774
+TRAIN  2550/5000 | BER(msg): 0.1074 | BER(phys): 0.1152 | PSNR: 29.2dB | msg: 0.1113 | perc: 0.0119 | spec: 0.0032 | srm_m: 0.0000 | atk: 0.85 | lr: 4.9e-05 | 0.10s/step | ETA: 4min | D: 0.548/1.00 adv: 0.8562
+TRAIN  2600/5000 | BER(msg): 0.1309 | BER(phys): 0.1543 | PSNR: 29.2dB | msg: 0.1796 | perc: 0.0126 | spec: 0.0026 | srm_m: 0.0000 | atk: 0.85 | lr: 4.7e-05 | 0.10s/step | ETA: 4min | D: 0.538/0.88 adv: 0.7274
+TRAIN  2650/5000 | BER(msg): 0.0645 | BER(phys): 0.0674 | PSNR: 29.1dB | msg: 0.0726 | perc: 0.0133 | spec: 0.0019 | srm_m: 0.0000 | atk: 0.85 | lr: 4.6e-05 | 0.10s/step | ETA: 4min | D: 0.585/0.62 adv: 1.1970
+TRAIN  2700/5000 | BER(msg): 0.0898 | BER(phys): 0.0957 | PSNR: 29.0dB | msg: 0.0711 | perc: 0.0142 | spec: 0.0039 | srm_m: 0.0000 | atk: 0.85 | lr: 4.4e-05 | 0.10s/step | ETA: 4min | D: 0.540/1.00 adv: 0.9349
+TRAIN  2750/5000 | BER(msg): 0.1328 | BER(phys): 0.1582 | PSNR: 29.1dB | msg: 0.1927 | perc: 0.0076 | spec: 0.0030 | srm_m: 0.0000 | atk: 0.85 | lr: 4.3e-05 | 0.10s/step | ETA: 4min | D: 0.519/1.00 adv: 0.9889
+TRAIN  2800/5000 | BER(msg): 0.0723 | BER(phys): 0.0840 | PSNR: 29.1dB | msg: 0.0659 | perc: 0.0140 | spec: 0.0028 | srm_m: 0.0000 | atk: 0.85 | lr: 4.1e-05 | 0.11s/step | ETA: 4min | D: 0.512/1.00 adv: 0.9439
+TRAIN  2850/5000 | BER(msg): 0.1250 | BER(phys): 0.1113 | PSNR: 28.9dB | msg: 0.1078 | perc: 0.0150 | spec: 0.0033 | srm_m: 0.0000 | atk: 0.85 | lr: 4.0e-05 | 0.10s/step | ETA: 4min | D: 0.536/1.00 adv: 1.1451
+TRAIN  2900/5000 | BER(msg): 0.1035 | BER(phys): 0.0938 | PSNR: 28.9dB | msg: 0.0896 | perc: 0.0104 | spec: 0.0030 | srm_m: 0.0000 | atk: 0.85 | lr: 3.8e-05 | 0.11s/step | ETA: 4min | D: 0.585/0.75 adv: 0.5752
+TRAIN  2950/5000 | BER(msg): 0.1562 | BER(phys): 0.1660 | PSNR: 28.9dB | msg: 0.1681 | perc: 0.0139 | spec: 0.0028 | srm_m: 0.0000 | atk: 0.85 | lr: 3.7e-05 | 0.10s/step | ETA: 4min | D: 0.530/1.00 adv: 0.9036
+TRAIN  3000/5000 | BER(msg): 0.1973 | BER(phys): 0.1865 | PSNR: 29.0dB | msg: 0.2131 | perc: 0.0095 | spec: 0.0060 | srm_m: 0.0000 | atk: 0.85 | lr: 3.5e-05 | 0.10s/step | ETA: 3min | D: 0.583/0.75 adv: 0.5747
+TRAIN  3050/5000 | BER(msg): 0.2227 | BER(phys): 0.2002 | PSNR: 28.8dB | msg: 0.2496 | perc: 0.0132 | spec: 0.0035 | srm_m: 0.0000 | atk: 0.85 | lr: 3.4e-05 | 0.11s/step | ETA: 3min | D: 0.550/1.00 adv: 1.0069
+TRAIN  3100/5000 | BER(msg): 0.1465 | BER(phys): 0.1465 | PSNR: 28.8dB | msg: 0.1638 | perc: 0.0121 | spec: 0.0029 | srm_m: 0.0000 | atk: 0.85 | lr: 3.2e-05 | 0.10s/step | ETA: 3min | D: 0.573/0.88 adv: 0.8857
+TRAIN  3150/5000 | BER(msg): 0.1719 | BER(phys): 0.1943 | PSNR: 28.9dB | msg: 0.2082 | perc: 0.0103 | spec: 0.0024 | srm_m: 0.0000 | atk: 0.85 | lr: 3.1e-05 | 0.10s/step | ETA: 3min | D: 0.587/1.00 adv: 0.8155
+TRAIN  3200/5000 | BER(msg): 0.2070 | BER(phys): 0.1992 | PSNR: 28.9dB | msg: 0.2299 | perc: 0.0098 | spec: 0.0034 | srm_m: 0.0000 | atk: 0.85 | lr: 2.9e-05 | 0.11s/step | ETA: 3min | D: 0.564/0.88 adv: 1.1582
+TRAIN  3250/5000 | BER(msg): 0.0723 | BER(phys): 0.0771 | PSNR: 28.9dB | msg: 0.0366 | perc: 0.0116 | spec: 0.0021 | srm_m: 0.0000 | atk: 0.85 | lr: 2.8e-05 | 0.10s/step | ETA: 3min | D: 0.568/0.75 adv: 1.1114
+TRAIN  3300/5000 | BER(msg): 0.0742 | BER(phys): 0.0967 | PSNR: 28.9dB | msg: 0.0689 | perc: 0.0117 | spec: 0.0023 | srm_m: 0.0000 | atk: 0.85 | lr: 2.7e-05 | 0.10s/step | ETA: 3min | D: 0.567/1.00 adv: 0.8504
+TRAIN  3350/5000 | BER(msg): 0.0820 | BER(phys): 0.0742 | PSNR: 28.8dB | msg: 0.0613 | perc: 0.0107 | spec: 0.0022 | srm_m: 0.0000 | atk: 0.85 | lr: 2.5e-05 | 0.10s/step | ETA: 3min | D: 0.569/1.00 adv: 0.8391
+TRAIN  3400/5000 | BER(msg): 0.1738 | BER(phys): 0.1885 | PSNR: 28.9dB | msg: 0.2424 | perc: 0.0148 | spec: 0.0030 | srm_m: 0.0000 | atk: 0.85 | lr: 2.4e-05 | 0.10s/step | ETA: 3min | D: 0.548/1.00 adv: 0.8082
+TRAIN  3450/5000 | BER(msg): 0.1699 | BER(phys): 0.1406 | PSNR: 28.8dB | msg: 0.1223 | perc: 0.0119 | spec: 0.0044 | srm_m: 0.0000 | atk: 0.85 | lr: 2.3e-05 | 0.10s/step | ETA: 3min | D: 0.580/1.00 adv: 0.9067
+TRAIN  3500/5000 | BER(msg): 0.1367 | BER(phys): 0.1592 | PSNR: 28.8dB | msg: 0.1303 | perc: 0.0150 | spec: 0.0025 | srm_m: 0.0000 | atk: 0.85 | lr: 2.1e-05 | 0.10s/step | ETA: 3min | D: 0.564/1.00 adv: 1.1270
+TRAIN  3550/5000 | BER(msg): 0.2559 | BER(phys): 0.2383 | PSNR: 28.8dB | msg: 0.3256 | perc: 0.0085 | spec: 0.0022 | srm_m: 0.0000 | atk: 0.85 | lr: 2.0e-05 | 0.10s/step | ETA: 3min | D: 0.594/0.88 adv: 0.9763
+TRAIN  3600/5000 | BER(msg): 0.1172 | BER(phys): 0.1250 | PSNR: 28.8dB | msg: 0.0839 | perc: 0.0109 | spec: 0.0021 | srm_m: 0.0000 | atk: 0.85 | lr: 1.9e-05 | 0.10s/step | ETA: 2min | D: 0.578/1.00 adv: 1.0155
+TRAIN  3650/5000 | BER(msg): 0.1328 | BER(phys): 0.1230 | PSNR: 28.7dB | msg: 0.0813 | perc: 0.0131 | spec: 0.0029 | srm_m: 0.0000 | atk: 0.85 | lr: 1.8e-05 | 0.10s/step | ETA: 2min | D: 0.559/1.00 adv: 0.8496
+TRAIN  3700/5000 | BER(msg): 0.2305 | BER(phys): 0.2139 | PSNR: 28.8dB | msg: 0.2083 | perc: 0.0127 | spec: 0.0035 | srm_m: 0.0000 | atk: 0.85 | lr: 1.7e-05 | 0.10s/step | ETA: 2min | D: 0.578/1.00 adv: 0.9322
+TRAIN  3750/5000 | BER(msg): 0.0547 | BER(phys): 0.0840 | PSNR: 28.9dB | msg: 0.0502 | perc: 0.0116 | spec: 0.0025 | srm_m: 0.0000 | atk: 0.85 | lr: 1.5e-05 | 0.10s/step | ETA: 2min | D: 0.563/0.88 adv: 0.7660
+TRAIN  3800/5000 | BER(msg): 0.2773 | BER(phys): 0.2363 | PSNR: 28.7dB | msg: 0.3249 | perc: 0.0173 | spec: 0.0039 | srm_m: 0.0000 | atk: 0.85 | lr: 1.4e-05 | 0.10s/step | ETA: 2min | D: 0.597/0.88 adv: 0.8049
+TRAIN  3850/5000 | BER(msg): 0.2715 | BER(phys): 0.2939 | PSNR: 28.9dB | msg: 0.5327 | perc: 0.0179 | spec: 0.0037 | srm_m: 0.0000 | atk: 0.85 | lr: 1.3e-05 | 0.10s/step | ETA: 2min | D: 0.559/1.00 adv: 0.9435
+TRAIN  3900/5000 | BER(msg): 0.4648 | BER(phys): 0.4824 | PSNR: 28.9dB | msg: 0.7468 | perc: 0.0162 | spec: 0.0025 | srm_m: 0.0000 | atk: 0.85 | lr: 1.2e-05 | 0.11s/step | ETA: 2min | D: 0.567/1.00 adv: 0.7763
+TRAIN  3950/5000 | BER(msg): 0.1816 | BER(phys): 0.1924 | PSNR: 28.8dB | msg: 0.1399 | perc: 0.0148 | spec: 0.0027 | srm_m: 0.0000 | atk: 0.85 | lr: 1.1e-05 | 0.10s/step | ETA: 2min | D: 0.576/1.00 adv: 0.8663
+TRAIN  4000/5000 | BER(msg): 0.2070 | BER(phys): 0.2207 | PSNR: 28.8dB | msg: 0.2912 | perc: 0.0127 | spec: 0.0028 | srm_m: 0.0000 | atk: 0.85 | lr: 1.0e-05 | 0.10s/step | ETA: 2min | D: 0.591/0.75 adv: 0.7663
+TRAIN  4050/5000 | BER(msg): 0.0879 | BER(phys): 0.1133 | PSNR: 28.9dB | msg: 0.0814 | perc: 0.0153 | spec: 0.0031 | srm_m: 0.0000 | atk: 0.85 | lr: 9.6e-06 | 0.10s/step | ETA: 2min | D: 0.576/1.00 adv: 0.7159
+TRAIN  4100/5000 | BER(msg): 0.2031 | BER(phys): 0.2119 | PSNR: 28.8dB | msg: 0.1720 | perc: 0.0207 | spec: 0.0024 | srm_m: 0.0000 | atk: 0.85 | lr: 8.7e-06 | 0.10s/step | ETA: 2min | D: 0.559/1.00 adv: 1.0035
+TRAIN  4150/5000 | BER(msg): 0.1074 | BER(phys): 0.1240 | PSNR: 28.8dB | msg: 0.0794 | perc: 0.0141 | spec: 0.0035 | srm_m: 0.0000 | atk: 0.85 | lr: 7.9e-06 | 0.10s/step | ETA: 1min | D: 0.574/1.00 adv: 0.9403
+TRAIN  4200/5000 | BER(msg): 0.1602 | BER(phys): 0.1631 | PSNR: 28.8dB | msg: 0.1444 | perc: 0.0184 | spec: 0.0030 | srm_m: 0.0000 | atk: 0.85 | lr: 7.1e-06 | 0.10s/step | ETA: 1min | D: 0.579/0.75 adv: 1.0248
+TRAIN  4250/5000 | BER(msg): 0.1973 | BER(phys): 0.1729 | PSNR: 28.7dB | msg: 0.1801 | perc: 0.0176 | spec: 0.0034 | srm_m: 0.0000 | atk: 0.85 | lr: 6.4e-06 | 0.10s/step | ETA: 1min | D: 0.603/1.00 adv: 0.9128
+TRAIN  4300/5000 | BER(msg): 0.2070 | BER(phys): 0.1924 | PSNR: 28.7dB | msg: 0.1905 | perc: 0.0186 | spec: 0.0030 | srm_m: 0.0000 | atk: 0.85 | lr: 5.7e-06 | 0.12s/step | ETA: 1min | D: 0.578/1.00 adv: 0.9060
+TRAIN  4350/5000 | BER(msg): 0.1367 | BER(phys): 0.1514 | PSNR: 28.9dB | msg: 0.1167 | perc: 0.0150 | spec: 0.0027 | srm_m: 0.0000 | atk: 0.85 | lr: 5.1e-06 | 0.12s/step | ETA: 1min | D: 0.581/0.88 adv: 0.7157
+TRAIN  4400/5000 | BER(msg): 0.1582 | BER(phys): 0.1719 | PSNR: 28.8dB | msg: 0.1296 | perc: 0.0131 | spec: 0.0031 | srm_m: 0.0000 | atk: 0.85 | lr: 4.5e-06 | 0.12s/step | ETA: 1min | D: 0.588/0.75 adv: 0.6708
+TRAIN  4450/5000 | BER(msg): 0.0977 | BER(phys): 0.0869 | PSNR: 28.8dB | msg: 0.0382 | perc: 0.0150 | spec: 0.0034 | srm_m: 0.0000 | atk: 0.85 | lr: 3.9e-06 | 0.12s/step | ETA: 1min | D: 0.589/1.00 adv: 0.9389
+TRAIN  4500/5000 | BER(msg): 0.1445 | BER(phys): 0.1289 | PSNR: 28.9dB | msg: 0.1018 | perc: 0.0174 | spec: 0.0057 | srm_m: 0.0000 | atk: 0.85 | lr: 3.4e-06 | 0.12s/step | ETA: 1min | D: 0.588/0.88 adv: 0.7379
+TRAIN  4550/5000 | BER(msg): 0.2012 | BER(phys): 0.2197 | PSNR: 29.0dB | msg: 0.2343 | perc: 0.0130 | spec: 0.0038 | srm_m: 0.0000 | atk: 0.85 | lr: 3.0e-06 | 0.10s/step | ETA: 1min | D: 0.578/1.00 adv: 0.8294
+TRAIN  4600/5000 | BER(msg): 0.1406 | BER(phys): 0.1133 | PSNR: 28.8dB | msg: 0.0997 | perc: 0.0220 | spec: 0.0032 | srm_m: 0.0000 | atk: 0.85 | lr: 2.6e-06 | 0.10s/step | ETA: 1min | D: 0.614/0.50 adv: 0.9952
+TRAIN  4650/5000 | BER(msg): 0.2109 | BER(phys): 0.2246 | PSNR: 28.8dB | msg: 0.2335 | perc: 0.0157 | spec: 0.0021 | srm_m: 0.0000 | atk: 0.85 | lr: 2.2e-06 | 0.10s/step | ETA: 1min | D: 0.596/0.88 adv: 0.7607
+TRAIN  4700/5000 | BER(msg): 0.0762 | BER(phys): 0.0840 | PSNR: 28.8dB | msg: 0.0405 | perc: 0.0110 | spec: 0.0022 | srm_m: 0.0000 | atk: 0.85 | lr: 1.9e-06 | 0.10s/step | ETA: 1min | D: 0.581/0.88 adv: 0.7437
+TRAIN  4750/5000 | BER(msg): 0.2148 | BER(phys): 0.1885 | PSNR: 29.0dB | msg: 0.1597 | perc: 0.0117 | spec: 0.0077 | srm_m: 0.0000 | atk: 0.85 | lr: 1.6e-06 | 0.11s/step | ETA: 0min | D: 0.598/0.88 adv: 0.9273
+TRAIN  4800/5000 | BER(msg): 0.1133 | BER(phys): 0.1055 | PSNR: 28.7dB | msg: 0.0569 | perc: 0.0129 | spec: 0.0024 | srm_m: 0.0000 | atk: 0.85 | lr: 1.4e-06 | 0.10s/step | ETA: 0min | D: 0.575/1.00 adv: 0.7946
+TRAIN  4850/5000 | BER(msg): 0.1309 | BER(phys): 0.1426 | PSNR: 28.8dB | msg: 0.0899 | perc: 0.0125 | spec: 0.0019 | srm_m: 0.0000 | atk: 0.85 | lr: 1.2e-06 | 0.11s/step | ETA: 0min | D: 0.564/1.00 adv: 0.7761
+TRAIN  4900/5000 | BER(msg): 0.2402 | BER(phys): 0.2627 | PSNR: 28.8dB | msg: 0.3956 | perc: 0.0192 | spec: 0.0037 | srm_m: 0.0000 | atk: 0.85 | lr: 1.1e-06 | 0.10s/step | ETA: 0min | D: 0.570/1.00 adv: 0.7973
+TRAIN  4950/5000 | BER(msg): 0.0742 | BER(phys): 0.0850 | PSNR: 28.8dB | msg: 0.0334 | perc: 0.0166 | spec: 0.0039 | srm_m: 0.0000 | atk: 0.85 | lr: 1.0e-06 | 0.11s/step | ETA: 0min | D: 0.575/0.88 adv: 0.7744
+TRAIN  5000/5000 | BER(msg): 0.1914 | BER(phys): 0.1914 | PSNR: 28.8dB | msg: 0.1807 | perc: 0.0192 | spec: 0.0027 | srm_m: 0.0000 | atk: 0.85 | lr: 1.0e-06 | 0.10s/step | ETA: 0min | D: 0.580/1.00 adv: 1.0016
+  Saved checkpoint: outputs_v5_ablation/warmstart/dscsp_v5_step_005000.pt
+
+============================================================
+FINAL EVALUATION (200 samples) — v5
+============================================================
+  Clean BER (message): 0.084219 (target: 0.0000)
+  PSNR:                28.8 dB (target: >= 35)
+  Best BER during training: 0.000000
+  WARNING: Clean BER not yet at target
+  Saved final model: outputs_v5_ablation/warmstart/dscsp_v5_final.pt
+  Saved results: outputs_v5_ablation/warmstart/train_v5_results.json
+
+Warm-start checkpoint ready: outputs_v5_ablation/warmstart/dscsp_v5_step_005000.pt
+
+============================================================
+VARIANT: full
+============================================================
+
+============================================================
+ABLATION VARIANT: full
+============================================================
+  OVERRIDE: total_steps = 8000
+  OVERRIDE: pool_refresh_interval = 99999
+  OVERRIDE: log_interval = 100
+  OVERRIDE: save_image_interval = 8000
+  OVERRIDE: checkpoint_interval = 8000
+  OVERRIDE: output_dir = outputs_v5_ablation/full
+  OVERRIDE: checkpoint_dir = outputs_v5_ablation/full
+  OVERRIDE: resume_path = outputs_v5_ablation/warmstart/dscsp_v5_step_005000.pt
+  OVERRIDE: resume_load_scheduler = False
+
+DSCSP v5 Training
+Device: cuda
+GPU: NVIDIA GeForce RTX 5090
+VRAM: 31.4 GB
+
+RedundantCoder: 128 message bits → 256 physical slots (R=2)
+
+Loading diffusion model...
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading pipeline components...:   0%|          | 0/2 [00:00<?, ?it/s]An error occurred while trying to fetch /workspace/.cache/huggingface/hub/models--google--ddpm-celebahq-256/snapshots/cd5c944777ea2668051904ead6cc120739b86c4d: Error no file named diffusion_pytorch_model.safetensors found in directory /workspace/.cache/huggingface/hub/models--google--ddpm-celebahq-256/snapshots/cd5c944777ea2668051904ead6cc120739b86c4d.
+Defaulting to unsafe serialization. Pass `allow_pickle=False` to raise an error instead.
+Loading pipeline components...: 100%|██████████| 2/2 [00:13<00:00,  6.80s/it]Loading pipeline components...: 100%|██████████| 2/2 [00:13<00:00,  6.80s/it]
+/root/diffusion-stego/dscsp/models/diffusion_wrapper.py:37: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.detach().clone() or sourceTensor.detach().clone().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  self.final_alpha_cumprod = torch.tensor(
+  UNet params: 113.7M (frozen)
+
+Initializing content-adaptive controller...
+  Controller params: 4.39M
+Initializing global-pool extractor...
+  Extractor params: 11.31M
+Initializing SN-discriminator...
+  Discriminator params: 2.76M
+  SRM feature-matching loss enabled (λ=0.05)
+Setting up [LPIPS] perceptual loss: trunk [vgg], v[0.1], spatial [off]
+/usr/local/lib/python3.12/dist-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+  warnings.warn(
+/usr/local/lib/python3.12/dist-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=VGG16_Weights.IMAGENET1K_V1`. You can also use `weights=VGG16_Weights.DEFAULT` to get the most up-to-date weights.
+  warnings.warn(msg)
+Loading model from: /usr/local/lib/python3.12/dist-packages/lpips/weights/v0.1/vgg.pth
+  Attack layer: JPEG weight 0.8, quality (70, 92)
+Resuming from outputs_v5_ablation/warmstart/dscsp_v5_step_005000.pt...
+  Loaded controller weights (strict)
+  Loaded extractor weights (strict)
+  Loaded discriminator weights (strict)
+  Resumed at step 5000, best BER: 0.0000
+Generating image pool...
+  Generating 128 clean images...
+    4/128    8/128    12/128    16/128    20/128    24/128    28/128    32/128    36/128    40/128    44/128    48/128    52/128    56/128    60/128    64/128    68/128    72/128    76/128    80/128    84/128    88/128    92/128    96/128    100/128    104/128    108/128    112/128    116/128    120/128    124/128    128/128
+  Image pool: torch.Size([128, 3, 256, 256]), range: [-1.000, 1.000]
+
+Starting DSCSP v5 training for 8000 steps (from step 5000)
+  Payload: 128 message bits → 256 physical bits (R=2)
+  JPEG: weight=0.8, quality=(70, 92)
+  Adv: start=500, D_steps=4
+  Compound attacks: start step 5000
+
+BOOT-EXT  5100/8000 | BER(msg): 0.0000 | BER(phys): 0.0000 | PSNR: 21.0dB | msg: 0.0002 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-04 | 0.01s/step | ETA: 0min
+BOOT-EXT  5200/8000 | BER(msg): 0.0000 | BER(phys): 0.0000 | PSNR: 21.1dB | msg: 0.0002 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-04 | 0.01s/step | ETA: 0min
+BOOT-EXT  5300/8000 | BER(msg): 0.0000 | BER(phys): 0.0000 | PSNR: 21.1dB | msg: 0.0002 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-04 | 0.01s/step | ETA: 0min
+BOOT-EXT  5400/8000 | BER(msg): 0.0000 | BER(phys): 0.0000 | PSNR: 21.0dB | msg: 0.0001 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 9.9e-05 | 0.01s/step | ETA: 0min
+BOOT-EXT  5500/8000 | BER(msg): 0.0000 | BER(phys): 0.0000 | PSNR: 21.0dB | msg: 0.0001 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 9.9e-05 | 0.01s/step | ETA: 0min
+BOOT-EXT  5600/8000 | BER(msg): 0.0000 | BER(phys): 0.0000 | PSNR: 21.0dB | msg: 0.0001 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 9.9e-05 | 0.01s/step | ETA: 0min
+BOOT-EXT  5700/8000 | BER(msg): 0.0000 | BER(phys): 0.0000 | PSNR: 21.0dB | msg: 0.0002 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 9.8e-05 | 0.01s/step | ETA: 0min
+BOOT-EXT  5800/8000 | BER(msg): 0.0000 | BER(phys): 0.0000 | PSNR: 21.0dB | msg: 0.0001 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 9.8e-05 | 0.01s/step | ETA: 0min
+BOOT-CTRL  5900/8000 | BER(msg): 0.0254 | BER(phys): 0.0146 | PSNR: 36.0dB | msg: 0.0442 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 9.7e-05 | 0.05s/step | ETA: 2min
+BOOT-CTRL  6000/8000 | BER(msg): 0.0176 | BER(phys): 0.0098 | PSNR: 37.2dB | msg: 0.0367 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 9.6e-05 | 0.05s/step | ETA: 2min
+BOOT-CTRL  6100/8000 | BER(msg): 0.0000 | BER(phys): 0.0000 | PSNR: 37.0dB | msg: 0.0029 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 9.5e-05 | 0.05s/step | ETA: 1min
+BOOT-CTRL  6200/8000 | BER(msg): 0.0059 | BER(phys): 0.0039 | PSNR: 37.5dB | msg: 0.0137 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 9.5e-05 | 0.05s/step | ETA: 1min
+BOOT-CTRL  6300/8000 | BER(msg): 0.0020 | BER(phys): 0.0078 | PSNR: 37.1dB | msg: 0.0262 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 9.4e-05 | 0.05s/step | ETA: 1min
+BOOT-CTRL  6400/8000 | BER(msg): 0.0039 | BER(phys): 0.0039 | PSNR: 37.5dB | msg: 0.0143 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 9.3e-05 | 0.05s/step | ETA: 1min
+BOOT-CTRL  6500/8000 | BER(msg): 0.0020 | BER(phys): 0.0078 | PSNR: 37.1dB | msg: 0.0181 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 9.2e-05 | 0.05s/step | ETA: 1min
+BOOT-CTRL  6600/8000 | BER(msg): 0.0020 | BER(phys): 0.0010 | PSNR: 37.0dB | msg: 0.0026 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 9.1e-05 | 0.05s/step | ETA: 1min
+BOOT-CTRL  6700/8000 | BER(msg): 0.0000 | BER(phys): 0.0000 | PSNR: 37.0dB | msg: 0.0038 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 8.9e-05 | 0.05s/step | ETA: 1min
+BOOT-CTRL  6800/8000 | BER(msg): 0.0000 | BER(phys): 0.0020 | PSNR: 36.8dB | msg: 0.0078 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 8.8e-05 | 0.05s/step | ETA: 1min
+TRAIN  6900/8000 | BER(msg): 0.1172 | BER(phys): 0.1133 | PSNR: 29.6dB | msg: 0.1267 | perc: 0.0888 | spec: 0.0253 | srm_m: 0.0002 | atk: 0.85 | lr: 8.7e-05 | 0.11s/step | ETA: 2min | D: 0.594/0.88 adv: 0.7184
+TRAIN  7000/8000 | BER(msg): 0.2715 | BER(phys): 0.2510 | PSNR: 29.2dB | msg: 0.3608 | perc: 0.0602 | spec: 0.0072 | srm_m: 0.0001 | atk: 0.85 | lr: 8.6e-05 | 0.12s/step | ETA: 2min | D: 0.608/0.50 adv: 1.1015
+TRAIN  7100/8000 | BER(msg): 0.1406 | BER(phys): 0.1494 | PSNR: 29.3dB | msg: 0.1353 | perc: 0.0612 | spec: 0.0111 | srm_m: 0.0000 | atk: 0.85 | lr: 8.4e-05 | 0.11s/step | ETA: 2min | D: 0.589/0.88 adv: 0.8647
+TRAIN  7200/8000 | BER(msg): 0.1562 | BER(phys): 0.1494 | PSNR: 29.0dB | msg: 0.1449 | perc: 0.0468 | spec: 0.0067 | srm_m: 0.0000 | atk: 0.85 | lr: 8.3e-05 | 0.11s/step | ETA: 1min | D: 0.582/1.00 adv: 0.8523
+TRAIN  7300/8000 | BER(msg): 0.4570 | BER(phys): 0.4766 | PSNR: 29.0dB | msg: 0.7814 | perc: 0.0870 | spec: 0.0082 | srm_m: 0.0000 | atk: 0.85 | lr: 8.1e-05 | 0.12s/step | ETA: 1min | D: 0.591/0.62 adv: 0.7175
+TRAIN  7400/8000 | BER(msg): 0.1758 | BER(phys): 0.1865 | PSNR: 28.9dB | msg: 0.1853 | perc: 0.0666 | spec: 0.0091 | srm_m: 0.0001 | atk: 0.85 | lr: 8.0e-05 | 0.11s/step | ETA: 1min | D: 0.579/1.00 adv: 0.8642
+TRAIN  7500/8000 | BER(msg): 0.1641 | BER(phys): 0.1904 | PSNR: 28.9dB | msg: 0.2527 | perc: 0.0504 | spec: 0.0057 | srm_m: 0.0000 | atk: 0.85 | lr: 7.8e-05 | 0.12s/step | ETA: 1min | D: 0.575/0.88 adv: 0.7945
+TRAIN  7600/8000 | BER(msg): 0.2285 | BER(phys): 0.2295 | PSNR: 28.9dB | msg: 0.2872 | perc: 0.0421 | spec: 0.0052 | srm_m: 0.0000 | atk: 0.85 | lr: 7.6e-05 | 0.11s/step | ETA: 1min | D: 0.596/1.00 adv: 0.9267
+TRAIN  7700/8000 | BER(msg): 0.1660 | BER(phys): 0.1738 | PSNR: 29.0dB | msg: 0.2048 | perc: 0.0807 | spec: 0.0127 | srm_m: 0.0001 | atk: 0.85 | lr: 7.5e-05 | 0.11s/step | ETA: 1min | D: 0.616/0.88 adv: 0.9484
+TRAIN  7800/8000 | BER(msg): 0.1387 | BER(phys): 0.1299 | PSNR: 28.9dB | msg: 0.1085 | perc: 0.0496 | spec: 0.0099 | srm_m: 0.0000 | atk: 0.85 | lr: 7.3e-05 | 0.11s/step | ETA: 0min | D: 0.611/0.88 adv: 1.0793
+TRAIN  7900/8000 | BER(msg): 0.1094 | BER(phys): 0.1094 | PSNR: 29.0dB | msg: 0.0903 | perc: 0.0683 | spec: 0.0083 | srm_m: 0.0000 | atk: 0.85 | lr: 7.1e-05 | 0.11s/step | ETA: 0min | D: 0.585/1.00 adv: 0.8095
+TRAIN  8000/8000 | BER(msg): 0.1211 | BER(phys): 0.1494 | PSNR: 28.8dB | msg: 0.1528 | perc: 0.0512 | spec: 0.0085 | srm_m: 0.0000 | atk: 0.85 | lr: 6.9e-05 | 0.11s/step | ETA: 0min | D: 0.595/1.00 adv: 0.9554
+  Saved checkpoint: outputs_v5_ablation/full/dscsp_v5_step_008000.pt
+
+============================================================
+FINAL EVALUATION (200 samples) — v5
+============================================================
+  Clean BER (message): 0.062031 (target: 0.0000)
+  PSNR:                28.8 dB (target: >= 35)
+  Best BER during training: 0.000000
+  WARNING: Clean BER not yet at target
+  Saved final model: outputs_v5_ablation/full/dscsp_v5_final.pt
+  Saved results: outputs_v5_ablation/full/train_v5_results.json
+  Running: /usr/bin/python3 evaluate_tifs.py --checkpoint outputs_v5_ablation/full/dscsp_v5_final.pt --n-images 200 --output outputs_v5_ablation/full/eval_results.json
+  WARNING: evaluate_tifs.py returned 2
+usage: evaluate_tifs.py [-h] [--checkpoint CHECKPOINT]
+                        [--num-samples NUM_SAMPLES]
+                        [--cross-dataset-samples CROSS_DATASET_SAMPLES]
+                        [--adaptive-train ADAPTIVE_TRAIN]
+                        [--adaptive-test ADAPTIVE_TEST] [--skip-cross-dataset]
+                        [--multi-payload] [--multiple-detectors]
+                        [--output OUTPUT]
+evaluate_tifs.py: error: unrecognized arguments: --n-images 200
+
+
+  Results for full:
+    clean_ber: N/A
+    jpeg_q75_ber: N/A
+    crop_q80_ber: N/A
+    auc: N/A
+    psnr: N/A
+    lpips: N/A
+  Results saved to outputs_v5_ablation/ablation_results.json
+
+============================================================
+VARIANT: no_redundant
+============================================================
+
+============================================================
+ABLATION VARIANT: no_redundant
+============================================================
+  OVERRIDE: message_bits = 256
+  OVERRIDE: use_redundant_coding = False
+  OVERRIDE: redundancy_factor = 1
+  OVERRIDE: total_steps = 8000
+  OVERRIDE: pool_refresh_interval = 99999
+  OVERRIDE: log_interval = 100
+  OVERRIDE: save_image_interval = 8000
+  OVERRIDE: checkpoint_interval = 8000
+  OVERRIDE: output_dir = outputs_v5_ablation/no_redundant
+  OVERRIDE: checkpoint_dir = outputs_v5_ablation/no_redundant
+  OVERRIDE: resume_path = outputs_v5_ablation/warmstart/dscsp_v5_step_005000.pt
+  OVERRIDE: resume_load_scheduler = False
+
+DSCSP v5 Training
+Device: cuda
+GPU: NVIDIA GeForce RTX 5090
+VRAM: 31.4 GB
+
+RedundantCoder: disabled (256 message bits = physical slots)
+
+Loading diffusion model...
+Loading pipeline components...:   0%|          | 0/2 [00:00<?, ?it/s]An error occurred while trying to fetch /workspace/.cache/huggingface/hub/models--google--ddpm-celebahq-256/snapshots/cd5c944777ea2668051904ead6cc120739b86c4d: Error no file named diffusion_pytorch_model.safetensors found in directory /workspace/.cache/huggingface/hub/models--google--ddpm-celebahq-256/snapshots/cd5c944777ea2668051904ead6cc120739b86c4d.
+Defaulting to unsafe serialization. Pass `allow_pickle=False` to raise an error instead.
+Loading pipeline components...: 100%|██████████| 2/2 [00:12<00:00,  6.12s/it]Loading pipeline components...: 100%|██████████| 2/2 [00:12<00:00,  6.12s/it]
+  UNet params: 113.7M (frozen)
+
+Initializing content-adaptive controller...
+  Controller params: 4.39M
+Initializing global-pool extractor...
+  Extractor params: 11.31M
+Initializing SN-discriminator...
+  Discriminator params: 2.76M
+  SRM feature-matching loss enabled (λ=0.05)
+Setting up [LPIPS] perceptual loss: trunk [vgg], v[0.1], spatial [off]
+Loading model from: /usr/local/lib/python3.12/dist-packages/lpips/weights/v0.1/vgg.pth
+  Attack layer: JPEG weight 0.8, quality (70, 92)
+Resuming from outputs_v5_ablation/warmstart/dscsp_v5_step_005000.pt...
+  Loaded controller weights (strict)
+  Loaded extractor weights (strict)
+  Loaded discriminator weights (strict)
+  Resumed at step 5000, best BER: 0.0000
+Generating image pool...
+  Generating 128 clean images...
+    4/128    8/128    12/128    16/128    20/128    24/128    28/128    32/128    36/128    40/128    44/128    48/128    52/128    56/128    60/128    64/128    68/128    72/128    76/128    80/128    84/128    88/128    92/128    96/128    100/128    104/128    108/128    112/128    116/128    120/128    124/128    128/128
+  Image pool: torch.Size([128, 3, 256, 256]), range: [-1.000, 1.000]
+
+Starting DSCSP v5 training for 8000 steps (from step 5000)
+  Payload: 256 message bits → 256 physical bits (R=1)
+  JPEG: weight=0.8, quality=(70, 92)
+  Adv: start=500, D_steps=4
+  Compound attacks: start step 5000
+
+BOOT-EXT  5100/8000 | BER(msg): 0.0000 | BER(phys): 0.0000 | PSNR: 21.1dB | msg: 0.0002 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-04 | 0.01s/step | ETA: 1min
+BOOT-EXT  5200/8000 | BER(msg): 0.0000 | BER(phys): 0.0000 | PSNR: 21.1dB | msg: 0.0002 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-04 | 0.01s/step | ETA: 0min
+BOOT-EXT  5300/8000 | BER(msg): 0.0000 | BER(phys): 0.0000 | PSNR: 21.0dB | msg: 0.0002 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-04 | 0.01s/step | ETA: 0min
+BOOT-EXT  5400/8000 | BER(msg): 0.0000 | BER(phys): 0.0000 | PSNR: 21.0dB | msg: 0.0002 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 9.9e-05 | 0.01s/step | ETA: 0min
+BOOT-EXT  5500/8000 | BER(msg): 0.0000 | BER(phys): 0.0000 | PSNR: 21.0dB | msg: 0.0001 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 9.9e-05 | 0.01s/step | ETA: 0min
+BOOT-EXT  5600/8000 | BER(msg): 0.0000 | BER(phys): 0.0000 | PSNR: 21.0dB | msg: 0.0001 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 9.9e-05 | 0.01s/step | ETA: 1min
+BOOT-EXT  5700/8000 | BER(msg): 0.0000 | BER(phys): 0.0000 | PSNR: 21.0dB | msg: 0.0001 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 9.8e-05 | 0.01s/step | ETA: 0min
+BOOT-EXT  5800/8000 | BER(msg): 0.0000 | BER(phys): 0.0000 | PSNR: 21.0dB | msg: 0.0001 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 9.8e-05 | 0.01s/step | ETA: 0min
+BOOT-CTRL  5900/8000 | BER(msg): 0.0127 | BER(phys): 0.0127 | PSNR: 36.2dB | msg: 0.0371 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 9.7e-05 | 0.05s/step | ETA: 2min
+BOOT-CTRL  6000/8000 | BER(msg): 0.0059 | BER(phys): 0.0059 | PSNR: 37.7dB | msg: 0.0147 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 9.6e-05 | 0.05s/step | ETA: 2min
+BOOT-CTRL  6100/8000 | BER(msg): 0.0010 | BER(phys): 0.0010 | PSNR: 37.8dB | msg: 0.0030 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 9.5e-05 | 0.05s/step | ETA: 1min
+BOOT-CTRL  6200/8000 | BER(msg): 0.0029 | BER(phys): 0.0029 | PSNR: 37.8dB | msg: 0.0064 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 9.5e-05 | 0.05s/step | ETA: 1min
+BOOT-CTRL  6300/8000 | BER(msg): 0.0020 | BER(phys): 0.0020 | PSNR: 37.9dB | msg: 0.0033 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 9.4e-05 | 0.05s/step | ETA: 1min
+BOOT-CTRL  6400/8000 | BER(msg): 0.0000 | BER(phys): 0.0000 | PSNR: 37.7dB | msg: 0.0016 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 9.3e-05 | 0.05s/step | ETA: 1min
+BOOT-CTRL  6500/8000 | BER(msg): 0.0020 | BER(phys): 0.0020 | PSNR: 37.7dB | msg: 0.0062 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 9.2e-05 | 0.05s/step | ETA: 1min
+BOOT-CTRL  6600/8000 | BER(msg): 0.0020 | BER(phys): 0.0020 | PSNR: 37.8dB | msg: 0.0042 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 9.1e-05 | 0.05s/step | ETA: 1min
+BOOT-CTRL  6700/8000 | BER(msg): 0.0000 | BER(phys): 0.0000 | PSNR: 37.3dB | msg: 0.0033 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 8.9e-05 | 0.05s/step | ETA: 1min
+BOOT-CTRL  6800/8000 | BER(msg): 0.0000 | BER(phys): 0.0000 | PSNR: 37.5dB | msg: 0.0020 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 8.8e-05 | 0.05s/step | ETA: 1min
+TRAIN  6900/8000 | BER(msg): 0.2256 | BER(phys): 0.2256 | PSNR: 29.1dB | msg: 0.4558 | perc: 0.0758 | spec: 0.0093 | srm_m: 0.0000 | atk: 0.85 | lr: 8.7e-05 | 0.11s/step | ETA: 2min | D: 0.585/0.88 adv: 0.7267
+TRAIN  7000/8000 | BER(msg): 0.5010 | BER(phys): 0.5010 | PSNR: 28.9dB | msg: 0.7157 | perc: 0.0539 | spec: 0.0098 | srm_m: 0.0000 | atk: 0.85 | lr: 8.6e-05 | 0.11s/step | ETA: 2min | D: 0.598/1.00 adv: 0.7620
+TRAIN  7100/8000 | BER(msg): 0.1279 | BER(phys): 0.1279 | PSNR: 28.9dB | msg: 0.2882 | perc: 0.0459 | spec: 0.0091 | srm_m: 0.0000 | atk: 0.85 | lr: 8.4e-05 | 0.11s/step | ETA: 2min | D: 0.604/1.00 adv: 0.7915
+TRAIN  7200/8000 | BER(msg): 0.2725 | BER(phys): 0.2725 | PSNR: 28.7dB | msg: 0.5434 | perc: 0.0460 | spec: 0.0098 | srm_m: 0.0000 | atk: 0.85 | lr: 8.3e-05 | 0.11s/step | ETA: 1min | D: 0.598/0.88 adv: 0.9069
+TRAIN  7300/8000 | BER(msg): 0.3545 | BER(phys): 0.3545 | PSNR: 28.9dB | msg: 0.6303 | perc: 0.0652 | spec: 0.0120 | srm_m: 0.0001 | atk: 0.85 | lr: 8.1e-05 | 0.11s/step | ETA: 1min | D: 0.577/0.88 adv: 1.0646
+TRAIN  7400/8000 | BER(msg): 0.1357 | BER(phys): 0.1357 | PSNR: 29.0dB | msg: 0.3318 | perc: 0.0628 | spec: 0.0113 | srm_m: 0.0001 | atk: 0.85 | lr: 8.0e-05 | 0.11s/step | ETA: 1min | D: 0.587/0.88 adv: 0.8315
+TRAIN  7500/8000 | BER(msg): 0.1963 | BER(phys): 0.1963 | PSNR: 28.7dB | msg: 0.4126 | perc: 0.0452 | spec: 0.0105 | srm_m: 0.0000 | atk: 0.85 | lr: 7.8e-05 | 0.11s/step | ETA: 1min | D: 0.586/0.88 adv: 0.6878
+TRAIN  7600/8000 | BER(msg): 0.4863 | BER(phys): 0.4863 | PSNR: 28.9dB | msg: 0.7051 | perc: 0.0629 | spec: 0.0095 | srm_m: 0.0000 | atk: 0.85 | lr: 7.6e-05 | 0.11s/step | ETA: 1min | D: 0.533/1.00 adv: 0.9471
+TRAIN  7700/8000 | BER(msg): 0.1211 | BER(phys): 0.1211 | PSNR: 28.7dB | msg: 0.2907 | perc: 0.0373 | spec: 0.0102 | srm_m: 0.0000 | atk: 0.85 | lr: 7.5e-05 | 0.11s/step | ETA: 1min | D: 0.596/0.88 adv: 0.7687
+TRAIN  7800/8000 | BER(msg): 0.0947 | BER(phys): 0.0947 | PSNR: 28.8dB | msg: 0.2334 | perc: 0.0753 | spec: 0.0117 | srm_m: 0.0000 | atk: 0.85 | lr: 7.3e-05 | 0.11s/step | ETA: 0min | D: 0.573/1.00 adv: 0.8907
+TRAIN  7900/8000 | BER(msg): 0.1924 | BER(phys): 0.1924 | PSNR: 28.7dB | msg: 0.4229 | perc: 0.0546 | spec: 0.0111 | srm_m: 0.0000 | atk: 0.85 | lr: 7.1e-05 | 0.11s/step | ETA: 0min | D: 0.568/1.00 adv: 0.9923
+TRAIN  8000/8000 | BER(msg): 0.1387 | BER(phys): 0.1387 | PSNR: 28.6dB | msg: 0.2973 | perc: 0.0362 | spec: 0.0090 | srm_m: 0.0000 | atk: 0.85 | lr: 6.9e-05 | 0.11s/step | ETA: 0min | D: 0.593/0.88 adv: 0.7859
+  Saved checkpoint: outputs_v5_ablation/no_redundant/dscsp_v5_step_008000.pt
+
+============================================================
+FINAL EVALUATION (200 samples) — v5
+============================================================
+  ERROR during training variant no_redundant: 'NoneType' object has no attribute 'encode'
+
+============================================================
+VARIANT: no_srm_match
+============================================================
+
+============================================================
+ABLATION VARIANT: no_srm_match
+============================================================
+  OVERRIDE: total_steps = 8000
+  OVERRIDE: lambda_srm_match = 0.0
+  OVERRIDE: pool_refresh_interval = 99999
+  OVERRIDE: log_interval = 100
+  OVERRIDE: save_image_interval = 8000
+  OVERRIDE: checkpoint_interval = 8000
+  OVERRIDE: output_dir = outputs_v5_ablation/no_srm_match
+  OVERRIDE: checkpoint_dir = outputs_v5_ablation/no_srm_match
+  OVERRIDE: resume_path = outputs_v5_ablation/warmstart/dscsp_v5_step_005000.pt
+  OVERRIDE: resume_load_scheduler = False
+
+DSCSP v5 Training
+Device: cuda
+GPU: NVIDIA GeForce RTX 5090
+VRAM: 31.4 GB
+
+RedundantCoder: 128 message bits → 256 physical slots (R=2)
+
+Loading diffusion model...
+Loading pipeline components...:   0%|          | 0/2 [00:00<?, ?it/s]An error occurred while trying to fetch /workspace/.cache/huggingface/hub/models--google--ddpm-celebahq-256/snapshots/cd5c944777ea2668051904ead6cc120739b86c4d: Error no file named diffusion_pytorch_model.safetensors found in directory /workspace/.cache/huggingface/hub/models--google--ddpm-celebahq-256/snapshots/cd5c944777ea2668051904ead6cc120739b86c4d.
+Defaulting to unsafe serialization. Pass `allow_pickle=False` to raise an error instead.
+Loading pipeline components...: 100%|██████████| 2/2 [00:11<00:00,  5.92s/it]Loading pipeline components...: 100%|██████████| 2/2 [00:11<00:00,  5.92s/it]
+  UNet params: 113.7M (frozen)
+
+Initializing content-adaptive controller...
+  Controller params: 4.39M
+Initializing global-pool extractor...
+  Extractor params: 11.31M
+Initializing SN-discriminator...
+  Discriminator params: 2.76M
+Setting up [LPIPS] perceptual loss: trunk [vgg], v[0.1], spatial [off]
+Loading model from: /usr/local/lib/python3.12/dist-packages/lpips/weights/v0.1/vgg.pth
+  Attack layer: JPEG weight 0.8, quality (70, 92)
+Resuming from outputs_v5_ablation/warmstart/dscsp_v5_step_005000.pt...
+  Loaded controller weights (strict)
+  Loaded extractor weights (strict)
+  Loaded discriminator weights (strict)
+  Resumed at step 5000, best BER: 0.0000
+Generating image pool...
+  Generating 128 clean images...
+    4/128    8/128    12/128    16/128    20/128    24/128    28/128    32/128    36/128    40/128    44/128    48/128    52/128    56/128    60/128    64/128    68/128    72/128    76/128    80/128    84/128    88/128    92/128    96/128    100/128    104/128    108/128    112/128    116/128    120/128    124/128    128/128
+  Image pool: torch.Size([128, 3, 256, 256]), range: [-1.000, 1.000]
+
+Starting DSCSP v5 training for 8000 steps (from step 5000)
+  Payload: 128 message bits → 256 physical bits (R=2)
+  JPEG: weight=0.8, quality=(70, 92)
+  Adv: start=500, D_steps=4
+  Compound attacks: start step 5000
+
+BOOT-EXT  5100/8000 | BER(msg): 0.0000 | BER(phys): 0.0000 | PSNR: 20.9dB | msg: 0.0002 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-04 | 0.01s/step | ETA: 1min
+BOOT-EXT  5200/8000 | BER(msg): 0.0000 | BER(phys): 0.0000 | PSNR: 21.0dB | msg: 0.0002 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-04 | 0.01s/step | ETA: 1min
+BOOT-EXT  5300/8000 | BER(msg): 0.0000 | BER(phys): 0.0000 | PSNR: 21.0dB | msg: 0.0001 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-04 | 0.01s/step | ETA: 0min
+BOOT-EXT  5400/8000 | BER(msg): 0.0000 | BER(phys): 0.0000 | PSNR: 21.0dB | msg: 0.0001 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 9.9e-05 | 0.01s/step | ETA: 1min
+BOOT-EXT  5500/8000 | BER(msg): 0.0000 | BER(phys): 0.0000 | PSNR: 20.9dB | msg: 0.0001 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 9.9e-05 | 0.01s/step | ETA: 0min
+BOOT-EXT  5600/8000 | BER(msg): 0.0000 | BER(phys): 0.0000 | PSNR: 21.0dB | msg: 0.0001 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 9.9e-05 | 0.01s/step | ETA: 0min
+BOOT-EXT  5700/8000 | BER(msg): 0.0000 | BER(phys): 0.0000 | PSNR: 21.0dB | msg: 0.0001 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 9.8e-05 | 0.01s/step | ETA: 0min
+BOOT-EXT  5800/8000 | BER(msg): 0.0000 | BER(phys): 0.0000 | PSNR: 21.1dB | msg: 0.0001 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 9.8e-05 | 0.01s/step | ETA: 0min
+BOOT-CTRL  5900/8000 | BER(msg): 0.0176 | BER(phys): 0.0107 | PSNR: 35.9dB | msg: 0.0299 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 9.7e-05 | 0.05s/step | ETA: 2min
+BOOT-CTRL  6000/8000 | BER(msg): 0.0078 | BER(phys): 0.0039 | PSNR: 37.0dB | msg: 0.0132 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 9.6e-05 | 0.05s/step | ETA: 2min
+BOOT-CTRL  6100/8000 | BER(msg): 0.0020 | BER(phys): 0.0010 | PSNR: 37.3dB | msg: 0.0052 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 9.5e-05 | 0.05s/step | ETA: 1min
+BOOT-CTRL  6200/8000 | BER(msg): 0.0039 | BER(phys): 0.0020 | PSNR: 37.4dB | msg: 0.0051 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 9.5e-05 | 0.05s/step | ETA: 1min
+BOOT-CTRL  6300/8000 | BER(msg): 0.0039 | BER(phys): 0.0020 | PSNR: 37.4dB | msg: 0.0048 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 9.4e-05 | 0.05s/step | ETA: 1min
+BOOT-CTRL  6400/8000 | BER(msg): 0.0000 | BER(phys): 0.0010 | PSNR: 37.2dB | msg: 0.0031 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 9.3e-05 | 0.05s/step | ETA: 1min
+BOOT-CTRL  6500/8000 | BER(msg): 0.0039 | BER(phys): 0.0020 | PSNR: 37.5dB | msg: 0.0052 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 9.2e-05 | 0.05s/step | ETA: 1min
+BOOT-CTRL  6600/8000 | BER(msg): 0.0000 | BER(phys): 0.0029 | PSNR: 36.9dB | msg: 0.0059 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 9.1e-05 | 0.05s/step | ETA: 1min
+BOOT-CTRL  6700/8000 | BER(msg): 0.0020 | BER(phys): 0.0010 | PSNR: 36.9dB | msg: 0.0020 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 8.9e-05 | 0.05s/step | ETA: 1min
+BOOT-CTRL  6800/8000 | BER(msg): 0.0000 | BER(phys): 0.0020 | PSNR: 37.1dB | msg: 0.0040 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 8.8e-05 | 0.05s/step | ETA: 1min
+TRAIN  6900/8000 | BER(msg): 0.0996 | BER(phys): 0.0801 | PSNR: 29.3dB | msg: 0.0562 | perc: 0.1063 | spec: 0.0154 | srm_m: 0.0000 | atk: 0.85 | lr: 8.7e-05 | 0.11s/step | ETA: 2min | D: 0.556/0.75 adv: 0.7737
+TRAIN  7000/8000 | BER(msg): 0.4961 | BER(phys): 0.5029 | PSNR: 29.1dB | msg: 0.7552 | perc: 0.0462 | spec: 0.0105 | srm_m: 0.0000 | atk: 0.85 | lr: 8.6e-05 | 0.11s/step | ETA: 2min | D: 0.546/1.00 adv: 0.7977
+TRAIN  7100/8000 | BER(msg): 0.1230 | BER(phys): 0.1162 | PSNR: 28.9dB | msg: 0.0735 | perc: 0.0506 | spec: 0.0109 | srm_m: 0.0000 | atk: 0.85 | lr: 8.4e-05 | 0.11s/step | ETA: 2min | D: 0.578/0.88 adv: 0.7548
+TRAIN  7200/8000 | BER(msg): 0.1836 | BER(phys): 0.1904 | PSNR: 28.8dB | msg: 0.2420 | perc: 0.0400 | spec: 0.0091 | srm_m: 0.0000 | atk: 0.85 | lr: 8.3e-05 | 0.10s/step | ETA: 1min | D: 0.576/0.88 adv: 0.7941
+TRAIN  7300/8000 | BER(msg): 0.0312 | BER(phys): 0.0264 | PSNR: 29.0dB | msg: 0.0154 | perc: 0.1029 | spec: 0.0185 | srm_m: 0.0000 | atk: 0.85 | lr: 8.1e-05 | 0.11s/step | ETA: 1min | D: 0.574/1.00 adv: 0.7312
+TRAIN  7400/8000 | BER(msg): 0.0449 | BER(phys): 0.0625 | PSNR: 28.9dB | msg: 0.0373 | perc: 0.0515 | spec: 0.0113 | srm_m: 0.0000 | atk: 0.85 | lr: 8.0e-05 | 0.11s/step | ETA: 1min | D: 0.545/1.00 adv: 0.8139
+TRAIN  7500/8000 | BER(msg): 0.1035 | BER(phys): 0.1045 | PSNR: 28.8dB | msg: 0.0917 | perc: 0.0683 | spec: 0.0153 | srm_m: 0.0000 | atk: 0.85 | lr: 7.8e-05 | 0.12s/step | ETA: 1min | D: 0.567/1.00 adv: 0.8210
+TRAIN  7600/8000 | BER(msg): 0.5195 | BER(phys): 0.5195 | PSNR: 28.9dB | msg: 0.7521 | perc: 0.0527 | spec: 0.0139 | srm_m: 0.0000 | atk: 0.85 | lr: 7.6e-05 | 0.12s/step | ETA: 1min | D: 0.579/0.88 adv: 0.7324
+TRAIN  7700/8000 | BER(msg): 0.2070 | BER(phys): 0.1904 | PSNR: 28.8dB | msg: 0.2398 | perc: 0.0528 | spec: 0.0121 | srm_m: 0.0000 | atk: 0.85 | lr: 7.5e-05 | 0.12s/step | ETA: 1min | D: 0.595/0.88 adv: 0.8482
+TRAIN  7800/8000 | BER(msg): 0.2539 | BER(phys): 0.2549 | PSNR: 28.8dB | msg: 0.3638 | perc: 0.0508 | spec: 0.0164 | srm_m: 0.0000 | atk: 0.85 | lr: 7.3e-05 | 0.12s/step | ETA: 0min | D: 0.585/0.88 adv: 0.7831
+TRAIN  7900/8000 | BER(msg): 0.2754 | BER(phys): 0.2686 | PSNR: 28.8dB | msg: 0.4217 | perc: 0.0479 | spec: 0.0155 | srm_m: 0.0000 | atk: 0.85 | lr: 7.1e-05 | 0.12s/step | ETA: 0min | D: 0.606/0.88 adv: 0.8185
+TRAIN  8000/8000 | BER(msg): 0.1758 | BER(phys): 0.1719 | PSNR: 28.8dB | msg: 0.1809 | perc: 0.0381 | spec: 0.0128 | srm_m: 0.0000 | atk: 0.85 | lr: 6.9e-05 | 0.12s/step | ETA: 0min | D: 0.589/1.00 adv: 0.8280
+  Saved checkpoint: outputs_v5_ablation/no_srm_match/dscsp_v5_step_008000.pt
+
+============================================================
+FINAL EVALUATION (200 samples) — v5
+============================================================
+  Clean BER (message): 0.088516 (target: 0.0000)
+  PSNR:                28.8 dB (target: >= 35)
+  Best BER during training: 0.000000
+  WARNING: Clean BER not yet at target
+  Saved final model: outputs_v5_ablation/no_srm_match/dscsp_v5_final.pt
+  Saved results: outputs_v5_ablation/no_srm_match/train_v5_results.json
+  Running: /usr/bin/python3 evaluate_tifs.py --checkpoint outputs_v5_ablation/no_srm_match/dscsp_v5_final.pt --n-images 200 --output outputs_v5_ablation/no_srm_match/eval_results.json
+  WARNING: evaluate_tifs.py returned 2
+usage: evaluate_tifs.py [-h] [--checkpoint CHECKPOINT]
+                        [--num-samples NUM_SAMPLES]
+                        [--cross-dataset-samples CROSS_DATASET_SAMPLES]
+                        [--adaptive-train ADAPTIVE_TRAIN]
+                        [--adaptive-test ADAPTIVE_TEST] [--skip-cross-dataset]
+                        [--multi-payload] [--multiple-detectors]
+                        [--output OUTPUT]
+evaluate_tifs.py: error: unrecognized arguments: --n-images 200
+
+
+  Results for no_srm_match:
+    clean_ber: N/A
+    jpeg_q75_ber: N/A
+    crop_q80_ber: N/A
+    auc: N/A
+    psnr: N/A
+    lpips: N/A
+  Results saved to outputs_v5_ablation/ablation_results.json
+
+============================================================
+VARIANT: no_spectral
+============================================================
+
+============================================================
+ABLATION VARIANT: no_spectral
+============================================================
+  OVERRIDE: total_steps = 8000
+  OVERRIDE: lambda_spec = 0.0
+  OVERRIDE: pool_refresh_interval = 99999
+  OVERRIDE: log_interval = 100
+  OVERRIDE: save_image_interval = 8000
+  OVERRIDE: checkpoint_interval = 8000
+  OVERRIDE: output_dir = outputs_v5_ablation/no_spectral
+  OVERRIDE: checkpoint_dir = outputs_v5_ablation/no_spectral
+  OVERRIDE: resume_path = outputs_v5_ablation/warmstart/dscsp_v5_step_005000.pt
+  OVERRIDE: resume_load_scheduler = False
+
+DSCSP v5 Training
+Device: cuda
+GPU: NVIDIA GeForce RTX 5090
+VRAM: 31.4 GB
+
+RedundantCoder: 128 message bits → 256 physical slots (R=2)
+
+Loading diffusion model...
+Loading pipeline components...:   0%|          | 0/2 [00:00<?, ?it/s]An error occurred while trying to fetch /workspace/.cache/huggingface/hub/models--google--ddpm-celebahq-256/snapshots/cd5c944777ea2668051904ead6cc120739b86c4d: Error no file named diffusion_pytorch_model.safetensors found in directory /workspace/.cache/huggingface/hub/models--google--ddpm-celebahq-256/snapshots/cd5c944777ea2668051904ead6cc120739b86c4d.
+Defaulting to unsafe serialization. Pass `allow_pickle=False` to raise an error instead.
+Loading pipeline components...: 100%|██████████| 2/2 [00:12<00:00,  6.43s/it]Loading pipeline components...: 100%|██████████| 2/2 [00:12<00:00,  6.43s/it]
+  UNet params: 113.7M (frozen)
+
+Initializing content-adaptive controller...
+  Controller params: 4.39M
+Initializing global-pool extractor...
+  Extractor params: 11.31M
+Initializing SN-discriminator...
+  Discriminator params: 2.76M
+  SRM feature-matching loss enabled (λ=0.05)
+Setting up [LPIPS] perceptual loss: trunk [vgg], v[0.1], spatial [off]
+Loading model from: /usr/local/lib/python3.12/dist-packages/lpips/weights/v0.1/vgg.pth
+  Attack layer: JPEG weight 0.8, quality (70, 92)
+Resuming from outputs_v5_ablation/warmstart/dscsp_v5_step_005000.pt...
+  Loaded controller weights (strict)
+  Loaded extractor weights (strict)
+  Loaded discriminator weights (strict)
+  Resumed at step 5000, best BER: 0.0000
+Generating image pool...
+  Generating 128 clean images...
+    4/128    8/128    12/128    16/128    20/128    24/128    28/128    32/128    36/128    40/128    44/128    48/128    52/128    56/128    60/128    64/128    68/128    72/128    76/128    80/128    84/128    88/128    92/128    96/128    100/128    104/128    108/128    112/128    116/128    120/128    124/128    128/128
+  Image pool: torch.Size([128, 3, 256, 256]), range: [-1.000, 1.000]
+
+Starting DSCSP v5 training for 8000 steps (from step 5000)
+  Payload: 128 message bits → 256 physical bits (R=2)
+  JPEG: weight=0.8, quality=(70, 92)
+  Adv: start=500, D_steps=4
+  Compound attacks: start step 5000
+
+BOOT-EXT  5100/8000 | BER(msg): 0.0000 | BER(phys): 0.0000 | PSNR: 21.1dB | msg: 0.0002 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-04 | 0.01s/step | ETA: 1min
+BOOT-EXT  5200/8000 | BER(msg): 0.0000 | BER(phys): 0.0000 | PSNR: 21.1dB | msg: 0.0002 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-04 | 0.01s/step | ETA: 1min
+BOOT-EXT  5300/8000 | BER(msg): 0.0000 | BER(phys): 0.0000 | PSNR: 21.1dB | msg: 0.0002 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-04 | 0.01s/step | ETA: 0min
+BOOT-EXT  5400/8000 | BER(msg): 0.0000 | BER(phys): 0.0000 | PSNR: 21.0dB | msg: 0.0001 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 9.9e-05 | 0.01s/step | ETA: 0min
+BOOT-EXT  5500/8000 | BER(msg): 0.0000 | BER(phys): 0.0000 | PSNR: 21.0dB | msg: 0.0001 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 9.9e-05 | 0.01s/step | ETA: 0min
+BOOT-EXT  5600/8000 | BER(msg): 0.0000 | BER(phys): 0.0000 | PSNR: 21.0dB | msg: 0.0001 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 9.9e-05 | 0.01s/step | ETA: 0min
+BOOT-EXT  5700/8000 | BER(msg): 0.0000 | BER(phys): 0.0000 | PSNR: 20.9dB | msg: 0.0001 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 9.8e-05 | 0.01s/step | ETA: 0min
+BOOT-EXT  5800/8000 | BER(msg): 0.0000 | BER(phys): 0.0000 | PSNR: 21.0dB | msg: 0.0001 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 9.8e-05 | 0.01s/step | ETA: 0min
+BOOT-CTRL  5900/8000 | BER(msg): 0.0137 | BER(phys): 0.0107 | PSNR: 35.9dB | msg: 0.0273 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 9.7e-05 | 0.05s/step | ETA: 2min
+BOOT-CTRL  6000/8000 | BER(msg): 0.0020 | BER(phys): 0.0029 | PSNR: 36.9dB | msg: 0.0080 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 9.6e-05 | 0.05s/step | ETA: 2min
+BOOT-CTRL  6100/8000 | BER(msg): 0.0059 | BER(phys): 0.0059 | PSNR: 37.2dB | msg: 0.0160 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 9.5e-05 | 0.05s/step | ETA: 2min
+BOOT-CTRL  6200/8000 | BER(msg): 0.0020 | BER(phys): 0.0010 | PSNR: 37.3dB | msg: 0.0033 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 9.5e-05 | 0.05s/step | ETA: 1min
+BOOT-CTRL  6300/8000 | BER(msg): 0.0039 | BER(phys): 0.0020 | PSNR: 37.6dB | msg: 0.0043 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 9.4e-05 | 0.05s/step | ETA: 1min
+BOOT-CTRL  6400/8000 | BER(msg): 0.0000 | BER(phys): 0.0039 | PSNR: 37.1dB | msg: 0.0079 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 9.3e-05 | 0.05s/step | ETA: 1min
+BOOT-CTRL  6500/8000 | BER(msg): 0.0020 | BER(phys): 0.0039 | PSNR: 36.9dB | msg: 0.0061 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 9.2e-05 | 0.05s/step | ETA: 1min
+BOOT-CTRL  6600/8000 | BER(msg): 0.0020 | BER(phys): 0.0010 | PSNR: 37.0dB | msg: 0.0057 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 9.1e-05 | 0.05s/step | ETA: 1min
+BOOT-CTRL  6700/8000 | BER(msg): 0.0039 | BER(phys): 0.0020 | PSNR: 37.3dB | msg: 0.0045 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 8.9e-05 | 0.05s/step | ETA: 1min
+BOOT-CTRL  6800/8000 | BER(msg): 0.0000 | BER(phys): 0.0000 | PSNR: 36.9dB | msg: 0.0030 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 8.8e-05 | 0.05s/step | ETA: 1min
+TRAIN  6900/8000 | BER(msg): 0.0625 | BER(phys): 0.0801 | PSNR: 29.3dB | msg: 0.0732 | perc: 0.0916 | spec: 0.0114 | srm_m: 0.0001 | atk: 0.85 | lr: 8.7e-05 | 0.12s/step | ETA: 2min | D: 0.581/0.75 adv: 0.7209
+TRAIN  7000/8000 | BER(msg): 0.4980 | BER(phys): 0.4854 | PSNR: 29.2dB | msg: 0.9592 | perc: 0.0478 | spec: 0.0077 | srm_m: 0.0000 | atk: 0.85 | lr: 8.6e-05 | 0.12s/step | ETA: 2min | D: 0.575/0.88 adv: 0.7492
+TRAIN  7100/8000 | BER(msg): 0.2695 | BER(phys): 0.2402 | PSNR: 28.9dB | msg: 0.3086 | perc: 0.0449 | spec: 0.0074 | srm_m: 0.0000 | atk: 0.85 | lr: 8.4e-05 | 0.11s/step | ETA: 2min | D: 0.592/0.88 adv: 0.6860
+TRAIN  7200/8000 | BER(msg): 0.1074 | BER(phys): 0.0938 | PSNR: 29.3dB | msg: 0.0781 | perc: 0.0998 | spec: 0.0127 | srm_m: 0.0001 | atk: 0.85 | lr: 8.3e-05 | 0.11s/step | ETA: 1min | D: 0.567/1.00 adv: 0.7758
+TRAIN  7300/8000 | BER(msg): 0.2949 | BER(phys): 0.2881 | PSNR: 28.9dB | msg: 0.4279 | perc: 0.0529 | spec: 0.0084 | srm_m: 0.0000 | atk: 0.85 | lr: 8.1e-05 | 0.11s/step | ETA: 1min | D: 0.579/0.88 adv: 0.7565
+TRAIN  7400/8000 | BER(msg): 0.0762 | BER(phys): 0.0801 | PSNR: 28.8dB | msg: 0.0577 | perc: 0.0432 | spec: 0.0073 | srm_m: 0.0000 | atk: 0.85 | lr: 8.0e-05 | 0.12s/step | ETA: 1min | D: 0.579/1.00 adv: 0.7567
+TRAIN  7500/8000 | BER(msg): 0.1816 | BER(phys): 0.1631 | PSNR: 28.8dB | msg: 0.1739 | perc: 0.0428 | spec: 0.0059 | srm_m: 0.0000 | atk: 0.85 | lr: 7.8e-05 | 0.11s/step | ETA: 1min | D: 0.589/0.75 adv: 1.1246
+TRAIN  7600/8000 | BER(msg): 0.2285 | BER(phys): 0.2520 | PSNR: 28.9dB | msg: 0.3877 | perc: 0.0471 | spec: 0.0130 | srm_m: 0.0000 | atk: 0.85 | lr: 7.6e-05 | 0.11s/step | ETA: 1min | D: 0.611/0.75 adv: 0.6159
+TRAIN  7700/8000 | BER(msg): 0.0996 | BER(phys): 0.0908 | PSNR: 28.8dB | msg: 0.0894 | perc: 0.0422 | spec: 0.0114 | srm_m: 0.0000 | atk: 0.85 | lr: 7.5e-05 | 0.11s/step | ETA: 1min | D: 0.585/0.88 adv: 0.7188
+TRAIN  7800/8000 | BER(msg): 0.2168 | BER(phys): 0.2354 | PSNR: 28.9dB | msg: 0.3807 | perc: 0.0314 | spec: 0.0140 | srm_m: 0.0001 | atk: 0.85 | lr: 7.3e-05 | 0.11s/step | ETA: 0min | D: 0.590/0.88 adv: 0.6873
+TRAIN  7900/8000 | BER(msg): 0.1641 | BER(phys): 0.1621 | PSNR: 28.8dB | msg: 0.2023 | perc: 0.0366 | spec: 0.0132 | srm_m: 0.0001 | atk: 0.85 | lr: 7.1e-05 | 0.11s/step | ETA: 0min | D: 0.602/0.75 adv: 0.7209
+TRAIN  8000/8000 | BER(msg): 0.1172 | BER(phys): 0.1143 | PSNR: 28.9dB | msg: 0.0824 | perc: 0.0468 | spec: 0.0174 | srm_m: 0.0001 | atk: 0.85 | lr: 6.9e-05 | 0.11s/step | ETA: 0min | D: 0.589/0.88 adv: 0.6854
+  Saved checkpoint: outputs_v5_ablation/no_spectral/dscsp_v5_step_008000.pt
+
+============================================================
+FINAL EVALUATION (200 samples) — v5
+============================================================
+  Clean BER (message): 0.090234 (target: 0.0000)
+  PSNR:                28.8 dB (target: >= 35)
+  Best BER during training: 0.000000
+  WARNING: Clean BER not yet at target
+  Saved final model: outputs_v5_ablation/no_spectral/dscsp_v5_final.pt
+  Saved results: outputs_v5_ablation/no_spectral/train_v5_results.json
+  Running: /usr/bin/python3 evaluate_tifs.py --checkpoint outputs_v5_ablation/no_spectral/dscsp_v5_final.pt --n-images 200 --output outputs_v5_ablation/no_spectral/eval_results.json
+  WARNING: evaluate_tifs.py returned 2
+usage: evaluate_tifs.py [-h] [--checkpoint CHECKPOINT]
+                        [--num-samples NUM_SAMPLES]
+                        [--cross-dataset-samples CROSS_DATASET_SAMPLES]
+                        [--adaptive-train ADAPTIVE_TRAIN]
+                        [--adaptive-test ADAPTIVE_TEST] [--skip-cross-dataset]
+                        [--multi-payload] [--multiple-detectors]
+                        [--output OUTPUT]
+evaluate_tifs.py: error: unrecognized arguments: --n-images 200
+
+
+  Results for no_spectral:
+    clean_ber: N/A
+    jpeg_q75_ber: N/A
+    crop_q80_ber: N/A
+    auc: N/A
+    psnr: N/A
+    lpips: N/A
+  Results saved to outputs_v5_ablation/ablation_results.json
+
+============================================================
+VARIANT: no_adv
+============================================================
+
+============================================================
+ABLATION VARIANT: no_adv
+============================================================
+  OVERRIDE: total_steps = 8000
+  OVERRIDE: pool_refresh_interval = 99999
+  OVERRIDE: use_adversarial = False
+  OVERRIDE: lambda_adv = 0.0
+  OVERRIDE: log_interval = 100
+  OVERRIDE: save_image_interval = 8000
+  OVERRIDE: checkpoint_interval = 8000
+  OVERRIDE: output_dir = outputs_v5_ablation/no_adv
+  OVERRIDE: checkpoint_dir = outputs_v5_ablation/no_adv
+  OVERRIDE: resume_path = outputs_v5_ablation/warmstart/dscsp_v5_step_005000.pt
+  OVERRIDE: resume_load_scheduler = False
+
+DSCSP v5 Training
+Device: cuda
+GPU: NVIDIA GeForce RTX 5090
+VRAM: 31.4 GB
+
+RedundantCoder: 128 message bits → 256 physical slots (R=2)
+
+Loading diffusion model...
+Loading pipeline components...:   0%|          | 0/2 [00:00<?, ?it/s]An error occurred while trying to fetch /workspace/.cache/huggingface/hub/models--google--ddpm-celebahq-256/snapshots/cd5c944777ea2668051904ead6cc120739b86c4d: Error no file named diffusion_pytorch_model.safetensors found in directory /workspace/.cache/huggingface/hub/models--google--ddpm-celebahq-256/snapshots/cd5c944777ea2668051904ead6cc120739b86c4d.
+Defaulting to unsafe serialization. Pass `allow_pickle=False` to raise an error instead.
+Loading pipeline components...: 100%|██████████| 2/2 [00:13<00:00,  6.70s/it]Loading pipeline components...: 100%|██████████| 2/2 [00:13<00:00,  6.70s/it]
+  UNet params: 113.7M (frozen)
+
+Initializing content-adaptive controller...
+  Controller params: 4.39M
+Initializing global-pool extractor...
+  Extractor params: 11.31M
+Setting up [LPIPS] perceptual loss: trunk [vgg], v[0.1], spatial [off]
+Loading model from: /usr/local/lib/python3.12/dist-packages/lpips/weights/v0.1/vgg.pth
+  Attack layer: JPEG weight 0.8, quality (70, 92)
+Resuming from outputs_v5_ablation/warmstart/dscsp_v5_step_005000.pt...
+  Loaded controller weights (strict)
+  Loaded extractor weights (strict)
+  Resumed at step 5000, best BER: 0.0000
+Generating image pool...
+  Generating 128 clean images...
+    4/128    8/128    12/128    16/128    20/128    24/128    28/128    32/128    36/128    40/128    44/128    48/128    52/128    56/128    60/128    64/128    68/128    72/128    76/128    80/128    84/128    88/128    92/128    96/128    100/128    104/128    108/128    112/128    116/128    120/128    124/128    128/128
+  Image pool: torch.Size([128, 3, 256, 256]), range: [-1.000, 1.000]
+
+Starting DSCSP v5 training for 8000 steps (from step 5000)
+  Payload: 128 message bits → 256 physical bits (R=2)
+  JPEG: weight=0.8, quality=(70, 92)
+  Adv: start=500, D_steps=4
+  Compound attacks: start step 5000
+
+BOOT-EXT  5100/8000 | BER(msg): 0.0000 | BER(phys): 0.0000 | PSNR: 21.0dB | msg: 0.0004 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-04 | 0.01s/step | ETA: 1min
+BOOT-EXT  5200/8000 | BER(msg): 0.0000 | BER(phys): 0.0000 | PSNR: 21.0dB | msg: 0.0002 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-04 | 0.01s/step | ETA: 1min
+BOOT-EXT  5300/8000 | BER(msg): 0.0000 | BER(phys): 0.0000 | PSNR: 21.0dB | msg: 0.0001 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-04 | 0.01s/step | ETA: 0min
+BOOT-EXT  5400/8000 | BER(msg): 0.0000 | BER(phys): 0.0000 | PSNR: 21.1dB | msg: 0.0001 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 9.9e-05 | 0.01s/step | ETA: 0min
+BOOT-EXT  5500/8000 | BER(msg): 0.0000 | BER(phys): 0.0000 | PSNR: 21.1dB | msg: 0.0001 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 9.9e-05 | 0.01s/step | ETA: 0min
+BOOT-EXT  5600/8000 | BER(msg): 0.0000 | BER(phys): 0.0000 | PSNR: 21.0dB | msg: 0.0001 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 9.9e-05 | 0.01s/step | ETA: 0min
+BOOT-EXT  5700/8000 | BER(msg): 0.0000 | BER(phys): 0.0000 | PSNR: 21.0dB | msg: 0.0001 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 9.8e-05 | 0.01s/step | ETA: 0min
+BOOT-EXT  5800/8000 | BER(msg): 0.0000 | BER(phys): 0.0000 | PSNR: 21.0dB | msg: 0.0001 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 9.8e-05 | 0.01s/step | ETA: 0min
+BOOT-CTRL  5900/8000 | BER(msg): 0.0195 | BER(phys): 0.0176 | PSNR: 35.8dB | msg: 0.0587 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 9.7e-05 | 0.05s/step | ETA: 2min
+BOOT-CTRL  6000/8000 | BER(msg): 0.0078 | BER(phys): 0.0068 | PSNR: 37.2dB | msg: 0.0257 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 9.6e-05 | 0.05s/step | ETA: 2min
+BOOT-CTRL  6100/8000 | BER(msg): 0.0059 | BER(phys): 0.0059 | PSNR: 37.5dB | msg: 0.0168 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 9.5e-05 | 0.05s/step | ETA: 1min
+BOOT-CTRL  6200/8000 | BER(msg): 0.0059 | BER(phys): 0.0059 | PSNR: 37.3dB | msg: 0.0144 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 9.5e-05 | 0.05s/step | ETA: 1min
+BOOT-CTRL  6300/8000 | BER(msg): 0.0000 | BER(phys): 0.0000 | PSNR: 37.4dB | msg: 0.0017 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 9.4e-05 | 0.05s/step | ETA: 1min
+BOOT-CTRL  6400/8000 | BER(msg): 0.0156 | BER(phys): 0.0117 | PSNR: 37.5dB | msg: 0.0339 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 9.3e-05 | 0.05s/step | ETA: 1min
+BOOT-CTRL  6500/8000 | BER(msg): 0.0020 | BER(phys): 0.0029 | PSNR: 37.0dB | msg: 0.0083 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 9.2e-05 | 0.05s/step | ETA: 1min
+BOOT-CTRL  6600/8000 | BER(msg): 0.0000 | BER(phys): 0.0020 | PSNR: 37.0dB | msg: 0.0053 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 9.1e-05 | 0.05s/step | ETA: 1min
+BOOT-CTRL  6700/8000 | BER(msg): 0.0039 | BER(phys): 0.0020 | PSNR: 36.9dB | msg: 0.0062 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 8.9e-05 | 0.05s/step | ETA: 1min
+BOOT-CTRL  6800/8000 | BER(msg): 0.0000 | BER(phys): 0.0000 | PSNR: 37.0dB | msg: 0.0015 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 8.8e-05 | 0.05s/step | ETA: 1min
+TRAIN  6900/8000 | BER(msg): 0.0020 | BER(phys): 0.0068 | PSNR: 36.9dB | msg: 0.0102 | perc: 0.1177 | spec: 0.0230 | srm_m: 0.0000 | atk: 0.85 | lr: 8.7e-05 | 0.07s/step | ETA: 1min
+TRAIN  7000/8000 | BER(msg): 0.0059 | BER(phys): 0.0029 | PSNR: 35.9dB | msg: 0.0012 | perc: 0.0925 | spec: 0.0215 | srm_m: 0.0000 | atk: 0.85 | lr: 8.6e-05 | 0.07s/step | ETA: 1min
+TRAIN  7100/8000 | BER(msg): 0.4961 | BER(phys): 0.5156 | PSNR: 33.9dB | msg: 0.7244 | perc: 0.0694 | spec: 0.0189 | srm_m: 0.0000 | atk: 0.85 | lr: 8.4e-05 | 0.07s/step | ETA: 1min
+TRAIN  7200/8000 | BER(msg): 0.0039 | BER(phys): 0.0088 | PSNR: 33.3dB | msg: 0.0046 | perc: 0.0509 | spec: 0.0127 | srm_m: 0.0000 | atk: 0.85 | lr: 8.3e-05 | 0.07s/step | ETA: 1min
+TRAIN  7300/8000 | BER(msg): 0.0059 | BER(phys): 0.0117 | PSNR: 33.8dB | msg: 0.0028 | perc: 0.0560 | spec: 0.0169 | srm_m: 0.0000 | atk: 0.85 | lr: 8.1e-05 | 0.07s/step | ETA: 1min
+TRAIN  7400/8000 | BER(msg): 0.0156 | BER(phys): 0.0156 | PSNR: 33.3dB | msg: 0.0062 | perc: 0.0422 | spec: 0.0150 | srm_m: 0.0000 | atk: 0.85 | lr: 8.0e-05 | 0.07s/step | ETA: 1min
+TRAIN  7500/8000 | BER(msg): 0.0332 | BER(phys): 0.0332 | PSNR: 33.2dB | msg: 0.0050 | perc: 0.0475 | spec: 0.0111 | srm_m: 0.0000 | atk: 0.85 | lr: 7.8e-05 | 0.07s/step | ETA: 1min
+TRAIN  7600/8000 | BER(msg): 0.0059 | BER(phys): 0.0049 | PSNR: 33.2dB | msg: 0.0008 | perc: 0.0468 | spec: 0.0143 | srm_m: 0.0000 | atk: 0.85 | lr: 7.6e-05 | 0.07s/step | ETA: 0min
+TRAIN  7700/8000 | BER(msg): 0.0000 | BER(phys): 0.0088 | PSNR: 33.7dB | msg: 0.0036 | perc: 0.0464 | spec: 0.0230 | srm_m: 0.0000 | atk: 0.85 | lr: 7.5e-05 | 0.07s/step | ETA: 0min
+TRAIN  7800/8000 | BER(msg): 0.4922 | BER(phys): 0.4902 | PSNR: 33.5dB | msg: 0.7150 | perc: 0.0573 | spec: 0.0147 | srm_m: 0.0000 | atk: 0.85 | lr: 7.3e-05 | 0.07s/step | ETA: 0min
+TRAIN  7900/8000 | BER(msg): 0.4824 | BER(phys): 0.4941 | PSNR: 32.7dB | msg: 0.7006 | perc: 0.0455 | spec: 0.0132 | srm_m: 0.0000 | atk: 0.85 | lr: 7.1e-05 | 0.07s/step | ETA: 0min
+TRAIN  8000/8000 | BER(msg): 0.0391 | BER(phys): 0.0254 | PSNR: 33.2dB | msg: 0.0159 | perc: 0.0339 | spec: 0.0095 | srm_m: 0.0000 | atk: 0.85 | lr: 6.9e-05 | 0.07s/step | ETA: 0min
+  Saved checkpoint: outputs_v5_ablation/no_adv/dscsp_v5_step_008000.pt
+
+============================================================
+FINAL EVALUATION (200 samples) — v5
+============================================================
+  Clean BER (message): 0.006445 (target: 0.0000)
+  PSNR:                33.1 dB (target: >= 35)
+  Best BER during training: 0.000000
+  WARNING: Clean BER not yet at target
+  Saved final model: outputs_v5_ablation/no_adv/dscsp_v5_final.pt
+  Saved results: outputs_v5_ablation/no_adv/train_v5_results.json
+  Running: /usr/bin/python3 evaluate_tifs.py --checkpoint outputs_v5_ablation/no_adv/dscsp_v5_final.pt --n-images 200 --output outputs_v5_ablation/no_adv/eval_results.json
+  WARNING: evaluate_tifs.py returned 2
+usage: evaluate_tifs.py [-h] [--checkpoint CHECKPOINT]
+                        [--num-samples NUM_SAMPLES]
+                        [--cross-dataset-samples CROSS_DATASET_SAMPLES]
+                        [--adaptive-train ADAPTIVE_TRAIN]
+                        [--adaptive-test ADAPTIVE_TEST] [--skip-cross-dataset]
+                        [--multi-payload] [--multiple-detectors]
+                        [--output OUTPUT]
+evaluate_tifs.py: error: unrecognized arguments: --n-images 200
+
+
+  Results for no_adv:
+    clean_ber: N/A
+    jpeg_q75_ber: N/A
+    crop_q80_ber: N/A
+    auc: N/A
+    psnr: N/A
+    lpips: N/A
+  Results saved to outputs_v5_ablation/ablation_results.json
+
+============================================================
+VARIANT: uniform_attacks
+============================================================
+
+============================================================
+ABLATION VARIANT: uniform_attacks
+============================================================
+  OVERRIDE: total_steps = 8000
+  OVERRIDE: pool_refresh_interval = 99999
+  OVERRIDE: jpeg_weight = 0.33
+  OVERRIDE: log_interval = 100
+  OVERRIDE: save_image_interval = 8000
+  OVERRIDE: checkpoint_interval = 8000
+  OVERRIDE: output_dir = outputs_v5_ablation/uniform_attacks
+  OVERRIDE: checkpoint_dir = outputs_v5_ablation/uniform_attacks
+  OVERRIDE: resume_path = outputs_v5_ablation/warmstart/dscsp_v5_step_005000.pt
+  OVERRIDE: resume_load_scheduler = False
+
+DSCSP v5 Training
+Device: cuda
+GPU: NVIDIA GeForce RTX 5090
+VRAM: 31.4 GB
+
+RedundantCoder: 128 message bits → 256 physical slots (R=2)
+
+Loading diffusion model...
+Loading pipeline components...:   0%|          | 0/2 [00:00<?, ?it/s]An error occurred while trying to fetch /workspace/.cache/huggingface/hub/models--google--ddpm-celebahq-256/snapshots/cd5c944777ea2668051904ead6cc120739b86c4d: Error no file named diffusion_pytorch_model.safetensors found in directory /workspace/.cache/huggingface/hub/models--google--ddpm-celebahq-256/snapshots/cd5c944777ea2668051904ead6cc120739b86c4d.
+Defaulting to unsafe serialization. Pass `allow_pickle=False` to raise an error instead.
+Loading pipeline components...: 100%|██████████| 2/2 [00:13<00:00,  6.90s/it]Loading pipeline components...: 100%|██████████| 2/2 [00:13<00:00,  6.90s/it]
+  UNet params: 113.7M (frozen)
+
+Initializing content-adaptive controller...
+  Controller params: 4.39M
+Initializing global-pool extractor...
+  Extractor params: 11.31M
+Initializing SN-discriminator...
+  Discriminator params: 2.76M
+  SRM feature-matching loss enabled (λ=0.05)
+Setting up [LPIPS] perceptual loss: trunk [vgg], v[0.1], spatial [off]
+Loading model from: /usr/local/lib/python3.12/dist-packages/lpips/weights/v0.1/vgg.pth
+  Attack layer: JPEG weight 0.33, quality (70, 92)
+Resuming from outputs_v5_ablation/warmstart/dscsp_v5_step_005000.pt...
+  Loaded controller weights (strict)
+  Loaded extractor weights (strict)
+  Loaded discriminator weights (strict)
+  Resumed at step 5000, best BER: 0.0000
+Generating image pool...
+  Generating 128 clean images...
+    4/128    8/128    12/128    16/128    20/128    24/128    28/128    32/128    36/128    40/128    44/128    48/128    52/128    56/128    60/128    64/128    68/128    72/128    76/128    80/128    84/128    88/128    92/128    96/128    100/128    104/128    108/128    112/128    116/128    120/128    124/128    128/128
+  Image pool: torch.Size([128, 3, 256, 256]), range: [-1.000, 1.000]
+
+Starting DSCSP v5 training for 8000 steps (from step 5000)
+  Payload: 128 message bits → 256 physical bits (R=2)
+  JPEG: weight=0.33, quality=(70, 92)
+  Adv: start=500, D_steps=4
+  Compound attacks: start step 5000
+
+BOOT-EXT  5100/8000 | BER(msg): 0.0000 | BER(phys): 0.0000 | PSNR: 21.0dB | msg: 0.0002 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-04 | 0.01s/step | ETA: 1min
+BOOT-EXT  5200/8000 | BER(msg): 0.0000 | BER(phys): 0.0000 | PSNR: 21.0dB | msg: 0.0002 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-04 | 0.01s/step | ETA: 1min
+BOOT-EXT  5300/8000 | BER(msg): 0.0000 | BER(phys): 0.0000 | PSNR: 21.0dB | msg: 0.0002 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 1.0e-04 | 0.01s/step | ETA: 1min
+BOOT-EXT  5400/8000 | BER(msg): 0.0000 | BER(phys): 0.0000 | PSNR: 21.0dB | msg: 0.0001 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 9.9e-05 | 0.01s/step | ETA: 0min
+BOOT-EXT  5500/8000 | BER(msg): 0.0000 | BER(phys): 0.0000 | PSNR: 20.9dB | msg: 0.0001 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 9.9e-05 | 0.01s/step | ETA: 0min
+BOOT-EXT  5600/8000 | BER(msg): 0.0000 | BER(phys): 0.0000 | PSNR: 21.0dB | msg: 0.0001 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 9.9e-05 | 0.01s/step | ETA: 0min
+BOOT-EXT  5700/8000 | BER(msg): 0.0000 | BER(phys): 0.0000 | PSNR: 21.0dB | msg: 0.0001 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 9.8e-05 | 0.01s/step | ETA: 0min
+BOOT-EXT  5800/8000 | BER(msg): 0.0000 | BER(phys): 0.0000 | PSNR: 21.0dB | msg: 0.0001 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 9.8e-05 | 0.01s/step | ETA: 0min
+BOOT-CTRL  5900/8000 | BER(msg): 0.0234 | BER(phys): 0.0166 | PSNR: 35.8dB | msg: 0.0363 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 9.7e-05 | 0.05s/step | ETA: 2min
+BOOT-CTRL  6000/8000 | BER(msg): 0.0156 | BER(phys): 0.0098 | PSNR: 36.8dB | msg: 0.0227 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 9.6e-05 | 0.05s/step | ETA: 2min
+BOOT-CTRL  6100/8000 | BER(msg): 0.0000 | BER(phys): 0.0000 | PSNR: 37.5dB | msg: 0.0029 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 9.5e-05 | 0.05s/step | ETA: 1min
+BOOT-CTRL  6200/8000 | BER(msg): 0.0137 | BER(phys): 0.0078 | PSNR: 37.4dB | msg: 0.0182 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 9.5e-05 | 0.05s/step | ETA: 1min
+BOOT-CTRL  6300/8000 | BER(msg): 0.0039 | BER(phys): 0.0029 | PSNR: 37.4dB | msg: 0.0070 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 9.4e-05 | 0.05s/step | ETA: 1min
+BOOT-CTRL  6400/8000 | BER(msg): 0.0000 | BER(phys): 0.0000 | PSNR: 37.3dB | msg: 0.0050 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 9.3e-05 | 0.05s/step | ETA: 1min
+BOOT-CTRL  6500/8000 | BER(msg): 0.0000 | BER(phys): 0.0010 | PSNR: 37.2dB | msg: 0.0036 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 9.2e-05 | 0.05s/step | ETA: 1min
+BOOT-CTRL  6600/8000 | BER(msg): 0.0020 | BER(phys): 0.0010 | PSNR: 37.1dB | msg: 0.0030 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 9.1e-05 | 0.05s/step | ETA: 1min
+BOOT-CTRL  6700/8000 | BER(msg): 0.0039 | BER(phys): 0.0020 | PSNR: 37.0dB | msg: 0.0062 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 8.9e-05 | 0.05s/step | ETA: 1min
+BOOT-CTRL  6800/8000 | BER(msg): 0.0098 | BER(phys): 0.0049 | PSNR: 36.7dB | msg: 0.0139 | perc: 0.0000 | spec: 0.0000 | srm_m: 0.0000 | atk: 0.00 | lr: 8.8e-05 | 0.05s/step | ETA: 1min
+TRAIN  6900/8000 | BER(msg): 0.0801 | BER(phys): 0.0908 | PSNR: 29.3dB | msg: 0.0776 | perc: 0.0922 | spec: 0.0134 | srm_m: 0.0001 | atk: 0.85 | lr: 8.7e-05 | 0.12s/step | ETA: 2min | D: 0.597/0.88 adv: 0.7430
+TRAIN  7000/8000 | BER(msg): 0.2129 | BER(phys): 0.2354 | PSNR: 29.2dB | msg: 0.2978 | perc: 0.0708 | spec: 0.0090 | srm_m: 0.0000 | atk: 0.85 | lr: 8.6e-05 | 0.13s/step | ETA: 2min | D: 0.541/1.00 adv: 0.8893
+TRAIN  7100/8000 | BER(msg): 0.0801 | BER(phys): 0.1162 | PSNR: 29.1dB | msg: 0.1045 | perc: 0.0491 | spec: 0.0122 | srm_m: 0.0000 | atk: 0.85 | lr: 8.4e-05 | 0.11s/step | ETA: 2min | D: 0.596/0.75 adv: 0.7429
+TRAIN  7200/8000 | BER(msg): 0.2773 | BER(phys): 0.2803 | PSNR: 28.8dB | msg: 0.4080 | perc: 0.0672 | spec: 0.0103 | srm_m: 0.0000 | atk: 0.85 | lr: 8.3e-05 | 0.13s/step | ETA: 2min | D: 0.610/0.88 adv: 0.8816
+TRAIN  7300/8000 | BER(msg): 0.1191 | BER(phys): 0.1230 | PSNR: 28.9dB | msg: 0.1255 | perc: 0.0504 | spec: 0.0089 | srm_m: 0.0001 | atk: 0.85 | lr: 8.1e-05 | 0.12s/step | ETA: 1min | D: 0.621/0.75 adv: 0.9788
+TRAIN  7400/8000 | BER(msg): 0.4863 | BER(phys): 0.4678 | PSNR: 28.8dB | msg: 0.7124 | perc: 0.0458 | spec: 0.0094 | srm_m: 0.0001 | atk: 0.85 | lr: 8.0e-05 | 0.12s/step | ETA: 1min | D: 0.615/1.00 adv: 0.8844
+TRAIN  7500/8000 | BER(msg): 0.1211 | BER(phys): 0.1094 | PSNR: 28.9dB | msg: 0.1029 | perc: 0.0556 | spec: 0.0082 | srm_m: 0.0000 | atk: 0.85 | lr: 7.8e-05 | 0.12s/step | ETA: 1min | D: 0.617/0.88 adv: 1.1025
+TRAIN  7600/8000 | BER(msg): 0.1074 | BER(phys): 0.1045 | PSNR: 28.8dB | msg: 0.0919 | perc: 0.0445 | spec: 0.0093 | srm_m: 0.0000 | atk: 0.85 | lr: 7.6e-05 | 0.12s/step | ETA: 1min | D: 0.634/0.62 adv: 0.9732
+TRAIN  7700/8000 | BER(msg): 0.2031 | BER(phys): 0.2246 | PSNR: 28.9dB | msg: 0.2721 | perc: 0.0505 | spec: 0.0123 | srm_m: 0.0000 | atk: 0.85 | lr: 7.5e-05 | 0.12s/step | ETA: 1min | D: 0.582/0.75 adv: 0.6492
+TRAIN  7800/8000 | BER(msg): 0.5000 | BER(phys): 0.4785 | PSNR: 28.7dB | msg: 0.7101 | perc: 0.0447 | spec: 0.0101 | srm_m: 0.0000 | atk: 0.85 | lr: 7.3e-05 | 0.11s/step | ETA: 0min | D: 0.602/0.75 adv: 0.7160
+TRAIN  7900/8000 | BER(msg): 0.2656 | BER(phys): 0.2363 | PSNR: 28.7dB | msg: 0.3296 | perc: 0.0414 | spec: 0.0110 | srm_m: 0.0000 | atk: 0.85 | lr: 7.1e-05 | 0.12s/step | ETA: 0min | D: 0.604/0.88 adv: 0.7667
+TRAIN  8000/8000 | BER(msg): 0.2070 | BER(phys): 0.2168 | PSNR: 28.8dB | msg: 0.2756 | perc: 0.0534 | spec: 0.0091 | srm_m: 0.0000 | atk: 0.85 | lr: 6.9e-05 | 0.12s/step | ETA: 0min | D: 0.585/1.00 adv: 0.7777
+  Saved checkpoint: outputs_v5_ablation/uniform_attacks/dscsp_v5_step_008000.pt
+
+============================================================
+FINAL EVALUATION (200 samples) — v5
+============================================================
+  Clean BER (message): 0.095273 (target: 0.0000)
+  PSNR:                28.7 dB (target: >= 35)
+  Best BER during training: 0.000000
+  WARNING: Clean BER not yet at target
+  Saved final model: outputs_v5_ablation/uniform_attacks/dscsp_v5_final.pt
+  Saved results: outputs_v5_ablation/uniform_attacks/train_v5_results.json
+  Running: /usr/bin/python3 evaluate_tifs.py --checkpoint outputs_v5_ablation/uniform_attacks/dscsp_v5_final.pt --n-images 200 --output outputs_v5_ablation/uniform_attacks/eval_results.json
+  WARNING: evaluate_tifs.py returned 2
+usage: evaluate_tifs.py [-h] [--checkpoint CHECKPOINT]
+                        [--num-samples NUM_SAMPLES]
+                        [--cross-dataset-samples CROSS_DATASET_SAMPLES]
+                        [--adaptive-train ADAPTIVE_TRAIN]
+                        [--adaptive-test ADAPTIVE_TEST] [--skip-cross-dataset]
+                        [--multi-payload] [--multiple-detectors]
+                        [--output OUTPUT]
+evaluate_tifs.py: error: unrecognized arguments: --n-images 200
+
+
+  Results for uniform_attacks:
+    clean_ber: N/A
+    jpeg_q75_ber: N/A
+    crop_q80_ber: N/A
+    auc: N/A
+    psnr: N/A
+    lpips: N/A
+  Results saved to outputs_v5_ablation/ablation_results.json
+
+Ablation report written to: outputs_v5_ablation/ablation_report.md
+
+Ablation study complete.

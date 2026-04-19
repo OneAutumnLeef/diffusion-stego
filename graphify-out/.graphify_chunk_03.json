@@ -1,0 +1,1409 @@
+{
+    "nodes": [
+        {
+            "id": "step_019500_training_panel",
+            "label": "outputs_v4/step_019500.png training panel",
+            "file_type": "image",
+            "source_file": "outputs_v4/step_019500.png",
+            "source_location": null,
+            "source_url": null,
+            "captured_at": null,
+            "author": null,
+            "contributor": null
+        },
+        {
+            "id": "step_000500_training_panel",
+            "label": "outputs_v5/step_000500.png training panel",
+            "file_type": "image",
+            "source_file": "outputs_v5/step_000500.png",
+            "source_location": null,
+            "source_url": null,
+            "captured_at": null,
+            "author": null,
+            "contributor": null
+        },
+        {
+            "id": "step_001000_training_panel",
+            "label": "outputs_v5/step_001000.png training panel",
+            "file_type": "image",
+            "source_file": "outputs_v5/step_001000.png",
+            "source_location": null,
+            "source_url": null,
+            "captured_at": null,
+            "author": null,
+            "contributor": null
+        },
+        {
+            "id": "step_001500_training_panel",
+            "label": "outputs_v5/step_001500.png training panel",
+            "file_type": "image",
+            "source_file": "outputs_v5/step_001500.png",
+            "source_location": null,
+            "source_url": null,
+            "captured_at": null,
+            "author": null,
+            "contributor": null
+        },
+        {
+            "id": "step_002000_training_panel",
+            "label": "outputs_v5/step_002000.png training panel",
+            "file_type": "image",
+            "source_file": "outputs_v5/step_002000.png",
+            "source_location": null,
+            "source_url": null,
+            "captured_at": null,
+            "author": null,
+            "contributor": null
+        },
+        {
+            "id": "step_002500_training_panel",
+            "label": "outputs_v5/step_002500.png training panel",
+            "file_type": "image",
+            "source_file": "outputs_v5/step_002500.png",
+            "source_location": null,
+            "source_url": null,
+            "captured_at": null,
+            "author": null,
+            "contributor": null
+        },
+        {
+            "id": "step_003000_training_panel",
+            "label": "outputs_v5/step_003000.png training panel",
+            "file_type": "image",
+            "source_file": "outputs_v5/step_003000.png",
+            "source_location": null,
+            "source_url": null,
+            "captured_at": null,
+            "author": null,
+            "contributor": null
+        },
+        {
+            "id": "step_003500_training_panel",
+            "label": "outputs_v5/step_003500.png training panel",
+            "file_type": "image",
+            "source_file": "outputs_v5/step_003500.png",
+            "source_location": null,
+            "source_url": null,
+            "captured_at": null,
+            "author": null,
+            "contributor": null
+        },
+        {
+            "id": "step_004000_training_panel",
+            "label": "outputs_v5/step_004000.png training panel",
+            "file_type": "image",
+            "source_file": "outputs_v5/step_004000.png",
+            "source_location": null,
+            "source_url": null,
+            "captured_at": null,
+            "author": null,
+            "contributor": null
+        },
+        {
+            "id": "step_004500_training_panel",
+            "label": "outputs_v5/step_004500.png training panel",
+            "file_type": "image",
+            "source_file": "outputs_v5/step_004500.png",
+            "source_location": null,
+            "source_url": null,
+            "captured_at": null,
+            "author": null,
+            "contributor": null
+        },
+        {
+            "id": "step_005000_training_panel",
+            "label": "outputs_v5/step_005000.png training panel",
+            "file_type": "image",
+            "source_file": "outputs_v5/step_005000.png",
+            "source_location": null,
+            "source_url": null,
+            "captured_at": null,
+            "author": null,
+            "contributor": null
+        },
+        {
+            "id": "step_005500_training_panel",
+            "label": "outputs_v5/step_005500.png training panel",
+            "file_type": "image",
+            "source_file": "outputs_v5/step_005500.png",
+            "source_location": null,
+            "source_url": null,
+            "captured_at": null,
+            "author": null,
+            "contributor": null
+        },
+        {
+            "id": "step_006000_training_panel",
+            "label": "outputs_v5/step_006000.png training panel",
+            "file_type": "image",
+            "source_file": "outputs_v5/step_006000.png",
+            "source_location": null,
+            "source_url": null,
+            "captured_at": null,
+            "author": null,
+            "contributor": null
+        },
+        {
+            "id": "step_006500_training_panel",
+            "label": "outputs_v5/step_006500.png training panel",
+            "file_type": "image",
+            "source_file": "outputs_v5/step_006500.png",
+            "source_location": null,
+            "source_url": null,
+            "captured_at": null,
+            "author": null,
+            "contributor": null
+        },
+        {
+            "id": "step_007000_training_panel",
+            "label": "outputs_v5/step_007000.png training panel",
+            "file_type": "image",
+            "source_file": "outputs_v5/step_007000.png",
+            "source_location": null,
+            "source_url": null,
+            "captured_at": null,
+            "author": null,
+            "contributor": null
+        },
+        {
+            "id": "step_007500_training_panel",
+            "label": "outputs_v5/step_007500.png training panel",
+            "file_type": "image",
+            "source_file": "outputs_v5/step_007500.png",
+            "source_location": null,
+            "source_url": null,
+            "captured_at": null,
+            "author": null,
+            "contributor": null
+        },
+        {
+            "id": "step_008000_training_panel",
+            "label": "outputs_v5/step_008000.png training panel",
+            "file_type": "image",
+            "source_file": "outputs_v5/step_008000.png",
+            "source_location": null,
+            "source_url": null,
+            "captured_at": null,
+            "author": null,
+            "contributor": null
+        },
+        {
+            "id": "step_008500_training_panel",
+            "label": "outputs_v5/step_008500.png training panel",
+            "file_type": "image",
+            "source_file": "outputs_v5/step_008500.png",
+            "source_location": null,
+            "source_url": null,
+            "captured_at": null,
+            "author": null,
+            "contributor": null
+        },
+        {
+            "id": "step_009000_training_panel",
+            "label": "outputs_v5/step_009000.png training panel",
+            "file_type": "image",
+            "source_file": "outputs_v5/step_009000.png",
+            "source_location": null,
+            "source_url": null,
+            "captured_at": null,
+            "author": null,
+            "contributor": null
+        },
+        {
+            "id": "step_009500_training_panel",
+            "label": "outputs_v5/step_009500.png training panel",
+            "file_type": "image",
+            "source_file": "outputs_v5/step_009500.png",
+            "source_location": null,
+            "source_url": null,
+            "captured_at": null,
+            "author": null,
+            "contributor": null
+        },
+        {
+            "id": "step_010000_training_panel",
+            "label": "outputs_v5/step_010000.png training panel",
+            "file_type": "image",
+            "source_file": "outputs_v5/step_010000.png",
+            "source_location": null,
+            "source_url": null,
+            "captured_at": null,
+            "author": null,
+            "contributor": null
+        },
+        {
+            "id": "step_010500_training_panel",
+            "label": "outputs_v5/step_010500.png training panel",
+            "file_type": "image",
+            "source_file": "outputs_v5/step_010500.png",
+            "source_location": null,
+            "source_url": null,
+            "captured_at": null,
+            "author": null,
+            "contributor": null
+        },
+        {
+            "id": "step_000500_triplet_panel_layout",
+            "label": "Three-row panel layout (cover, stego, residual)",
+            "file_type": "image",
+            "source_file": "outputs_v5/step_000500.png",
+            "source_location": null,
+            "source_url": null,
+            "captured_at": null,
+            "author": null,
+            "contributor": null
+        },
+        {
+            "id": "step_000500_cover_stego_pair",
+            "label": "Near-identity cover to stego pairing in top two rows",
+            "file_type": "image",
+            "source_file": "outputs_v5/step_000500.png",
+            "source_location": null,
+            "source_url": null,
+            "captured_at": null,
+            "author": null,
+            "contributor": null
+        },
+        {
+            "id": "step_000500_blocky_residual_pattern",
+            "label": "Coarse blocky residual carrier pattern",
+            "file_type": "image",
+            "source_file": "outputs_v5/step_000500.png",
+            "source_location": null,
+            "source_url": null,
+            "captured_at": null,
+            "author": null,
+            "contributor": null
+        },
+        {
+            "id": "step_004500_striped_residual_pattern",
+            "label": "Fine horizontal-striped residual carrier pattern",
+            "file_type": "image",
+            "source_file": "outputs_v5/step_004500.png",
+            "source_location": null,
+            "source_url": null,
+            "captured_at": null,
+            "author": null,
+            "contributor": null
+        },
+        {
+            "id": "step_006000_horizontal_banding_pattern",
+            "label": "Horizontal banding dominant in residual maps",
+            "file_type": "image",
+            "source_file": "outputs_v5/step_006000.png",
+            "source_location": null,
+            "source_url": null,
+            "captured_at": null,
+            "author": null,
+            "contributor": null
+        },
+        {
+            "id": "step_005000_edge_focused_perturbation",
+            "label": "Residual energy concentrated on facial edges and contours",
+            "file_type": "image",
+            "source_file": "outputs_v5/step_005000.png",
+            "source_location": null,
+            "source_url": null,
+            "captured_at": null,
+            "author": null,
+            "contributor": null
+        },
+        {
+            "id": "step_002000_identity_distortion_outlier",
+            "label": "Occasional severe identity distortion outlier in individual columns",
+            "file_type": "image",
+            "source_file": "outputs_v5/step_002000.png",
+            "source_location": null,
+            "source_url": null,
+            "captured_at": null,
+            "author": null,
+            "contributor": null
+        },
+        {
+            "id": "step_008000_color_cast_persistence",
+            "label": "Persistent green-yellow color cast across many samples",
+            "file_type": "image",
+            "source_file": "outputs_v5/step_008000.png",
+            "source_location": null,
+            "source_url": null,
+            "captured_at": null,
+            "author": null,
+            "contributor": null
+        },
+        {
+            "id": "step_004500_v5_stabilization_trend",
+            "label": "Post-4500 stabilization trend with less visible cover-stego drift",
+            "file_type": "image",
+            "source_file": "outputs_v5/step_004500.png",
+            "source_location": null,
+            "source_url": null,
+            "captured_at": null,
+            "author": null,
+            "contributor": null
+        },
+        {
+            "id": "step_019500_v4_low_delta_baseline",
+            "label": "Late v4 baseline with very low visible residual energy",
+            "file_type": "image",
+            "source_file": "outputs_v4/step_019500.png",
+            "source_location": null,
+            "source_url": null,
+            "captured_at": null,
+            "author": null,
+            "contributor": null
+        },
+        {
+            "id": "step_000500_v4_to_v5_shift",
+            "label": "Shift from v4 low-delta look to v5 high-energy residual carrier",
+            "file_type": "image",
+            "source_file": "outputs_v5/step_000500.png",
+            "source_location": null,
+            "source_url": null,
+            "captured_at": null,
+            "author": null,
+            "contributor": null
+        }
+    ],
+    "edges": [
+        {
+            "source": "step_019500_training_panel",
+            "target": "step_000500_cover_stego_pair",
+            "relation": "references",
+            "confidence": "EXTRACTED",
+            "confidence_score": 1.0,
+            "source_file": "outputs_v4/step_019500.png",
+            "source_location": null,
+            "weight": 1.0
+        },
+        {
+            "source": "step_019500_training_panel",
+            "target": "step_019500_v4_low_delta_baseline",
+            "relation": "references",
+            "confidence": "EXTRACTED",
+            "confidence_score": 1.0,
+            "source_file": "outputs_v4/step_019500.png",
+            "source_location": null,
+            "weight": 1.0
+        },
+        {
+            "source": "step_000500_training_panel",
+            "target": "step_000500_triplet_panel_layout",
+            "relation": "references",
+            "confidence": "EXTRACTED",
+            "confidence_score": 1.0,
+            "source_file": "outputs_v5/step_000500.png",
+            "source_location": null,
+            "weight": 1.0
+        },
+        {
+            "source": "step_001000_training_panel",
+            "target": "step_000500_triplet_panel_layout",
+            "relation": "references",
+            "confidence": "EXTRACTED",
+            "confidence_score": 1.0,
+            "source_file": "outputs_v5/step_001000.png",
+            "source_location": null,
+            "weight": 1.0
+        },
+        {
+            "source": "step_001500_training_panel",
+            "target": "step_000500_triplet_panel_layout",
+            "relation": "references",
+            "confidence": "EXTRACTED",
+            "confidence_score": 1.0,
+            "source_file": "outputs_v5/step_001500.png",
+            "source_location": null,
+            "weight": 1.0
+        },
+        {
+            "source": "step_002000_training_panel",
+            "target": "step_000500_triplet_panel_layout",
+            "relation": "references",
+            "confidence": "EXTRACTED",
+            "confidence_score": 1.0,
+            "source_file": "outputs_v5/step_002000.png",
+            "source_location": null,
+            "weight": 1.0
+        },
+        {
+            "source": "step_002500_training_panel",
+            "target": "step_000500_triplet_panel_layout",
+            "relation": "references",
+            "confidence": "EXTRACTED",
+            "confidence_score": 1.0,
+            "source_file": "outputs_v5/step_002500.png",
+            "source_location": null,
+            "weight": 1.0
+        },
+        {
+            "source": "step_003000_training_panel",
+            "target": "step_000500_triplet_panel_layout",
+            "relation": "references",
+            "confidence": "EXTRACTED",
+            "confidence_score": 1.0,
+            "source_file": "outputs_v5/step_003000.png",
+            "source_location": null,
+            "weight": 1.0
+        },
+        {
+            "source": "step_003500_training_panel",
+            "target": "step_000500_triplet_panel_layout",
+            "relation": "references",
+            "confidence": "EXTRACTED",
+            "confidence_score": 1.0,
+            "source_file": "outputs_v5/step_003500.png",
+            "source_location": null,
+            "weight": 1.0
+        },
+        {
+            "source": "step_004000_training_panel",
+            "target": "step_000500_triplet_panel_layout",
+            "relation": "references",
+            "confidence": "EXTRACTED",
+            "confidence_score": 1.0,
+            "source_file": "outputs_v5/step_004000.png",
+            "source_location": null,
+            "weight": 1.0
+        },
+        {
+            "source": "step_004500_training_panel",
+            "target": "step_000500_triplet_panel_layout",
+            "relation": "references",
+            "confidence": "EXTRACTED",
+            "confidence_score": 1.0,
+            "source_file": "outputs_v5/step_004500.png",
+            "source_location": null,
+            "weight": 1.0
+        },
+        {
+            "source": "step_005000_training_panel",
+            "target": "step_000500_triplet_panel_layout",
+            "relation": "references",
+            "confidence": "EXTRACTED",
+            "confidence_score": 1.0,
+            "source_file": "outputs_v5/step_005000.png",
+            "source_location": null,
+            "weight": 1.0
+        },
+        {
+            "source": "step_005500_training_panel",
+            "target": "step_000500_triplet_panel_layout",
+            "relation": "references",
+            "confidence": "EXTRACTED",
+            "confidence_score": 1.0,
+            "source_file": "outputs_v5/step_005500.png",
+            "source_location": null,
+            "weight": 1.0
+        },
+        {
+            "source": "step_006000_training_panel",
+            "target": "step_000500_triplet_panel_layout",
+            "relation": "references",
+            "confidence": "EXTRACTED",
+            "confidence_score": 1.0,
+            "source_file": "outputs_v5/step_006000.png",
+            "source_location": null,
+            "weight": 1.0
+        },
+        {
+            "source": "step_006500_training_panel",
+            "target": "step_000500_triplet_panel_layout",
+            "relation": "references",
+            "confidence": "EXTRACTED",
+            "confidence_score": 1.0,
+            "source_file": "outputs_v5/step_006500.png",
+            "source_location": null,
+            "weight": 1.0
+        },
+        {
+            "source": "step_007000_training_panel",
+            "target": "step_000500_triplet_panel_layout",
+            "relation": "references",
+            "confidence": "EXTRACTED",
+            "confidence_score": 1.0,
+            "source_file": "outputs_v5/step_007000.png",
+            "source_location": null,
+            "weight": 1.0
+        },
+        {
+            "source": "step_007500_training_panel",
+            "target": "step_000500_triplet_panel_layout",
+            "relation": "references",
+            "confidence": "EXTRACTED",
+            "confidence_score": 1.0,
+            "source_file": "outputs_v5/step_007500.png",
+            "source_location": null,
+            "weight": 1.0
+        },
+        {
+            "source": "step_008000_training_panel",
+            "target": "step_000500_triplet_panel_layout",
+            "relation": "references",
+            "confidence": "EXTRACTED",
+            "confidence_score": 1.0,
+            "source_file": "outputs_v5/step_008000.png",
+            "source_location": null,
+            "weight": 1.0
+        },
+        {
+            "source": "step_008500_training_panel",
+            "target": "step_000500_triplet_panel_layout",
+            "relation": "references",
+            "confidence": "EXTRACTED",
+            "confidence_score": 1.0,
+            "source_file": "outputs_v5/step_008500.png",
+            "source_location": null,
+            "weight": 1.0
+        },
+        {
+            "source": "step_009000_training_panel",
+            "target": "step_000500_triplet_panel_layout",
+            "relation": "references",
+            "confidence": "EXTRACTED",
+            "confidence_score": 1.0,
+            "source_file": "outputs_v5/step_009000.png",
+            "source_location": null,
+            "weight": 1.0
+        },
+        {
+            "source": "step_009500_training_panel",
+            "target": "step_000500_triplet_panel_layout",
+            "relation": "references",
+            "confidence": "EXTRACTED",
+            "confidence_score": 1.0,
+            "source_file": "outputs_v5/step_009500.png",
+            "source_location": null,
+            "weight": 1.0
+        },
+        {
+            "source": "step_010000_training_panel",
+            "target": "step_000500_triplet_panel_layout",
+            "relation": "references",
+            "confidence": "EXTRACTED",
+            "confidence_score": 1.0,
+            "source_file": "outputs_v5/step_010000.png",
+            "source_location": null,
+            "weight": 1.0
+        },
+        {
+            "source": "step_010500_training_panel",
+            "target": "step_000500_triplet_panel_layout",
+            "relation": "references",
+            "confidence": "EXTRACTED",
+            "confidence_score": 1.0,
+            "source_file": "outputs_v5/step_010500.png",
+            "source_location": null,
+            "weight": 1.0
+        },
+        {
+            "source": "step_000500_training_panel",
+            "target": "step_000500_cover_stego_pair",
+            "relation": "references",
+            "confidence": "EXTRACTED",
+            "confidence_score": 1.0,
+            "source_file": "outputs_v5/step_000500.png",
+            "source_location": null,
+            "weight": 1.0
+        },
+        {
+            "source": "step_001000_training_panel",
+            "target": "step_000500_cover_stego_pair",
+            "relation": "references",
+            "confidence": "EXTRACTED",
+            "confidence_score": 1.0,
+            "source_file": "outputs_v5/step_001000.png",
+            "source_location": null,
+            "weight": 1.0
+        },
+        {
+            "source": "step_001500_training_panel",
+            "target": "step_000500_cover_stego_pair",
+            "relation": "references",
+            "confidence": "EXTRACTED",
+            "confidence_score": 1.0,
+            "source_file": "outputs_v5/step_001500.png",
+            "source_location": null,
+            "weight": 1.0
+        },
+        {
+            "source": "step_002000_training_panel",
+            "target": "step_000500_cover_stego_pair",
+            "relation": "references",
+            "confidence": "EXTRACTED",
+            "confidence_score": 1.0,
+            "source_file": "outputs_v5/step_002000.png",
+            "source_location": null,
+            "weight": 1.0
+        },
+        {
+            "source": "step_002500_training_panel",
+            "target": "step_000500_cover_stego_pair",
+            "relation": "references",
+            "confidence": "EXTRACTED",
+            "confidence_score": 1.0,
+            "source_file": "outputs_v5/step_002500.png",
+            "source_location": null,
+            "weight": 1.0
+        },
+        {
+            "source": "step_003000_training_panel",
+            "target": "step_000500_cover_stego_pair",
+            "relation": "references",
+            "confidence": "EXTRACTED",
+            "confidence_score": 1.0,
+            "source_file": "outputs_v5/step_003000.png",
+            "source_location": null,
+            "weight": 1.0
+        },
+        {
+            "source": "step_003500_training_panel",
+            "target": "step_000500_cover_stego_pair",
+            "relation": "references",
+            "confidence": "EXTRACTED",
+            "confidence_score": 1.0,
+            "source_file": "outputs_v5/step_003500.png",
+            "source_location": null,
+            "weight": 1.0
+        },
+        {
+            "source": "step_004000_training_panel",
+            "target": "step_000500_cover_stego_pair",
+            "relation": "references",
+            "confidence": "EXTRACTED",
+            "confidence_score": 1.0,
+            "source_file": "outputs_v5/step_004000.png",
+            "source_location": null,
+            "weight": 1.0
+        },
+        {
+            "source": "step_004500_training_panel",
+            "target": "step_000500_cover_stego_pair",
+            "relation": "references",
+            "confidence": "EXTRACTED",
+            "confidence_score": 1.0,
+            "source_file": "outputs_v5/step_004500.png",
+            "source_location": null,
+            "weight": 1.0
+        },
+        {
+            "source": "step_005000_training_panel",
+            "target": "step_000500_cover_stego_pair",
+            "relation": "references",
+            "confidence": "EXTRACTED",
+            "confidence_score": 1.0,
+            "source_file": "outputs_v5/step_005000.png",
+            "source_location": null,
+            "weight": 1.0
+        },
+        {
+            "source": "step_005500_training_panel",
+            "target": "step_000500_cover_stego_pair",
+            "relation": "references",
+            "confidence": "EXTRACTED",
+            "confidence_score": 1.0,
+            "source_file": "outputs_v5/step_005500.png",
+            "source_location": null,
+            "weight": 1.0
+        },
+        {
+            "source": "step_006000_training_panel",
+            "target": "step_000500_cover_stego_pair",
+            "relation": "references",
+            "confidence": "EXTRACTED",
+            "confidence_score": 1.0,
+            "source_file": "outputs_v5/step_006000.png",
+            "source_location": null,
+            "weight": 1.0
+        },
+        {
+            "source": "step_006500_training_panel",
+            "target": "step_000500_cover_stego_pair",
+            "relation": "references",
+            "confidence": "EXTRACTED",
+            "confidence_score": 1.0,
+            "source_file": "outputs_v5/step_006500.png",
+            "source_location": null,
+            "weight": 1.0
+        },
+        {
+            "source": "step_007000_training_panel",
+            "target": "step_000500_cover_stego_pair",
+            "relation": "references",
+            "confidence": "EXTRACTED",
+            "confidence_score": 1.0,
+            "source_file": "outputs_v5/step_007000.png",
+            "source_location": null,
+            "weight": 1.0
+        },
+        {
+            "source": "step_007500_training_panel",
+            "target": "step_000500_cover_stego_pair",
+            "relation": "references",
+            "confidence": "EXTRACTED",
+            "confidence_score": 1.0,
+            "source_file": "outputs_v5/step_007500.png",
+            "source_location": null,
+            "weight": 1.0
+        },
+        {
+            "source": "step_008000_training_panel",
+            "target": "step_000500_cover_stego_pair",
+            "relation": "references",
+            "confidence": "EXTRACTED",
+            "confidence_score": 1.0,
+            "source_file": "outputs_v5/step_008000.png",
+            "source_location": null,
+            "weight": 1.0
+        },
+        {
+            "source": "step_008500_training_panel",
+            "target": "step_000500_cover_stego_pair",
+            "relation": "references",
+            "confidence": "EXTRACTED",
+            "confidence_score": 1.0,
+            "source_file": "outputs_v5/step_008500.png",
+            "source_location": null,
+            "weight": 1.0
+        },
+        {
+            "source": "step_009000_training_panel",
+            "target": "step_000500_cover_stego_pair",
+            "relation": "references",
+            "confidence": "EXTRACTED",
+            "confidence_score": 1.0,
+            "source_file": "outputs_v5/step_009000.png",
+            "source_location": null,
+            "weight": 1.0
+        },
+        {
+            "source": "step_009500_training_panel",
+            "target": "step_000500_cover_stego_pair",
+            "relation": "references",
+            "confidence": "EXTRACTED",
+            "confidence_score": 1.0,
+            "source_file": "outputs_v5/step_009500.png",
+            "source_location": null,
+            "weight": 1.0
+        },
+        {
+            "source": "step_010000_training_panel",
+            "target": "step_000500_cover_stego_pair",
+            "relation": "references",
+            "confidence": "EXTRACTED",
+            "confidence_score": 1.0,
+            "source_file": "outputs_v5/step_010000.png",
+            "source_location": null,
+            "weight": 1.0
+        },
+        {
+            "source": "step_010500_training_panel",
+            "target": "step_000500_cover_stego_pair",
+            "relation": "references",
+            "confidence": "EXTRACTED",
+            "confidence_score": 1.0,
+            "source_file": "outputs_v5/step_010500.png",
+            "source_location": null,
+            "weight": 1.0
+        },
+        {
+            "source": "step_000500_training_panel",
+            "target": "step_000500_blocky_residual_pattern",
+            "relation": "references",
+            "confidence": "EXTRACTED",
+            "confidence_score": 1.0,
+            "source_file": "outputs_v5/step_000500.png",
+            "source_location": null,
+            "weight": 1.0
+        },
+        {
+            "source": "step_001000_training_panel",
+            "target": "step_000500_blocky_residual_pattern",
+            "relation": "references",
+            "confidence": "EXTRACTED",
+            "confidence_score": 1.0,
+            "source_file": "outputs_v5/step_001000.png",
+            "source_location": null,
+            "weight": 1.0
+        },
+        {
+            "source": "step_001500_training_panel",
+            "target": "step_000500_blocky_residual_pattern",
+            "relation": "references",
+            "confidence": "EXTRACTED",
+            "confidence_score": 1.0,
+            "source_file": "outputs_v5/step_001500.png",
+            "source_location": null,
+            "weight": 1.0
+        },
+        {
+            "source": "step_002000_training_panel",
+            "target": "step_000500_blocky_residual_pattern",
+            "relation": "references",
+            "confidence": "EXTRACTED",
+            "confidence_score": 1.0,
+            "source_file": "outputs_v5/step_002000.png",
+            "source_location": null,
+            "weight": 1.0
+        },
+        {
+            "source": "step_002500_training_panel",
+            "target": "step_000500_blocky_residual_pattern",
+            "relation": "references",
+            "confidence": "EXTRACTED",
+            "confidence_score": 1.0,
+            "source_file": "outputs_v5/step_002500.png",
+            "source_location": null,
+            "weight": 1.0
+        },
+        {
+            "source": "step_003000_training_panel",
+            "target": "step_000500_blocky_residual_pattern",
+            "relation": "references",
+            "confidence": "EXTRACTED",
+            "confidence_score": 1.0,
+            "source_file": "outputs_v5/step_003000.png",
+            "source_location": null,
+            "weight": 1.0
+        },
+        {
+            "source": "step_003500_training_panel",
+            "target": "step_000500_blocky_residual_pattern",
+            "relation": "references",
+            "confidence": "EXTRACTED",
+            "confidence_score": 1.0,
+            "source_file": "outputs_v5/step_003500.png",
+            "source_location": null,
+            "weight": 1.0
+        },
+        {
+            "source": "step_004000_training_panel",
+            "target": "step_000500_blocky_residual_pattern",
+            "relation": "references",
+            "confidence": "EXTRACTED",
+            "confidence_score": 1.0,
+            "source_file": "outputs_v5/step_004000.png",
+            "source_location": null,
+            "weight": 1.0
+        },
+        {
+            "source": "step_004500_training_panel",
+            "target": "step_004500_striped_residual_pattern",
+            "relation": "references",
+            "confidence": "EXTRACTED",
+            "confidence_score": 1.0,
+            "source_file": "outputs_v5/step_004500.png",
+            "source_location": null,
+            "weight": 1.0
+        },
+        {
+            "source": "step_005000_training_panel",
+            "target": "step_004500_striped_residual_pattern",
+            "relation": "references",
+            "confidence": "EXTRACTED",
+            "confidence_score": 1.0,
+            "source_file": "outputs_v5/step_005000.png",
+            "source_location": null,
+            "weight": 1.0
+        },
+        {
+            "source": "step_005500_training_panel",
+            "target": "step_004500_striped_residual_pattern",
+            "relation": "references",
+            "confidence": "EXTRACTED",
+            "confidence_score": 1.0,
+            "source_file": "outputs_v5/step_005500.png",
+            "source_location": null,
+            "weight": 1.0
+        },
+        {
+            "source": "step_006000_training_panel",
+            "target": "step_004500_striped_residual_pattern",
+            "relation": "references",
+            "confidence": "EXTRACTED",
+            "confidence_score": 1.0,
+            "source_file": "outputs_v5/step_006000.png",
+            "source_location": null,
+            "weight": 1.0
+        },
+        {
+            "source": "step_006500_training_panel",
+            "target": "step_004500_striped_residual_pattern",
+            "relation": "references",
+            "confidence": "EXTRACTED",
+            "confidence_score": 1.0,
+            "source_file": "outputs_v5/step_006500.png",
+            "source_location": null,
+            "weight": 1.0
+        },
+        {
+            "source": "step_007000_training_panel",
+            "target": "step_004500_striped_residual_pattern",
+            "relation": "references",
+            "confidence": "EXTRACTED",
+            "confidence_score": 1.0,
+            "source_file": "outputs_v5/step_007000.png",
+            "source_location": null,
+            "weight": 1.0
+        },
+        {
+            "source": "step_007500_training_panel",
+            "target": "step_004500_striped_residual_pattern",
+            "relation": "references",
+            "confidence": "EXTRACTED",
+            "confidence_score": 1.0,
+            "source_file": "outputs_v5/step_007500.png",
+            "source_location": null,
+            "weight": 1.0
+        },
+        {
+            "source": "step_008000_training_panel",
+            "target": "step_004500_striped_residual_pattern",
+            "relation": "references",
+            "confidence": "EXTRACTED",
+            "confidence_score": 1.0,
+            "source_file": "outputs_v5/step_008000.png",
+            "source_location": null,
+            "weight": 1.0
+        },
+        {
+            "source": "step_008500_training_panel",
+            "target": "step_004500_striped_residual_pattern",
+            "relation": "references",
+            "confidence": "EXTRACTED",
+            "confidence_score": 1.0,
+            "source_file": "outputs_v5/step_008500.png",
+            "source_location": null,
+            "weight": 1.0
+        },
+        {
+            "source": "step_009000_training_panel",
+            "target": "step_004500_striped_residual_pattern",
+            "relation": "references",
+            "confidence": "EXTRACTED",
+            "confidence_score": 1.0,
+            "source_file": "outputs_v5/step_009000.png",
+            "source_location": null,
+            "weight": 1.0
+        },
+        {
+            "source": "step_009500_training_panel",
+            "target": "step_004500_striped_residual_pattern",
+            "relation": "references",
+            "confidence": "EXTRACTED",
+            "confidence_score": 1.0,
+            "source_file": "outputs_v5/step_009500.png",
+            "source_location": null,
+            "weight": 1.0
+        },
+        {
+            "source": "step_010000_training_panel",
+            "target": "step_004500_striped_residual_pattern",
+            "relation": "references",
+            "confidence": "EXTRACTED",
+            "confidence_score": 1.0,
+            "source_file": "outputs_v5/step_010000.png",
+            "source_location": null,
+            "weight": 1.0
+        },
+        {
+            "source": "step_010500_training_panel",
+            "target": "step_004500_striped_residual_pattern",
+            "relation": "references",
+            "confidence": "EXTRACTED",
+            "confidence_score": 1.0,
+            "source_file": "outputs_v5/step_010500.png",
+            "source_location": null,
+            "weight": 1.0
+        },
+        {
+            "source": "step_005500_training_panel",
+            "target": "step_006000_horizontal_banding_pattern",
+            "relation": "references",
+            "confidence": "EXTRACTED",
+            "confidence_score": 1.0,
+            "source_file": "outputs_v5/step_005500.png",
+            "source_location": null,
+            "weight": 1.0
+        },
+        {
+            "source": "step_006000_training_panel",
+            "target": "step_006000_horizontal_banding_pattern",
+            "relation": "references",
+            "confidence": "EXTRACTED",
+            "confidence_score": 1.0,
+            "source_file": "outputs_v5/step_006000.png",
+            "source_location": null,
+            "weight": 1.0
+        },
+        {
+            "source": "step_007000_training_panel",
+            "target": "step_006000_horizontal_banding_pattern",
+            "relation": "references",
+            "confidence": "EXTRACTED",
+            "confidence_score": 1.0,
+            "source_file": "outputs_v5/step_007000.png",
+            "source_location": null,
+            "weight": 1.0
+        },
+        {
+            "source": "step_008500_training_panel",
+            "target": "step_006000_horizontal_banding_pattern",
+            "relation": "references",
+            "confidence": "EXTRACTED",
+            "confidence_score": 1.0,
+            "source_file": "outputs_v5/step_008500.png",
+            "source_location": null,
+            "weight": 1.0
+        },
+        {
+            "source": "step_009500_training_panel",
+            "target": "step_006000_horizontal_banding_pattern",
+            "relation": "references",
+            "confidence": "EXTRACTED",
+            "confidence_score": 1.0,
+            "source_file": "outputs_v5/step_009500.png",
+            "source_location": null,
+            "weight": 1.0
+        },
+        {
+            "source": "step_010500_training_panel",
+            "target": "step_006000_horizontal_banding_pattern",
+            "relation": "references",
+            "confidence": "EXTRACTED",
+            "confidence_score": 1.0,
+            "source_file": "outputs_v5/step_010500.png",
+            "source_location": null,
+            "weight": 1.0
+        },
+        {
+            "source": "step_003000_training_panel",
+            "target": "step_005000_edge_focused_perturbation",
+            "relation": "references",
+            "confidence": "EXTRACTED",
+            "confidence_score": 1.0,
+            "source_file": "outputs_v5/step_003000.png",
+            "source_location": null,
+            "weight": 1.0
+        },
+        {
+            "source": "step_003500_training_panel",
+            "target": "step_005000_edge_focused_perturbation",
+            "relation": "references",
+            "confidence": "EXTRACTED",
+            "confidence_score": 1.0,
+            "source_file": "outputs_v5/step_003500.png",
+            "source_location": null,
+            "weight": 1.0
+        },
+        {
+            "source": "step_005000_training_panel",
+            "target": "step_005000_edge_focused_perturbation",
+            "relation": "references",
+            "confidence": "EXTRACTED",
+            "confidence_score": 1.0,
+            "source_file": "outputs_v5/step_005000.png",
+            "source_location": null,
+            "weight": 1.0
+        },
+        {
+            "source": "step_008000_training_panel",
+            "target": "step_005000_edge_focused_perturbation",
+            "relation": "references",
+            "confidence": "EXTRACTED",
+            "confidence_score": 1.0,
+            "source_file": "outputs_v5/step_008000.png",
+            "source_location": null,
+            "weight": 1.0
+        },
+        {
+            "source": "step_009500_training_panel",
+            "target": "step_005000_edge_focused_perturbation",
+            "relation": "references",
+            "confidence": "EXTRACTED",
+            "confidence_score": 1.0,
+            "source_file": "outputs_v5/step_009500.png",
+            "source_location": null,
+            "weight": 1.0
+        },
+        {
+            "source": "step_010000_training_panel",
+            "target": "step_005000_edge_focused_perturbation",
+            "relation": "references",
+            "confidence": "EXTRACTED",
+            "confidence_score": 1.0,
+            "source_file": "outputs_v5/step_010000.png",
+            "source_location": null,
+            "weight": 1.0
+        },
+        {
+            "source": "step_002000_training_panel",
+            "target": "step_002000_identity_distortion_outlier",
+            "relation": "references",
+            "confidence": "EXTRACTED",
+            "confidence_score": 1.0,
+            "source_file": "outputs_v5/step_002000.png",
+            "source_location": null,
+            "weight": 1.0
+        },
+        {
+            "source": "step_003500_training_panel",
+            "target": "step_002000_identity_distortion_outlier",
+            "relation": "references",
+            "confidence": "EXTRACTED",
+            "confidence_score": 1.0,
+            "source_file": "outputs_v5/step_003500.png",
+            "source_location": null,
+            "weight": 1.0
+        },
+        {
+            "source": "step_008000_training_panel",
+            "target": "step_002000_identity_distortion_outlier",
+            "relation": "references",
+            "confidence": "EXTRACTED",
+            "confidence_score": 1.0,
+            "source_file": "outputs_v5/step_008000.png",
+            "source_location": null,
+            "weight": 1.0
+        },
+        {
+            "source": "step_000500_training_panel",
+            "target": "step_008000_color_cast_persistence",
+            "relation": "references",
+            "confidence": "EXTRACTED",
+            "confidence_score": 1.0,
+            "source_file": "outputs_v5/step_000500.png",
+            "source_location": null,
+            "weight": 1.0
+        },
+        {
+            "source": "step_003000_training_panel",
+            "target": "step_008000_color_cast_persistence",
+            "relation": "references",
+            "confidence": "EXTRACTED",
+            "confidence_score": 1.0,
+            "source_file": "outputs_v5/step_003000.png",
+            "source_location": null,
+            "weight": 1.0
+        },
+        {
+            "source": "step_007000_training_panel",
+            "target": "step_008000_color_cast_persistence",
+            "relation": "references",
+            "confidence": "EXTRACTED",
+            "confidence_score": 1.0,
+            "source_file": "outputs_v5/step_007000.png",
+            "source_location": null,
+            "weight": 1.0
+        },
+        {
+            "source": "step_008000_training_panel",
+            "target": "step_008000_color_cast_persistence",
+            "relation": "references",
+            "confidence": "EXTRACTED",
+            "confidence_score": 1.0,
+            "source_file": "outputs_v5/step_008000.png",
+            "source_location": null,
+            "weight": 1.0
+        },
+        {
+            "source": "step_010000_training_panel",
+            "target": "step_008000_color_cast_persistence",
+            "relation": "references",
+            "confidence": "EXTRACTED",
+            "confidence_score": 1.0,
+            "source_file": "outputs_v5/step_010000.png",
+            "source_location": null,
+            "weight": 1.0
+        },
+        {
+            "source": "step_000500_training_panel",
+            "target": "step_000500_v4_to_v5_shift",
+            "relation": "references",
+            "confidence": "EXTRACTED",
+            "confidence_score": 1.0,
+            "source_file": "outputs_v5/step_000500.png",
+            "source_location": null,
+            "weight": 1.0
+        },
+        {
+            "source": "step_000500_v4_to_v5_shift",
+            "target": "step_019500_v4_low_delta_baseline",
+            "relation": "conceptually_related_to",
+            "confidence": "INFERRED",
+            "confidence_score": 0.88,
+            "source_file": "outputs_v5/step_000500.png",
+            "source_location": null,
+            "weight": 1.0
+        },
+        {
+            "source": "step_000500_v4_to_v5_shift",
+            "target": "step_000500_blocky_residual_pattern",
+            "relation": "conceptually_related_to",
+            "confidence": "INFERRED",
+            "confidence_score": 0.84,
+            "source_file": "outputs_v5/step_000500.png",
+            "source_location": null,
+            "weight": 1.0
+        },
+        {
+            "source": "step_004500_striped_residual_pattern",
+            "target": "step_004500_v5_stabilization_trend",
+            "relation": "conceptually_related_to",
+            "confidence": "INFERRED",
+            "confidence_score": 0.82,
+            "source_file": "outputs_v5/step_004500.png",
+            "source_location": null,
+            "weight": 1.0
+        },
+        {
+            "source": "step_006000_horizontal_banding_pattern",
+            "target": "step_004500_v5_stabilization_trend",
+            "relation": "conceptually_related_to",
+            "confidence": "INFERRED",
+            "confidence_score": 0.78,
+            "source_file": "outputs_v5/step_006000.png",
+            "source_location": null,
+            "weight": 1.0
+        },
+        {
+            "source": "step_004500_training_panel",
+            "target": "step_004500_v5_stabilization_trend",
+            "relation": "references",
+            "confidence": "EXTRACTED",
+            "confidence_score": 1.0,
+            "source_file": "outputs_v5/step_004500.png",
+            "source_location": null,
+            "weight": 1.0
+        },
+        {
+            "source": "step_010500_training_panel",
+            "target": "step_004500_v5_stabilization_trend",
+            "relation": "references",
+            "confidence": "EXTRACTED",
+            "confidence_score": 1.0,
+            "source_file": "outputs_v5/step_010500.png",
+            "source_location": null,
+            "weight": 1.0
+        },
+        {
+            "source": "step_000500_blocky_residual_pattern",
+            "target": "step_004500_striped_residual_pattern",
+            "relation": "semantically_similar_to",
+            "confidence": "INFERRED",
+            "confidence_score": 0.76,
+            "source_file": "outputs_v5/step_004500.png",
+            "source_location": null,
+            "weight": 1.0
+        },
+        {
+            "source": "step_000500_training_panel",
+            "target": "step_002500_training_panel",
+            "relation": "conceptually_related_to",
+            "confidence": "INFERRED",
+            "confidence_score": 0.83,
+            "source_file": "outputs_v5/step_002500.png",
+            "source_location": null,
+            "weight": 1.0
+        },
+        {
+            "source": "step_002500_training_panel",
+            "target": "step_004500_training_panel",
+            "relation": "conceptually_related_to",
+            "confidence": "INFERRED",
+            "confidence_score": 0.82,
+            "source_file": "outputs_v5/step_004500.png",
+            "source_location": null,
+            "weight": 1.0
+        },
+        {
+            "source": "step_004500_training_panel",
+            "target": "step_006500_training_panel",
+            "relation": "conceptually_related_to",
+            "confidence": "INFERRED",
+            "confidence_score": 0.81,
+            "source_file": "outputs_v5/step_006500.png",
+            "source_location": null,
+            "weight": 1.0
+        },
+        {
+            "source": "step_006500_training_panel",
+            "target": "step_008500_training_panel",
+            "relation": "conceptually_related_to",
+            "confidence": "INFERRED",
+            "confidence_score": 0.81,
+            "source_file": "outputs_v5/step_008500.png",
+            "source_location": null,
+            "weight": 1.0
+        },
+        {
+            "source": "step_008500_training_panel",
+            "target": "step_010500_training_panel",
+            "relation": "conceptually_related_to",
+            "confidence": "INFERRED",
+            "confidence_score": 0.8,
+            "source_file": "outputs_v5/step_010500.png",
+            "source_location": null,
+            "weight": 1.0
+        }
+    ],
+    "hyperedges": [
+        {
+            "id": "v5_early_blocky_phase",
+            "label": "Early v5 blocky residual phase",
+            "nodes": [
+                "step_000500_training_panel",
+                "step_001000_training_panel",
+                "step_001500_training_panel",
+                "step_002000_training_panel",
+                "step_002500_training_panel",
+                "step_003000_training_panel",
+                "step_003500_training_panel",
+                "step_004000_training_panel"
+            ],
+            "relation": "participate_in",
+            "confidence": "INFERRED",
+            "confidence_score": 0.88,
+            "source_file": "outputs_v5/step_000500.png"
+        },
+        {
+            "id": "v5_late_striped_phase",
+            "label": "Late v5 striped residual phase",
+            "nodes": [
+                "step_004500_training_panel",
+                "step_005000_training_panel",
+                "step_005500_training_panel",
+                "step_006000_training_panel",
+                "step_006500_training_panel",
+                "step_007000_training_panel",
+                "step_007500_training_panel",
+                "step_008000_training_panel",
+                "step_008500_training_panel",
+                "step_009000_training_panel",
+                "step_009500_training_panel",
+                "step_010000_training_panel",
+                "step_010500_training_panel"
+            ],
+            "relation": "participate_in",
+            "confidence": "INFERRED",
+            "confidence_score": 0.9,
+            "source_file": "outputs_v5/step_004500.png"
+        },
+        {
+            "id": "training_panel_visual_components",
+            "label": "Training panel visualization components",
+            "nodes": [
+                "step_000500_triplet_panel_layout",
+                "step_000500_cover_stego_pair",
+                "step_000500_blocky_residual_pattern",
+                "step_004500_striped_residual_pattern",
+                "step_006000_horizontal_banding_pattern"
+            ],
+            "relation": "form",
+            "confidence": "INFERRED",
+            "confidence_score": 0.86,
+            "source_file": "outputs_v5/step_004500.png"
+        }
+    ],
+    "input_tokens": 0,
+    "output_tokens": 0
+}

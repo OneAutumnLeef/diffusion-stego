@@ -1,0 +1,45 @@
+{
+  "full": {
+    "clean_ber": 0.06984375,
+    "jpeg_q75_ber": 0.194921875,
+    "crop_q80_ber": 0.494296875,
+    "auc": 0.949025,
+    "psnr": 28.848659601211548,
+    "lpips": null
+  },
+  "no_srm_match": {
+    "clean_ber": 0.096796875,
+    "jpeg_q75_ber": 0.21734375,
+    "crop_q80_ber": 0.4929296875,
+    "auc": 0.97765,
+    "psnr": 28.794109201431276,
+    "lpips": null
+  },
+  "no_spectral": {
+    "clean_ber": 0.10125,
+    "jpeg_q75_ber": 0.2097265625,
+    "crop_q80_ber": 0.5008203125,
+    "auc": 0.919975,
+    "psnr": 28.831110343933105,
+    "lpips": null
+  },
+  "no_adv": {
+    "clean_ber": 0.0053515625,
+    "jpeg_q75_ber": 0.013671875,
+    "crop_q80_ber": 0.49796875,
+    "auc": 0.8337999999999999,
+    "psnr": 33.05254713058471,
+    "lpips": null
+  },
+  "uniform_attacks": {
+    "clean_ber": 0.1065625,
+    "jpeg_q75_ber": 0.267421875,
+    "crop_q80_ber": 0.5012890625,
+    "auc": 0.995025,
+    "psnr": 28.742855463027954,
+    "lpips": null
+  },
+  "no_redundant": {
+    "error": "'NoneType' object has no attribute 'encode' (training failed)"
+  }
+}
