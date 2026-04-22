@@ -1,0 +1,352 @@
+\documentclass[journal]{IEEEtran}
+
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{cite}
+\usepackage{url}
+\usepackage{xcolor}
+\usepackage{array}
+
+\title{DSCSP: Content-Adaptive Diffusion Steganography Under BER-Detectability Trade-offs}
+
+\author{Anonymous Authors}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+This paper reports the current validated state of DSCSP, a diffusion-based image steganography pipeline implemented around a frozen \texttt{google/ddpm-celebahq-256} sampler, a content-adaptive controller, and a spatial extractor. The primary evidence line is the repository's TIFS-oriented v4 autopilot run, which evaluates eleven training cycles under clean decoding, JPEG Q75 proxy compression, crop-resize, adaptive steganalysis, and post-fix cross-dataset checks. The strongest BER operating point reaches clean BER $1.95\times10^{-5}$ and JPEG Q75 BER $3.91\times10^{-5}$, but remains trivially detectable (adaptive AUC $0.9990$). The strongest detectability operating point reaches adaptive AUC $0.6915$, while maintaining clean BER $0.0243$ and JPEG Q75 BER $0.1370$, yet crop Q80 BER remains $0.4955$, effectively chance-level. No stored cycle satisfies all four publication gates simultaneously. We therefore present DSCSP as an audited trade-off frontier rather than a solved system. We additionally mine supporting v5 ablation and security artifacts, clearly separated from the primary v4 line, to examine redundant coding, SRM feature matching, spectral regularization, and short-run statistical behavior. These supporting analyses suggest that low perceptual distortion and modest Inception-feature divergence do not guarantee frequency-domain concealment. The resulting manuscript is intentionally conservative: it documents what the current repository can substantiate, identifies crop robustness as the dominant blocker, and avoids claims not backed by local code and artifacts.
+\end{abstract}
+
+\begin{IEEEkeywords}
+Steganography, diffusion models, image forensics, adaptive steganalysis, robustness evaluation, adversarial training.
+\end{IEEEkeywords}
+
+\section{Introduction}
+Diffusion models \cite{ho2020denoising} have made generative steganography newly attractive because they can synthesize high-quality covers instead of modifying pre-existing natural images. That promise comes with two hard constraints. First, the hidden message must remain recoverable after realistic image processing. Second, the stego image must resist an adaptive detector trained on the same broad image family. The current DSCSP repository targets both constraints, but its stored experiments show that the two goals do not yet align cleanly.
+
+DSCSP couples a frozen diffusion sampler with a trainable perturbation controller and extractor. Earlier repository drafts centered on stronger claims, including near-perfect decoding with stronger robustness and detectability numbers. However, the current source-of-truth artifacts tell a narrower and more honest story. The v4 TIFS autopilot line breaks the early BER deadlock, produces a clear BER-detectability frontier, and reaches the repository's adaptive detectability gate in cycle 11. At the same time, crop-resize robustness remains unsolved across all stored cycles and across post-fix cross-dataset checks. This failure mode is central, not incidental.
+
+The current system is also architecturally different from the older tiled-controller drafts. The repository now uses a content-adaptive controller implemented as a three-level U-Net conditioned on both the clean image and the payload, plus two explicit payload carrier branches. Training uses extractor and controller bootstrap phases, a JPEG-heavy differentiable attack layer, spectral regularization, and an SRM-based adversarial discriminator. Supporting v5 experiments add redundant coding and SRM feature matching, but those results are short-run ablations and security probes rather than the main validated TIFS line.
+
+This paper therefore makes a different kind of contribution than a conventional polished final-results manuscript. It provides a code-grounded, artifact-grounded account of the repository's latest validated state. In particular, the paper makes the following contributions:
+\begin{itemize}
+    \item It reconstructs the current DSCSP architecture directly from source code, including the frozen DDIM wrapper, the content-adaptive controller with explicit payload carrier branches, the spatial extractor, and the SRM-assisted discriminator.
+    \item It reports the full eleven-cycle TIFS v4 autopilot frontier from stored JSON artifacts, showing that BER-oriented cycles and detectability-oriented cycles occupy different operating points rather than collapsing into a single winning checkpoint.
+    \item It documents the evaluator semantics used by the repository, including post-fix cross-dataset checks, adaptive steganalysis, bootstrap confidence intervals, and the fact that the current JPEG Q75 metric comes from the repository's \texttt{DiffJPEG} proxy rather than a real image codec.
+    \item It separates primary v4 TIFS evidence from supporting v5 ablation and security analyses, avoiding the common failure mode of mixing incompatible evidence lines into one headline claim.
+    \item It identifies crop robustness as the dominant unresolved blocker and shows that this limitation persists across the main line, the post-fix cross-dataset evaluations, and the supporting v5 analyses.
+\end{itemize}
+
+\section{Related Work}
+Classical image steganography optimized hand-crafted distortion functions to hide payloads in textured regions while minimizing detectable statistical shifts \cite{cox2007digital,pevny2010using,holub2012designing,holub2014universal}. These methods remain an important reference point because they define the basic tension between capacity, fidelity, and detectability that modern learned systems still face.
+
+Deep learning-based steganography replaced hand-crafted encoders with trainable encoder-decoder pairs and differentiable attack models. HiDDeN and SteganoGAN are representative examples that jointly learn embedding, recovery, and in some cases adversarial concealment \cite{zhu2018hidden,zhang2019steganogan}. Those systems established the value of end-to-end optimization, but detectability under strong steganalysis remains difficult at high payloads.
+
+Recent diffusion-based approaches push the problem into generative modeling. Diffusion-Stego projects payloads into the initial noise variable of a pretrained diffusion model \cite{wei2023diffusionstego}. Other directions move payloads into latent diffusion or watermarking-oriented diffusion pipelines \cite{zhang2024ldstega,zhao2024dero}. DSCSP differs from these lines in one specific way that is directly verifiable in the repository: the diffusion backbone remains frozen, while a separate controller injects a learned perturbation at the image level after DDIM sampling.
+
+On the detection side, classical SRM features and modern deep steganalysers remain strong baselines for exposing subtle artifacts \cite{fridrich2012rich,boroumand2019deep}. The current DSCSP training code explicitly imports SRM filtering into the adversarial path, and its supporting v5 analysis shows that perceptual similarity alone is not enough to eliminate detectable frequency-domain structure.
+
+\section{Threat Model and Problem Setup}
+\subsection{Actors and Channel Model}
+We consider a sender and receiver that share a frozen diffusion backbone, a controller $C_{\phi}$, an extractor $E_{\psi}$, and, in the supporting v5 branch, an optional redundant coder $R$. The sender first samples a clean image $\mathbf{x}_c$ from a frozen DDIM chain and then embeds a payload into that image through an additive perturbation:
+\begin{equation}
+\mathbf{x}_s = \mathrm{clip}\!\left(\mathbf{x}_c + C_{\phi}(\mathbf{x}_c,\mathbf{b}), -1, 1\right).
+\end{equation}
+The receiver applies the extractor to the attacked stego image $\mathcal{A}(\mathbf{x}_s)$ and computes bit decisions from its logits. In the primary v4 line, $\mathbf{b}\in\{0,1\}^{256}$ is the directly supervised payload. In the supporting v5 line, a shorter message $\mathbf{m}$ is mapped to a longer physical payload $\mathbf{b}=R(\mathbf{m})$ by redundancy.
+
+The channel may apply JPEG-like compression, crop-resize, blur, noise, or brightness/contrast perturbations. The repository's training path uses differentiable attack proxies, while the TIFS evaluator reuses the differentiable JPEG proxy and a bilinear crop-resize operator at test time. This detail matters: the stored JPEG Q75 numbers are proxy-codec results, not measurements from a real Pillow or libjpeg round trip.
+
+\subsection{Adversary}
+The detection adversary observes only the image and trains a binary steganalyser to distinguish clean from stego samples. In the repository's evaluator, this adversary is adaptive in the sense that it augments both clean and stego samples with JPEG, crop, and additive noise during training and testing. The headline detectability metric is the adaptive ROC AUC; lower is better. The repository gate is AUC $\leq 0.70$.
+
+\subsection{Repository Gates}
+The automation in \texttt{training\_ops/tifs\_autopilot.py} defines four main publication gates:
+\begin{itemize}
+    \item clean BER $\leq 0.10$,
+    \item JPEG Q75 BER $\leq 0.20$,
+    \item crop Q80 BER $\leq 0.35$,
+    \item adaptive AUC $\leq 0.70$.
+\end{itemize}
+The stored autopilot history never meets all four simultaneously. That fact shapes both the experimental presentation and the paper's conclusions.
+
+\section{Methodology}
+\subsection{System Overview}
+Figure~\ref{fig:system_overview} summarizes the shared DSCSP pipeline reconstructed from the codebase. The frozen diffusion wrapper in \texttt{dscsp/models/diffusion\_wrapper.py} loads \texttt{google/ddpm-celebahq-256}, freezes the UNet weights, and runs a $20$-step DDIM schedule \cite{song2020denoising}. The controller consumes both the clean image and a payload tensor and outputs a bounded perturbation. The extractor predicts payload logits from the resulting stego image, optionally after a differentiable attack layer during training or evaluation. A separate adaptive steganalyser is trained only for evaluation.
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{figures/system_overview.pdf}
+\caption{System overview generated from verified repository code and current artifact metadata. Solid components belong to the primary v4 TIFS line. Dashed components denote the supporting v5 analysis branch and are not mixed into the headline v4 results. Source files: \texttt{train\_v4.py}, \texttt{dscsp/models/controller\_v4.py}, \texttt{dscsp/models/diffusion\_wrapper.py}, \texttt{dscsp/models/discriminator.py}, and \texttt{dscsp/utils/redundant\_coding.py}.}
+\label{fig:system_overview}
+\end{figure*}
+
+\subsection{Content-Adaptive Controller}
+The controller in \texttt{dscsp/models/controller\_v4.py} is the main architectural departure from the older tiled-grid drafts. It first maps the binary payload through a small MLP into a $4\times4$ message feature map, upsamples that map to image resolution, concatenates it with the clean image, and passes the result through a three-level U-Net encoder-decoder with skip connections. This path is explicitly image-conditioned, which is the intended mechanism for avoiding the periodic boundary artifacts associated with rigid spatial tiling.
+
+The controller also contains two auxiliary payload paths. The first is a learned fixed-gain carrier branch built from an interpolated signed payload grid and channel-shifted copies. The second is a direct linear payload projection reshaped to a $16\times16$ RGB map and then upsampled. The final perturbation is the sum of the U-Net output and both auxiliary paths, passed through $\tanh(\cdot)$ and scaled by the configured maximum perturbation. In the current v4 configuration, the controller contains $4.39$M trainable parameters.
+
+\subsection{Extractor}
+The extractor implemented inside \texttt{train\_v4.py} uses a ResNet-18 backbone \cite{he2016deep} with the max-pooling layer removed in \texttt{spatial\_map} mode. For a $256\times256$ input, the resulting feature grid remains at $16\times16$, after which a $1\times1$ convolution produces a single-logit map that is flattened into $256$ payload logits. This design preserves more local evidence than the older global fully connected head and aligns with the repository's move away from low-dimensional bottlenecks. The current extractor has $11.31$M trainable parameters.
+
+\subsection{Adversarial and Attack Paths}
+The primary v4 training line instantiates a spectral-normalized discriminator in \texttt{train\_v4.py} while reusing the fixed SRM filter layer from \texttt{dscsp/models/discriminator.py}. The spectral-normalized design follows the standard stabilization rationale of \cite{miyato2018spectral}, while the SRM preprocessing is meant to amplify high-frequency steganographic traces before the discriminator classifies clean versus stego images. The discriminator has $2.76$M trainable parameters in the current configuration.
+
+The differentiable attack path comes from \texttt{dscsp/augmentations/differentiable.py}. It includes Gaussian noise, Gaussian blur, brightness/contrast shifts, crop-resize, and a straight-through-estimator JPEG proxy (\texttt{DiffJPEG}) \cite{bengio2013estimating}. The primary v4 training line wraps this module in a JPEG-heavy scheduler, while the evaluator reuses the same proxy for the reported JPEG Q75 and Q50 numbers.
+
+\subsection{Losses}
+The repository's composite objective is spread across \texttt{dscsp/losses/composite\_loss.py} and \texttt{train\_v4.py}. The main v4 optimization target can be summarized as
+\begin{equation}
+\mathcal{L} =
+\mathcal{L}_{\mathrm{msg}}
+ + \lambda_{\mathrm{perc}}\mathcal{L}_{\mathrm{LPIPS}}
+ + \lambda_{\mathrm{spec}}\mathcal{L}_{\mathrm{FFT}}
+ + \lambda_{\mathrm{adv}}\mathcal{L}_{\mathrm{adv}},
+\end{equation}
+where $\mathcal{L}_{\mathrm{msg}}$ is a BCE reconstruction loss, $\mathcal{L}_{\mathrm{LPIPS}}$ is the VGG-based LPIPS perceptual term \cite{zhang2018unreasonable}, $\mathcal{L}_{\mathrm{FFT}}$ is an MSE penalty on log-magnitude FFT spectra, and $\mathcal{L}_{\mathrm{adv}}$ encourages the discriminator to classify stego images as clean. The controller regularization term in \texttt{DSCSPLoss} is present but effectively disabled in the current v4 configuration.
+
+The supporting v5 branch keeps the same core structure and adds two extra mechanisms: a redundant coder that maps $128$ message bits to $256$ physical slots, and an SRM feature-matching term that penalizes the difference between mean SRM responses for clean and stego images. These v5 additions appear only in the supporting analysis section and are not treated as if they produced the primary TIFS results.
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{figures/architecture_detail.pdf}
+\caption{Detailed controller, extractor, and training path reconstructed from source. The figure explicitly shows the two auxiliary payload branches, the three-stage training schedule, the differentiable attack path, and the SRM-assisted adversarial path. Source files: \texttt{train\_v4.py}, \texttt{dscsp/models/controller\_v4.py}, \texttt{dscsp/losses/composite\_loss.py}, and \texttt{dscsp/augmentations/differentiable.py}.}
+\label{fig:architecture_detail}
+\end{figure*}
+
+\section{Training Strategy and Evaluation Protocol}
+\subsection{Three-Phase Training}
+The primary v4 training loop uses three explicit phases, all visible in \texttt{train\_v4.py}. First, an extractor bootstrap phase trains the extractor against a deterministic synthetic channel built by \texttt{\_build\_bootstrap\_delta}. This phase exists to escape the near-random BER behavior seen in the early probes. Second, a controller bootstrap phase aligns the controller's output with the same synthetic target while optionally freezing the extractor. Third, full training turns on the controller-extractor path, spectral loss, attack scheduling, and eventually the adversarial discriminator.
+
+The attack schedule is also phased. In the base v4 configuration, robustness ramps after step $500$, attack probability ramps to $0.85$, and JPEG receives $60\%$ of single-attack draws. Combined attacks can start later. The discriminator is introduced with its own start step and ramp schedule rather than from the first minibatch.
+
+\subsection{Autopilot Variants}
+The TIFS autopilot iterates four variants: \texttt{ber\_recovery\_clean\_first}, \texttt{ber\_recovery\_curriculum}, \texttt{robust\_balance}, and \texttt{detectability\_harden}. These variants change bootstrap duration, perturbation budgets, attack probabilities, adversarial strength, and learning rates. The variant family is itself an ablation over training strategy, and the stored eleven-cycle history is best interpreted as a frontier search rather than a monotonic progression to a final single optimum.
+
+\subsection{Stored Evaluation Protocol}
+The evaluator in \texttt{evaluate\_tifs.py} computes:
+\begin{itemize}
+    \item clean BER and PSNR,
+    \item JPEG Q75 and Q50 BER using the repository's \texttt{DiffJPEG} proxy,
+    \item crop Q80 and Q70 BER using random crop-resize,
+    \item adaptive steganalysis AUC and accuracy,
+    \item paired bootstrap confidence intervals and paired $t$-tests,
+    \item cross-dataset clean and crop BER on CIFAR10 and STL10 after resizing to $256\times256$.
+\end{itemize}
+
+Two details are essential for correct interpretation. First, cycles $1$--$8$ were evaluated in the original autopilot run with $320$ samples per cycle, whereas cycles $9$--$11$ were evaluated after evaluator fixes using $200$ samples and adaptive train/test sizes $300/100$. Second, cross-dataset entries before the evaluator fixes were unreliable because the old loader could emit PIL images and still satisfy a weak pass condition. We therefore use only cycles $9$--$11$ for the cross-dataset table.
+
+\section{Experimental Results}
+\subsection{Main Operating Points}
+Table~\ref{tab:main_results} summarizes the three post-fix operating points that best characterize the current frontier. Cycle $9$ is the repository's best clean and JPEG BER checkpoint, but it is also almost perfectly detectable (adaptive AUC $0.9990$). Cycle $10$ trades a small BER increase for similar detectability failure. Cycle $11$ is the first stored operating point that satisfies the detectability gate, reaching adaptive AUC $0.6915$ while still meeting the clean and JPEG BER focus gates. However, crop Q80 BER remains $0.4955$, essentially random-guess behavior.
+
+\begin{table*}[t]
+\centering
+\caption{Primary v4 TIFS operating points from the post-fix evaluator. BER and AUC are lower-is-better. ``BER gate'' means clean BER $\leq 0.10$ and JPEG Q75 BER $\leq 0.20$. ``AUC gate'' means adaptive AUC $\leq 0.70$. Source files: \texttt{outputs\_tifs\_eval/cycle\_009\_*.json} to \texttt{cycle\_011\_*.json}.}
+\label{tab:main_results}
+\small
+\begin{tabular}{l l c c c c c c c}
+\toprule
+Cycle & Variant & Clean BER & JPEG Q75 BER & Crop Q80 BER & Adaptive AUC & PSNR (dB) & BER gate & AUC gate \\
+\midrule
+9 & BER clean-first & $1.95\times10^{-5}$ & $3.91\times10^{-5}$ & 0.4999 & 0.9990 & 30.68 & Yes & No \\
+10 & BER curriculum & 0.0090 & 0.0105 & 0.4985 & 0.9987 & 32.56 & Yes & No \\
+11 & Robust balance & 0.0243 & 0.1370 & 0.4955 & 0.6915 & 27.80 & Yes & Yes \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+Figure~\ref{fig:autopilot_cycles} shows the full eleven-cycle trajectory from \texttt{outputs\_tifs/autopilot\_state.json}. The clean-first and curriculum variants repeatedly drive clean and JPEG BER close to zero, but AUC remains high. The robust-balance variant is the only one that reaches the AUC gate in the current artifact set, and it also achieves the best crop BER, but the crop metric never leaves the chance regime. This makes crop robustness the central blocker, not a marginal one.
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{figures/autopilot_cycles.pdf}
+\caption{Cycle-by-cycle performance from \texttt{outputs\_tifs/autopilot\_state.json}. The gray region marks the post-fix sprint extension (cycles $9$--$11$). Clean and JPEG BER improve dramatically at several points, adaptive AUC improves sharply only at cycle $11$, and crop BER stays near $0.5$ throughout.}
+\label{fig:autopilot_cycles}
+\end{figure*}
+
+An additional quality caveat is visible in Table~\ref{tab:main_results}: the detectability-optimal cycle $11$ checkpoint reaches only $27.80$ dB PSNR. The current repository therefore supports the statement that BER and AUC can be jointly improved to a degree, but not yet without a noticeable fidelity cost and not yet with crop-resize robustness.
+
+\subsection{Cross-Dataset Generalization}
+Table~\ref{tab:cross_dataset} reports only the post-fix cross-dataset results. The clean BER generalizes reasonably to CIFAR10 for all three post-fix cycles and degrades more strongly on STL10, especially at cycle $11$. Crop BER, by contrast, remains near $0.5$ on both datasets for all three cycles. This matters because it shows that the crop failure is not confined to the in-distribution CelebA-HQ-like samples generated by the frozen diffusion model.
+
+\begin{table}[t]
+\centering
+\caption{Post-fix cross-dataset generalization from the stored TIFS evaluator. Only cycles $9$--$11$ are included because earlier cross-dataset entries were affected by loader and pass-condition bugs. Source files: \texttt{outputs\_tifs\_eval/cycle\_009\_*.json} to \texttt{cycle\_011\_*.json}.}
+\label{tab:cross_dataset}
+\small
+\begin{tabular}{l l c c c c}
+\toprule
+Cycle & Variant & CIFAR clean & CIFAR crop & STL clean & STL crop \\
+\midrule
+9 & BER clean-first & 0 & 0.5019 & 0.0016 & 0.5029 \\
+10 & BER curriculum & 0.0029 & 0.4981 & 0.0440 & 0.4969 \\
+11 & Robust balance & 0.0063 & 0.5020 & 0.1237 & 0.5007 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Variant-Level Ablation}
+The left half of Figure~\ref{fig:ablation_summary} and the top panel of Table~\ref{tab:ablation_table} summarize the mean behavior of the four v4 autopilot variants across the stored cycles. The pattern is consistent with the main frontier analysis: \texttt{ber\_recovery\_clean\_first} is the strongest BER specialist, \texttt{detectability\_harden} is the strongest AUC specialist among the non-cycle-11 variants, and \texttt{robust\_balance} is the best compromise variant class. None of the v4 variants materially improves crop BER.
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{figures/ablation_summary.pdf}
+\caption{Ablation summary from two evidence lines. Left: mean performance of the primary v4 autopilot variants from \texttt{outputs\_tifs\_ablation/latest\_ablation.json}. Right: short-run component ablations from \texttt{outputs\_v5\_ablation/ablation\_results.json}. The two panels are intentionally separated because they do not represent the same training line or the same maturity level.}
+\label{fig:ablation_summary}
+\end{figure*}
+
+\begin{table*}[t]
+\centering
+\caption{Ablation summary split into the primary v4 TIFS evidence line and the supporting v5 exploratory line. The v5 results come from short-run $8$k-step variants starting from a shared warm start and should be interpreted as supporting analysis rather than replacement headline results.}
+\label{tab:ablation_table}
+\begin{minipage}{0.48\textwidth}
+\centering
+\textbf{(a) v4 autopilot variant means}\par\vspace{0.3em}
+\footnotesize
+\begin{tabular}{l c c c c}
+\toprule
+Variant & $n$ & Mean clean BER & Mean crop BER & Mean AUC \\
+\midrule
+BER clean-first & 3 & 0.0025 & 0.4993 & 0.9862 \\
+BER curriculum & 3 & 0.0134 & 0.4997 & 0.9413 \\
+Robust balance & 3 & 0.0410 & 0.4985 & 0.7979 \\
+Detectability harden & 2 & 0.1350 & 0.5000 & 0.7660 \\
+\bottomrule
+\end{tabular}
+\end{minipage}\hfill
+\begin{minipage}{0.48\textwidth}
+\centering
+\textbf{(b) v5 supporting ablations}\par\vspace{0.3em}
+\footnotesize
+\begin{tabular}{l c c c c c}
+\toprule
+Variant & Clean BER & JPEG Q75 & Crop Q80 & AUC & PSNR \\
+\midrule
+Full & 0.0698 & 0.1949 & 0.4943 & 0.9490 & 28.85 \\
+No SRM match & 0.0968 & 0.2173 & 0.4929 & 0.9777 & 28.79 \\
+No spectral & 0.1013 & 0.2097 & 0.5008 & 0.9200 & 28.83 \\
+No adversarial & 0.0054 & 0.0137 & 0.4980 & 0.8338 & 33.05 \\
+Uniform attacks & 0.1066 & 0.2674 & 0.5013 & 0.9950 & 28.74 \\
+No redundant coding & failed & -- & -- & -- & bugged \\
+\bottomrule
+\end{tabular}
+\end{minipage}
+\end{table*}
+
+\section{Supporting v5 Analyses}
+\subsection{Short-Run Component Ablations}
+The right half of Figure~\ref{fig:ablation_summary} and Table~\ref{tab:ablation_table}(b) use the repository's v5 ablation artifacts as supporting evidence only. These runs explore redundant coding, SRM feature matching, spectral loss, adversarial training, and attack weighting, but they were trained for short budgets and do not replace the validated v4 autopilot line.
+
+Several trends are still informative. Removing SRM matching worsens clean BER, JPEG BER, and AUC relative to the short-run v5 full model. Uniform attack weighting also degrades most metrics, suggesting the repository's JPEG-heavy training heuristic matters. The spectral term helps clean and JPEG BER and modestly helps crop BER in this short-run setting, although it does not improve AUC. The no-adversarial variant is counterintuitive: it yields much lower BER and better PSNR than the short-run full model, while also producing a lower AUC than the full model. Because this result comes from a short-run supporting line rather than the main autopilot frontier, it should be interpreted as evidence that the v5 recipe is still exploratory rather than internally settled.
+
+The \texttt{no\_redundant} ablation failed to train due to a repository bug (\texttt{'NoneType' object has no attribute 'encode'}). We list that failure directly in Table~\ref{tab:ablation_table} instead of omitting it.
+
+\subsection{Security and Statistical Analysis}
+Figure~\ref{fig:security_v5} summarizes the stored v5 security analysis. The headline numbers are a KL divergence of $0.4169$ between diagonal-Gaussian Inception feature fits, a power-spectrum chi-square $p$-value of $1.07\times10^{-122}$, an SVD gini coefficient of $0.8200$ on the mean stego delta, and bootstrap estimates of BER $0.0764$, PSNR $34.56$ dB, and LPIPS $0.0211$.
+
+The important qualitative lesson is the mismatch between low feature-space divergence and strong spectral detectability. The KL value is small enough to suggest modest high-level distribution shift, yet the power-spectrum test is overwhelmingly significant and the SVD spectrum is highly concentrated. In other words, low LPIPS and low KL are not sufficient evidence of forensic concealment for this system.
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{figures/security_analysis_v5.pdf}
+\caption{Supporting security/statistical analysis from \texttt{outputs\_v5\_analysis/security\_analysis.json}. The stored JSON suggests modest Inception-feature divergence but strong detectability in the power-spectrum test and a concentrated singular-value spectrum. These results are v5-only supporting evidence and are not mixed into the primary v4 headline claims.}
+\label{fig:security_v5}
+\end{figure*}
+
+\section{Limitations}
+The repository's current limitations are concrete and measurable.
+
+\paragraph{Crop robustness remains unresolved.}
+Figure~\ref{fig:crop_failure} makes the main failure mode explicit. In the best stored detectability operating point (cycle $11$), clean BER and JPEG Q75 BER both satisfy the repository's BER-focus gates, but crop Q80 BER remains $0.4955$, only marginally better than random guessing. The post-fix CIFAR10 and STL10 checks show the same behavior. This is the strongest reason the paper does not present DSCSP as publication-ready in the stricter sense of meeting all its own gates.
+
+\paragraph{The current JPEG metric is proxy-based.}
+The reported JPEG Q75 numbers come from the repository's differentiable \texttt{DiffJPEG} module, not a real codec loop. Those results are still useful because they are exactly what the repository currently evaluates, but they should not be oversold as fully real-world compression robustness.
+
+\paragraph{The detectability-optimal checkpoint has a fidelity cost.}
+Cycle $11$ reaches the adaptive AUC gate only after sacrificing image quality to $27.80$ dB PSNR. The system therefore has not yet demonstrated a simultaneously low-BER, low-AUC, high-PSNR, crop-robust operating point.
+
+\paragraph{The evidence lines have different maturity levels.}
+The main v4 autopilot line is the strongest validated evidence in the repository because it contains full cycle histories, stored evaluator outputs, and post-fix cross-dataset checks. The v5 branch contributes supporting ablations and security probes, but it remains exploratory. The current manuscript keeps those evidence lines separate on purpose.
+
+\paragraph{No local baseline reruns support a state-of-the-art claim.}
+The repository does not contain fresh, directly rerun external baselines under the current evaluation stack. We therefore do not claim superiority over prior methods and restrict related-work comparisons to architectural positioning rather than reproduced headline numbers.
+
+\paragraph{Diffusion-image forensics remain a live external threat.}
+Even if BER and AUC improve further, diffusion-generated image detection remains an active forensic problem in its own right \cite{corvi2023detection}. The current repository does not contain a dedicated evaluation against diffusion-forensics detectors beyond the adaptive steganalysis pipeline described earlier.
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{figures/crop_failure_analysis.pdf}
+\caption{Crop-robustness failure analysis from the final stored operating point and the post-fix cross-dataset evaluations. Left: cycle $11$ clean/JPEG/crop BER with the stored bootstrap confidence intervals. Right: crop BER on in-distribution samples plus CIFAR10 and STL10 for cycles $9$--$11$. The crop curve stays near the random-guess line throughout.}
+\label{fig:crop_failure}
+\end{figure*}
+
+\section{Conclusion}
+The current DSCSP repository supports a clear but limited conclusion. The codebase now contains a substantially improved content-adaptive architecture and a better-instrumented TIFS evaluation stack. The primary v4 autopilot line demonstrates that the system can reach very low clean and proxy-JPEG BER, and it can also reach the repository's adaptive AUC gate in a separate operating point. However, those gains do not extend to crop-resize robustness, and no stored checkpoint satisfies all publication gates simultaneously.
+
+That outcome is still useful. It identifies the repository's real frontier, validates the recent controller and evaluator changes, and narrows the open problem. The next scientifically meaningful step is not to polish old headline numbers; it is to close the crop-robustness gap without losing the detectability gains reached in cycle $11$.
+
+\bibliographystyle{IEEEtran}
+\begin{thebibliography}{99}
+
+\bibitem{bengio2013estimating}
+Y.~Bengio, N.~L{\'e}onard, and A.~Courville, ``Estimating or propagating gradients through stochastic neurons for conditional computation,'' \emph{arXiv preprint arXiv:1308.3432}, 2013.
+
+\bibitem{boroumand2019deep}
+M.~Boroumand, M.~Chen, and J.~Fridrich, ``Deep residual network for steganalysis of digital images,'' \emph{IEEE Trans. Inf. Forensics Security}, vol.~14, no.~5, pp.~1181--1193, 2019.
+
+\bibitem{cox2007digital}
+I.~Cox, M.~Miller, J.~Bloom, J.~Fridrich, and T.~Kalker, \emph{Digital Watermarking and Steganography}, 2nd~ed. Morgan Kaufmann, 2007.
+
+\bibitem{corvi2023detection}
+R.~Corvi, D.~Cozzolino, G.~Zingarini, G.~Poggi, K.~Nagano, and L.~Verdoliva, ``On the detection of synthetic images generated by diffusion models,'' in \emph{Proc. IEEE Int. Conf. Acoust., Speech Signal Process. (ICASSP)}, 2023, pp.~1--5.
+
+\bibitem{fridrich2012rich}
+J.~Fridrich and J.~Kodovsk{\'y}, ``Rich models for steganalysis of digital images,'' \emph{IEEE Trans. Inf. Forensics Security}, vol.~7, no.~3, pp.~868--882, 2012.
+
+\bibitem{he2016deep}
+K.~He, X.~Zhang, S.~Ren, and J.~Sun, ``Deep residual learning for image recognition,'' in \emph{Proc. IEEE Conf. Comput. Vis. Pattern Recognit. (CVPR)}, 2016, pp.~770--778.
+
+\bibitem{ho2020denoising}
+J.~Ho, A.~Jain, and P.~Abbeel, ``Denoising diffusion probabilistic models,'' in \emph{Proc. Adv. Neural Inf. Process. Syst. (NeurIPS)}, 2020, pp.~6840--6851.
+
+\bibitem{holub2012designing}
+V.~Holub and J.~Fridrich, ``Designing steganographic distortion using directional filters,'' in \emph{Proc. IEEE Int. Workshop Inf. Forensics Security (WIFS)}, 2012, pp.~234--239.
+
+\bibitem{holub2014universal}
+V.~Holub, J.~Fridrich, and T.~Denemark, ``Universal distortion function for steganography in an arbitrary domain,'' \emph{EURASIP J. Inf. Security}, vol.~2014, no.~1, pp.~1--13, 2014.
+
+\bibitem{miyato2018spectral}
+T.~Miyato, T.~Kataoka, M.~Koyama, and Y.~Yoshida, ``Spectral normalization for generative adversarial networks,'' in \emph{Proc. Int. Conf. Learn. Represent. (ICLR)}, 2018.
+
+\bibitem{pevny2010using}
+T.~Pevn{\'y}, T.~Filler, and P.~Bas, ``Using high-dimensional image models to perform highly undetectable steganography,'' in \emph{Information Hiding}, Springer, 2010, pp.~161--177.
+
+\bibitem{song2020denoising}
+J.~Song, C.~Meng, and S.~Ermon, ``Denoising diffusion implicit models,'' in \emph{Proc. Int. Conf. Learn. Represent. (ICLR)}, 2021.
+
+\bibitem{wei2023diffusionstego}
+R.~Wei, C.~Wen, Y.~Xue, and T.~Wang, ``Diffusion-Stego: Training-free diffusion generative steganography via message projection,'' \emph{arXiv preprint arXiv:2305.18726}, 2023.
+
+\bibitem{zhang2018unreasonable}
+R.~Zhang, P.~Isola, A.~A.~Efros, E.~Shechtman, and O.~Wang, ``The unreasonable effectiveness of deep features as a perceptual metric,'' in \emph{Proc. IEEE Conf. Comput. Vis. Pattern Recognit. (CVPR)}, 2018, pp.~586--595.
+
+\bibitem{zhang2019steganogan}
+K.~A.~Zhang, A.~Cuesta-Infante, L.~Xu, and K.~Veeramachaneni, ``SteganoGAN: High capacity image steganography with GANs,'' \emph{arXiv preprint arXiv:1901.03892}, 2019.
+
+\bibitem{zhang2024ldstega}
+J.~Zhang, Y.~Qin, Z.~Liu, and T.~Wang, ``LDStega: Practical and robust generative image steganography based on latent diffusion models,'' in \emph{Proc. ACM Multimedia}, 2024.
+
+\bibitem{zhao2024dero}
+J.~Zhao, Y.~Liu, and X.~Zhang, ``DERO: Diffusion-model-erasure robust watermarking,'' in \emph{Proc. ACM Multimedia}, 2024.
+
+\bibitem{zhu2018hidden}
+J.~Zhu, R.~Kaplan, J.~Johnson, and L.~Fei-Fei, ``HiDDeN: Hiding data with deep networks,'' in \emph{Proc. Eur. Conf. Comput. Vis. (ECCV)}, 2018, pp.~657--672.
+
+\end{thebibliography}
+
+\end{document}

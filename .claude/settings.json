@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(/c/ProgramData/anaconda3/python.exe -c ' *)",
+      "Read(//d/Diffusion_@ - Copy/Diffusion/**)"
+    ]
+  }
+}

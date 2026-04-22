@@ -1,0 +1,100 @@
+{
+  "checkpoint": "checkpoints_v5_clean/dscsp_v5_final.pt",
+  "num_samples": 500,
+  "clean": {
+    "ber": 0.078640625,
+    "psnr": 34.56493379974365,
+    "ber_ci95": [
+      0.075265234375,
+      0.081672265625
+    ]
+  },
+  "jpeg": {
+    "q75_ber": 0.265734375,
+    "q50_ber": 0.365375,
+    "q75_ber_ci95": [
+      0.262061328125,
+      0.26929765625
+    ]
+  },
+  "crop": {
+    "q80_ber": 0.49128125,
+    "q70_ber": 0.493265625,
+    "q80_ber_ci95": [
+      0.486953125,
+      0.4951265625
+    ]
+  },
+  "adaptive_steganalysis": {
+    "auc_clean": 0.6265750000000001,
+    "auc_adaptive": 0.6200749999999999,
+    "accuracy_adaptive": 0.5825
+  },
+  "cross_dataset": {},
+  "statistics": {
+    "p_clean_vs_crop80": 0.0,
+    "p_clean_vs_jpeg75": 3.906604362268258e-298
+  },
+  "ablation": {
+    "has_report": true,
+    "report": "outputs_tifs_ablation/latest_ablation.json"
+  },
+  "areas": {
+    "detectability": {
+      "current": 0.6200749999999999,
+      "target": 0.7,
+      "pass": true
+    },
+    "crop_robustness": {
+      "current": 0.49128125,
+      "target": 0.35,
+      "pass": false
+    },
+    "ablation": {
+      "current": "extensive",
+      "target": "extensive",
+      "pass": true
+    },
+    "statistical_analysis": {
+      "current": "deep",
+      "target": "deep",
+      "pass": true
+    },
+    "cross_dataset": {
+      "current": "no",
+      "target": "yes",
+      "pass": false
+    },
+    "adaptive_steganalysis": {
+      "current": 0.6200749999999999,
+      "target": 0.7,
+      "pass": true
+    },
+    "ber_focus": {
+      "clean_ber": 0.078640625,
+      "jpeg_q75_ber": 0.265734375,
+      "clean_target": 0.1,
+      "jpeg_q75_target": 0.2,
+      "pass": false
+    }
+  },
+  "capacity_table": {
+    "64": {
+      "ber_mean": 0.011796875,
+      "ber_std": 0.021622284647080544
+    },
+    "128": {
+      "ber_mean": 0.011328125,
+      "ber_std": 0.018267723361078004
+    },
+    "256": {
+      "ber_mean": 0.1247265625,
+      "ber_std": 0.031953769668007774
+    }
+  },
+  "multi_detector": {
+    "auc_resnet18": 0.6333500000000001,
+    "auc_resnet34": 0.6412,
+    "auc_ensemble": 0.645475
+  }
+}

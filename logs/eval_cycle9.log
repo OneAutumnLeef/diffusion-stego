@@ -1,0 +1,28 @@
+2026-04-23 00:30:23.864138: I tensorflow/core/util/port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+2026-04-23 00:30:25.420186: I tensorflow/core/util/port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+C:\ProgramData\anaconda3\Lib\site-packages\paramiko\pkey.py:82: CryptographyDeprecationWarning: TripleDES has been moved to cryptography.hazmat.decrepit.ciphers.algorithms.TripleDES and will be removed from this module in 48.0.0.
+  "cipher": algorithms.TripleDES,
+C:\ProgramData\anaconda3\Lib\site-packages\paramiko\transport.py:219: CryptographyDeprecationWarning: Blowfish has been moved to cryptography.hazmat.decrepit.ciphers.algorithms.Blowfish and will be removed from this module in 45.0.0.
+  "class": algorithms.Blowfish,
+C:\ProgramData\anaconda3\Lib\site-packages\paramiko\transport.py:243: CryptographyDeprecationWarning: TripleDES has been moved to cryptography.hazmat.decrepit.ciphers.algorithms.TripleDES and will be removed from this module in 48.0.0.
+  "class": algorithms.TripleDES,
+[eval] Loading checkpoint: checkpoints_tifs/ber_recovery/dscsp_v4_final.pt
+Traceback (most recent call last):
+  File "D:\Diffusion_@ - Copy\Diffusion\evaluate_tifs.py", line 775, in <module>
+    main()
+  File "D:\Diffusion_@ - Copy\Diffusion\evaluate_tifs.py", line 733, in main
+    result = evaluate_checkpoint(
+             ^^^^^^^^^^^^^^^^^^^^
+  File "D:\Diffusion_@ - Copy\Diffusion\evaluate_tifs.py", line 483, in evaluate_checkpoint
+    controller, extractor, config = ev.load_v4_model(checkpoint, device)
+                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Diffusion_@ - Copy\Diffusion\evaluate_v4.py", line 56, in load_v4_model
+    ckpt = torch.load(ckpt_path, map_location=device, weights_only=False)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\ProgramData\anaconda3\Lib\site-packages\torch\serialization.py", line 1384, in load
+    return _legacy_load(
+           ^^^^^^^^^^^^^
+  File "C:\ProgramData\anaconda3\Lib\site-packages\torch\serialization.py", line 1628, in _legacy_load
+    magic_number = pickle_module.load(f, **pickle_load_args)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_pickle.UnpicklingError: invalid load key, 'v'.

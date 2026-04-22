@@ -312,7 +312,7 @@ def main() -> None:
     parser = argparse.ArgumentParser(description="Autonomous TIFS-focused DSCSP runner")
     parser.add_argument("--max-cycles", type=int, default=16)
     parser.add_argument("--steps-per-cycle", type=int, default=3000)
-    parser.add_argument("--eval-samples", type=int, default=500)
+    parser.add_argument("--eval-samples", type=int, default=1000)
     parser.add_argument("--cross-dataset-samples", type=int, default=400)
     parser.add_argument("--adaptive-train", type=int, default=800)
     parser.add_argument("--adaptive-test", type=int, default=200)

@@ -1,0 +1,50 @@
+DSCSP v5 Security Analysis
+Checkpoint: checkpoints_v5_clean/dscsp_v5_final.pt
+Device: cuda
+Images: 500
+
+  RedundantCoder: 128 msg bits → 256 physical (R=2)
+  Controller: 4.39M params
+  Extractor:  11.31M params
+Generating 500 image pairs via diffusion model...
+Loading pipeline components...:   0%|          | 0/2 [00:00<?, ?it/s]An error occurred while trying to fetch /workspace/.cache/huggingface/hub/models--google--ddpm-celebahq-256/snapshots/cd5c944777ea2668051904ead6cc120739b86c4d: Error no file named diffusion_pytorch_model.safetensors found in directory /workspace/.cache/huggingface/hub/models--google--ddpm-celebahq-256/snapshots/cd5c944777ea2668051904ead6cc120739b86c4d.
+Defaulting to unsafe serialization. Pass `allow_pickle=False` to raise an error instead.
+Loading pipeline components...: 100%|██████████| 2/2 [00:14<00:00,  7.25s/it]Loading pipeline components...: 100%|██████████| 2/2 [00:14<00:00,  7.25s/it]
+/root/diffusion-stego/dscsp/models/diffusion_wrapper.py:37: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.detach().clone() or sourceTensor.detach().clone().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  self.final_alpha_cumprod = torch.tensor(
+  4/500  8/500  12/500  16/500  20/500  24/500  28/500  32/500  36/500  40/500  44/500  48/500  52/500  56/500  60/500  64/500  68/500  72/500  76/500  80/500  84/500  88/500  92/500  96/500  100/500  104/500  108/500  112/500  116/500  120/500  124/500  128/500  132/500  136/500  140/500  144/500  148/500  152/500  156/500  160/500  164/500  168/500  172/500  176/500  180/500  184/500  188/500  192/500  196/500  200/500  204/500  208/500  212/500  216/500  220/500  224/500  228/500  232/500  236/500  240/500  244/500  248/500  252/500  256/500  260/500  264/500  268/500  272/500  276/500  280/500  284/500  288/500  292/500  296/500  300/500  304/500  308/500  312/500  316/500  320/500  324/500  328/500  332/500  336/500  340/500  344/500  348/500  352/500  356/500  360/500  364/500  368/500  372/500  376/500  380/500  384/500  388/500  392/500  396/500  400/500  404/500  408/500  412/500  416/500  420/500  424/500  428/500  432/500  436/500  440/500  444/500  448/500  452/500  456/500  460/500  464/500  468/500  472/500  476/500  480/500  484/500  488/500  492/500  496/500  500/500
+Computing KL divergence (InceptionV3 pool features)...
+Downloading: "https://download.pytorch.org/models/inception_v3_google-0cc3c7bd.pth" to /root/.cache/torch/hub/checkpoints/inception_v3_google-0cc3c7bd.pth
+  0%|          | 0.00/104M [00:00<?, ?B/s]  0%|          | 128k/104M [00:00<01:53, 955kB/s]  0%|          | 256k/104M [00:00<01:55, 944kB/s]  0%|          | 384k/104M [00:00<01:41, 1.07MB/s]  1%|          | 640k/104M [00:00<01:23, 1.30MB/s]  1%|          | 896k/104M [00:00<01:19, 1.36MB/s]  1%|          | 1.12M/104M [00:00<01:16, 1.41MB/s]  1%|▏         | 1.38M/104M [00:01<01:13, 1.46MB/s]  2%|▏         | 1.62M/104M [00:01<01:08, 1.55MB/s]  2%|▏         | 1.88M/104M [00:01<01:02, 1.71MB/s]  2%|▏         | 2.38M/104M [00:01<00:43, 2.44MB/s]  3%|▎         | 3.12M/104M [00:01<00:28, 3.71MB/s]  4%|▍         | 4.12M/104M [00:01<00:19, 5.30MB/s]  5%|▌         | 5.62M/104M [00:01<00:12, 7.99MB/s]  6%|▋         | 6.75M/104M [00:01<00:11, 8.76MB/s]  9%|▉         | 9.25M/104M [00:01<00:07, 13.3MB/s] 12%|█▏        | 12.6M/104M [00:02<00:04, 19.3MB/s] 19%|█▉        | 19.8M/104M [00:02<00:02, 34.8MB/s] 29%|██▉       | 30.4M/104M [00:02<00:01, 56.7MB/s] 40%|███▉      | 41.1M/104M [00:02<00:00, 72.9MB/s] 51%|█████     | 52.6M/104M [00:02<00:00, 86.9MB/s] 64%|██████▍   | 66.9M/104M [00:02<00:00, 105MB/s]  75%|███████▍  | 77.6M/104M [00:02<00:00, 107MB/s] 85%|████████▍ | 88.0M/104M [00:02<00:00, 107MB/s] 96%|█████████▌| 99.5M/104M [00:02<00:00, 111MB/s]100%|██████████| 104M/104M [00:02<00:00, 37.2MB/s]
+  KL(stego||clean) = 0.4169
+Computing power spectrum chi-square test...
+  Chi-square stat: 772.46, p-value: 1.0700e-122
+  Interpretation: DETECTABLE (p<0.05)
+Computing SVD spectrum of stego deltas...
+  Top singular values (normalised): [0.71986777 0.06061005 0.02174329 0.01828853 0.01625127 0.0157991
+ 0.01410102 0.01235268]
+  Gini coefficient: 0.8200 (0=flat/good, 1=spike/bad)
+Setting up [LPIPS] perceptual loss: trunk [vgg], v[0.1], spatial [off]
+/usr/local/lib/python3.12/dist-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+  warnings.warn(
+/usr/local/lib/python3.12/dist-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=VGG16_Weights.IMAGENET1K_V1`. You can also use `weights=VGG16_Weights.DEFAULT` to get the most up-to-date weights.
+  warnings.warn(msg)
+Loading model from: /usr/local/lib/python3.12/dist-packages/lpips/weights/v0.1/vgg.pth
+
+Bootstrap 95% CI table:
+  ber: 0.0764 [0.0735, 0.0796]
+  psnr: 34.5612 [34.5513, 34.5718]
+  lpips: 0.0211 [0.0204, 0.0218]
+
+Results saved to: outputs_v5_analysis/security_analysis.json
+  matplotlib not available — skipping plots
+
+============================================================
+SECURITY ANALYSIS SUMMARY
+============================================================
+  KL divergence:          0.4169
+  Power spectrum p-value: 1.0700e-122 (FAIL)
+  SVD Gini coefficient:   0.8200 (bad)
+  Clean BER:              0.0764 [0.0735, 0.0796]
+  PSNR:                   34.56 dB [34.55, 34.57]
+  LPIPS:                  0.0211 [0.0204, 0.0218]

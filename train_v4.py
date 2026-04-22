@@ -146,10 +146,14 @@ class GlobalExtractor(nn.Module):
         Bit extractor with selectable head type:
             - global_fc  : legacy GAP + FC head
             - spatial_map: high-resolution spatial head (one bit per spatial cell)
+            - shift_pool : spatial_map + ±2-pixel max-pool before flatten for
+                           crop-shift robustness
 
-        The spatial_map mode preserves local embedding evidence and avoids the
-        severe compression bottleneck of forcing all bits through a single global
-        pooled vector.
+        The spatial_map/shift_pool modes preserve local embedding evidence and
+        avoid the severe compression bottleneck of forcing all bits through a
+        single globally pooled vector.  shift_pool applies a 5×5 max-pool over
+        the logit map so a random crop that shifts the grid by ≤2 pixels does
+        not change which maximum is selected.
     """
 
     def __init__(self, num_bits: int = 256, mode: str = "global_fc", grid_size: int = 16):
@@ -163,7 +167,7 @@ class GlobalExtractor(nn.Module):
         # Keep FC shape aligned with num_bits for robust checkpoint compatibility.
         backbone.fc = nn.Linear(512, num_bits)
 
-        if self.mode == "spatial_map":
+        if self.mode in ("spatial_map", "shift_pool"):
             # Preserve higher-frequency spatial details (256 -> 16 feature grid).
             backbone.maxpool = nn.Identity()
             self.spatial_head = nn.Conv2d(512, 1, kernel_size=1)
@@ -210,6 +214,11 @@ class GlobalExtractor(nn.Module):
                 mode="bilinear",
                 align_corners=False,
             )
+
+        if self.mode == "shift_pool":
+            # Max over ±2-pixel neighbourhood — a random crop shifting the grid
+            # by ≤2 pixels will not change the maximum, giving crop-shift tolerance.
+            logits_map = F.max_pool2d(logits_map, kernel_size=5, stride=1, padding=2)
 
         logits = logits_map.flatten(1)
         if logits.shape[1] > self.num_bits:

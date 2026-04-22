@@ -206,6 +206,11 @@ def _build_stage_config(
     cfg.update(BASE_5090_OVERRIDES)
     cfg.update(stage["overrides"])
 
+    # Allow stages to specify head_type (shift_pool/spatial_map/global_fc) as an alias
+    # for extractor_mode so stage configs stay readable without knowing the internal key.
+    if "head_type" in cfg:
+        cfg["extractor_mode"] = cfg.pop("head_type")
+
     cfg["total_steps"] = stage["end_step"]
     cfg["output_dir"] = os.path.join(output_root, stage["name"])
     cfg["checkpoint_dir"] = os.path.join(checkpoint_root, stage["name"])

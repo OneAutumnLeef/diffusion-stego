@@ -1,0 +1,1069 @@
+{
+  "nodes": [
+    {
+      "id": "step_051000_quality_montage",
+      "label": "Step 051000 quality-training montage with stable identity preservation",
+      "file_type": "image",
+      "source_file": "outputs_v5_quality/step_051000.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "step_051000_residual_map_grid",
+      "label": "Step 051000 residual map grid showing low-to-moderate distributed energy",
+      "file_type": "image",
+      "source_file": "outputs_v5_quality/step_051000.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "step_051500_quality_montage",
+      "label": "Step 051500 quality-training montage with stable identity preservation",
+      "file_type": "image",
+      "source_file": "outputs_v5_quality/step_051500.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "step_051500_residual_map_grid",
+      "label": "Step 051500 residual map grid showing low-to-moderate distributed energy",
+      "file_type": "image",
+      "source_file": "outputs_v5_quality/step_051500.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "step_052000_quality_montage",
+      "label": "Step 052000 quality-training montage with stable identity preservation",
+      "file_type": "image",
+      "source_file": "outputs_v5_quality/step_052000.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "step_052000_residual_map_grid",
+      "label": "Step 052000 residual map grid showing low-to-moderate distributed energy",
+      "file_type": "image",
+      "source_file": "outputs_v5_quality/step_052000.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "step_052500_quality_montage",
+      "label": "Step 052500 quality-training montage with stable identity preservation",
+      "file_type": "image",
+      "source_file": "outputs_v5_quality/step_052500.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "step_052500_residual_map_grid",
+      "label": "Step 052500 residual map grid showing low-to-moderate distributed energy",
+      "file_type": "image",
+      "source_file": "outputs_v5_quality/step_052500.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "step_053000_quality_montage",
+      "label": "Step 053000 quality-training montage with stable identity preservation",
+      "file_type": "image",
+      "source_file": "outputs_v5_quality/step_053000.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "step_053000_residual_map_grid",
+      "label": "Step 053000 residual map grid showing low-to-moderate distributed energy",
+      "file_type": "image",
+      "source_file": "outputs_v5_quality/step_053000.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "step_053500_quality_montage",
+      "label": "Step 053500 quality-training montage with stable identity preservation",
+      "file_type": "image",
+      "source_file": "outputs_v5_quality/step_053500.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "step_053500_residual_map_grid",
+      "label": "Step 053500 residual map grid showing low-to-moderate distributed energy",
+      "file_type": "image",
+      "source_file": "outputs_v5_quality/step_053500.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "step_054000_quality_montage",
+      "label": "Step 054000 quality-training montage with localized residual hotspot",
+      "file_type": "image",
+      "source_file": "outputs_v5_quality/step_054000.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "step_054000_residual_map_grid",
+      "label": "Step 054000 residual map grid showing localized high-energy facial regions",
+      "file_type": "image",
+      "source_file": "outputs_v5_quality/step_054000.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "step_054500_quality_montage",
+      "label": "Step 054500 quality-training montage with localized residual hotspot",
+      "file_type": "image",
+      "source_file": "outputs_v5_quality/step_054500.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "step_054500_residual_map_grid",
+      "label": "Step 054500 residual map grid showing localized high-energy facial regions",
+      "file_type": "image",
+      "source_file": "outputs_v5_quality/step_054500.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "step_055000_quality_montage",
+      "label": "Step 055000 quality-training montage with stable identity preservation",
+      "file_type": "image",
+      "source_file": "outputs_v5_quality/step_055000.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "step_055000_residual_map_grid",
+      "label": "Step 055000 residual map grid showing low-to-moderate distributed energy",
+      "file_type": "image",
+      "source_file": "outputs_v5_quality/step_055000.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "step_055500_quality_montage",
+      "label": "Step 055500 quality-training montage with stable identity preservation",
+      "file_type": "image",
+      "source_file": "outputs_v5_quality/step_055500.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "step_055500_residual_map_grid",
+      "label": "Step 055500 residual map grid showing low-to-moderate distributed energy",
+      "file_type": "image",
+      "source_file": "outputs_v5_quality/step_055500.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "step_056000_quality_montage",
+      "label": "Step 056000 quality-training montage with stable identity preservation",
+      "file_type": "image",
+      "source_file": "outputs_v5_quality/step_056000.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "step_056000_residual_map_grid",
+      "label": "Step 056000 residual map grid showing low-to-moderate distributed energy",
+      "file_type": "image",
+      "source_file": "outputs_v5_quality/step_056000.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "step_056500_quality_montage",
+      "label": "Step 056500 quality-training montage with stable identity preservation",
+      "file_type": "image",
+      "source_file": "outputs_v5_quality/step_056500.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "step_056500_residual_map_grid",
+      "label": "Step 056500 residual map grid showing low-to-moderate distributed energy",
+      "file_type": "image",
+      "source_file": "outputs_v5_quality/step_056500.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "step_057000_quality_montage",
+      "label": "Step 057000 quality-training montage with stable identity preservation",
+      "file_type": "image",
+      "source_file": "outputs_v5_quality/step_057000.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "step_057000_residual_map_grid",
+      "label": "Step 057000 residual map grid showing low-to-moderate distributed energy",
+      "file_type": "image",
+      "source_file": "outputs_v5_quality/step_057000.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "step_057500_quality_montage",
+      "label": "Step 057500 quality-training montage with localized residual hotspot",
+      "file_type": "image",
+      "source_file": "outputs_v5_quality/step_057500.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "step_057500_residual_map_grid",
+      "label": "Step 057500 residual map grid showing localized high-energy facial regions",
+      "file_type": "image",
+      "source_file": "outputs_v5_quality/step_057500.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "step_058000_quality_montage",
+      "label": "Step 058000 quality-training montage with localized residual hotspot",
+      "file_type": "image",
+      "source_file": "outputs_v5_quality/step_058000.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "step_058000_residual_map_grid",
+      "label": "Step 058000 residual map grid showing localized high-energy facial regions",
+      "file_type": "image",
+      "source_file": "outputs_v5_quality/step_058000.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "step_058500_quality_montage",
+      "label": "Step 058500 quality-training montage with stable identity preservation",
+      "file_type": "image",
+      "source_file": "outputs_v5_quality/step_058500.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "step_058500_residual_map_grid",
+      "label": "Step 058500 residual map grid showing low-to-moderate distributed energy",
+      "file_type": "image",
+      "source_file": "outputs_v5_quality/step_058500.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "step_059000_quality_montage",
+      "label": "Step 059000 quality-training montage with stable identity preservation",
+      "file_type": "image",
+      "source_file": "outputs_v5_quality/step_059000.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "step_059000_residual_map_grid",
+      "label": "Step 059000 residual map grid showing low-to-moderate distributed energy",
+      "file_type": "image",
+      "source_file": "outputs_v5_quality/step_059000.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "step_059500_quality_montage",
+      "label": "Step 059500 quality-training montage with stable identity preservation",
+      "file_type": "image",
+      "source_file": "outputs_v5_quality/step_059500.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "step_059500_residual_map_grid",
+      "label": "Step 059500 residual map grid showing low-to-moderate distributed energy",
+      "file_type": "image",
+      "source_file": "outputs_v5_quality/step_059500.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "step_060000_quality_montage",
+      "label": "Step 060000 quality-training montage with localized residual hotspot",
+      "file_type": "image",
+      "source_file": "outputs_v5_quality/step_060000.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "step_060000_residual_map_grid",
+      "label": "Step 060000 residual map grid showing localized high-energy facial regions",
+      "file_type": "image",
+      "source_file": "outputs_v5_quality/step_060000.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "step_060500_quality_montage",
+      "label": "Step 060500 quality-training montage with stable identity preservation",
+      "file_type": "image",
+      "source_file": "outputs_v5_quality/step_060500.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "step_060500_residual_map_grid",
+      "label": "Step 060500 residual map grid showing low-to-moderate distributed energy",
+      "file_type": "image",
+      "source_file": "outputs_v5_quality/step_060500.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "step_061000_quality_montage",
+      "label": "Step 061000 quality-training montage with stable identity preservation",
+      "file_type": "image",
+      "source_file": "outputs_v5_quality/step_061000.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "step_061000_residual_map_grid",
+      "label": "Step 061000 residual map grid showing low-to-moderate distributed energy",
+      "file_type": "image",
+      "source_file": "outputs_v5_quality/step_061000.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "step_061500_quality_montage",
+      "label": "Step 061500 quality-training montage with localized residual hotspot",
+      "file_type": "image",
+      "source_file": "outputs_v5_quality/step_061500.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "step_061500_residual_map_grid",
+      "label": "Step 061500 residual map grid showing localized high-energy facial regions",
+      "file_type": "image",
+      "source_file": "outputs_v5_quality/step_061500.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    }
+  ],
+  "edges": [
+    {
+      "source": "step_051000_quality_montage",
+      "target": "step_051000_residual_map_grid",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "outputs_v5_quality/step_051000.png",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "step_051500_quality_montage",
+      "target": "step_051500_residual_map_grid",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "outputs_v5_quality/step_051500.png",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "step_052000_quality_montage",
+      "target": "step_052000_residual_map_grid",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "outputs_v5_quality/step_052000.png",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "step_052500_quality_montage",
+      "target": "step_052500_residual_map_grid",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "outputs_v5_quality/step_052500.png",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "step_053000_quality_montage",
+      "target": "step_053000_residual_map_grid",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "outputs_v5_quality/step_053000.png",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "step_053500_quality_montage",
+      "target": "step_053500_residual_map_grid",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "outputs_v5_quality/step_053500.png",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "step_054000_quality_montage",
+      "target": "step_054000_residual_map_grid",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "outputs_v5_quality/step_054000.png",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "step_054500_quality_montage",
+      "target": "step_054500_residual_map_grid",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "outputs_v5_quality/step_054500.png",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "step_055000_quality_montage",
+      "target": "step_055000_residual_map_grid",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "outputs_v5_quality/step_055000.png",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "step_055500_quality_montage",
+      "target": "step_055500_residual_map_grid",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "outputs_v5_quality/step_055500.png",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "step_056000_quality_montage",
+      "target": "step_056000_residual_map_grid",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "outputs_v5_quality/step_056000.png",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "step_056500_quality_montage",
+      "target": "step_056500_residual_map_grid",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "outputs_v5_quality/step_056500.png",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "step_057000_quality_montage",
+      "target": "step_057000_residual_map_grid",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "outputs_v5_quality/step_057000.png",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "step_057500_quality_montage",
+      "target": "step_057500_residual_map_grid",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "outputs_v5_quality/step_057500.png",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "step_058000_quality_montage",
+      "target": "step_058000_residual_map_grid",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "outputs_v5_quality/step_058000.png",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "step_058500_quality_montage",
+      "target": "step_058500_residual_map_grid",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "outputs_v5_quality/step_058500.png",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "step_059000_quality_montage",
+      "target": "step_059000_residual_map_grid",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "outputs_v5_quality/step_059000.png",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "step_059500_quality_montage",
+      "target": "step_059500_residual_map_grid",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "outputs_v5_quality/step_059500.png",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "step_060000_quality_montage",
+      "target": "step_060000_residual_map_grid",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "outputs_v5_quality/step_060000.png",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "step_060500_quality_montage",
+      "target": "step_060500_residual_map_grid",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "outputs_v5_quality/step_060500.png",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "step_061000_quality_montage",
+      "target": "step_061000_residual_map_grid",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "outputs_v5_quality/step_061000.png",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "step_061500_quality_montage",
+      "target": "step_061500_residual_map_grid",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "outputs_v5_quality/step_061500.png",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "step_051000_quality_montage",
+      "target": "step_051500_quality_montage",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.86,
+      "source_file": "outputs_v5_quality/step_051500.png",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "step_051500_quality_montage",
+      "target": "step_052000_quality_montage",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.86,
+      "source_file": "outputs_v5_quality/step_052000.png",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "step_052000_quality_montage",
+      "target": "step_052500_quality_montage",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.86,
+      "source_file": "outputs_v5_quality/step_052500.png",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "step_052500_quality_montage",
+      "target": "step_053000_quality_montage",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.86,
+      "source_file": "outputs_v5_quality/step_053000.png",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "step_053000_quality_montage",
+      "target": "step_053500_quality_montage",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.86,
+      "source_file": "outputs_v5_quality/step_053500.png",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "step_053500_quality_montage",
+      "target": "step_054000_quality_montage",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.78,
+      "source_file": "outputs_v5_quality/step_054000.png",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "step_054000_quality_montage",
+      "target": "step_054500_quality_montage",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.78,
+      "source_file": "outputs_v5_quality/step_054500.png",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "step_054500_quality_montage",
+      "target": "step_055000_quality_montage",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.78,
+      "source_file": "outputs_v5_quality/step_055000.png",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "step_055000_quality_montage",
+      "target": "step_055500_quality_montage",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.86,
+      "source_file": "outputs_v5_quality/step_055500.png",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "step_055500_quality_montage",
+      "target": "step_056000_quality_montage",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.86,
+      "source_file": "outputs_v5_quality/step_056000.png",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "step_056000_quality_montage",
+      "target": "step_056500_quality_montage",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.86,
+      "source_file": "outputs_v5_quality/step_056500.png",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "step_056500_quality_montage",
+      "target": "step_057000_quality_montage",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.86,
+      "source_file": "outputs_v5_quality/step_057000.png",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "step_057000_quality_montage",
+      "target": "step_057500_quality_montage",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.78,
+      "source_file": "outputs_v5_quality/step_057500.png",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "step_057500_quality_montage",
+      "target": "step_058000_quality_montage",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.78,
+      "source_file": "outputs_v5_quality/step_058000.png",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "step_058000_quality_montage",
+      "target": "step_058500_quality_montage",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.78,
+      "source_file": "outputs_v5_quality/step_058500.png",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "step_058500_quality_montage",
+      "target": "step_059000_quality_montage",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.86,
+      "source_file": "outputs_v5_quality/step_059000.png",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "step_059000_quality_montage",
+      "target": "step_059500_quality_montage",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.86,
+      "source_file": "outputs_v5_quality/step_059500.png",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "step_059500_quality_montage",
+      "target": "step_060000_quality_montage",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.78,
+      "source_file": "outputs_v5_quality/step_060000.png",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "step_060000_quality_montage",
+      "target": "step_060500_quality_montage",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.78,
+      "source_file": "outputs_v5_quality/step_060500.png",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "step_060500_quality_montage",
+      "target": "step_061000_quality_montage",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.86,
+      "source_file": "outputs_v5_quality/step_061000.png",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "step_061000_quality_montage",
+      "target": "step_061500_quality_montage",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.78,
+      "source_file": "outputs_v5_quality/step_061500.png",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "step_051000_quality_montage",
+      "target": "step_059000_quality_montage",
+      "relation": "semantically_similar_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.87,
+      "source_file": "outputs_v5_quality/step_059000.png",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "step_051500_quality_montage",
+      "target": "step_059500_quality_montage",
+      "relation": "semantically_similar_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.87,
+      "source_file": "outputs_v5_quality/step_059500.png",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "step_052000_quality_montage",
+      "target": "step_060500_quality_montage",
+      "relation": "semantically_similar_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.87,
+      "source_file": "outputs_v5_quality/step_060500.png",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "step_052500_quality_montage",
+      "target": "step_061000_quality_montage",
+      "relation": "semantically_similar_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.87,
+      "source_file": "outputs_v5_quality/step_061000.png",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "step_054000_residual_map_grid",
+      "target": "step_055000_residual_map_grid",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.72,
+      "source_file": "outputs_v5_quality/step_055000.png",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "step_057500_residual_map_grid",
+      "target": "step_058000_residual_map_grid",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.89,
+      "source_file": "outputs_v5_quality/step_058000.png",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "step_058000_residual_map_grid",
+      "target": "step_059000_residual_map_grid",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.76,
+      "source_file": "outputs_v5_quality/step_059000.png",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "step_060000_residual_map_grid",
+      "target": "step_060500_residual_map_grid",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "outputs_v5_quality/step_060500.png",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "step_061000_residual_map_grid",
+      "target": "step_061500_residual_map_grid",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.74,
+      "source_file": "outputs_v5_quality/step_061500.png",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "step_057500_residual_map_grid",
+      "target": "step_058000_quality_montage",
+      "relation": "shares_data_with",
+      "confidence": "AMBIGUOUS",
+      "confidence_score": 0.24,
+      "source_file": "outputs_v5_quality/step_058000.png",
+      "source_location": null,
+      "weight": 1.0
+    }
+  ],
+  "hyperedges": [
+    {
+      "id": "stable_quality_window_early",
+      "label": "Early stable quality window",
+      "nodes": [
+        "step_051000_quality_montage",
+        "step_051500_quality_montage",
+        "step_052000_quality_montage",
+        "step_052500_quality_montage",
+        "step_053000_quality_montage"
+      ],
+      "relation": "form",
+      "confidence": "INFERRED",
+      "confidence_score": 0.84,
+      "source_file": "outputs_v5_quality/step_053000.png"
+    },
+    {
+      "id": "localized_residual_spike_window",
+      "label": "Localized residual spike window",
+      "nodes": [
+        "step_054000_residual_map_grid",
+        "step_054500_residual_map_grid",
+        "step_057500_residual_map_grid",
+        "step_058000_residual_map_grid",
+        "step_060000_residual_map_grid",
+        "step_061500_residual_map_grid"
+      ],
+      "relation": "participate_in",
+      "confidence": "INFERRED",
+      "confidence_score": 0.76,
+      "source_file": "outputs_v5_quality/step_061500.png"
+    },
+    {
+      "id": "late_phase_quality_convergence",
+      "label": "Late-phase quality convergence",
+      "nodes": [
+        "step_059000_quality_montage",
+        "step_059500_quality_montage",
+        "step_060500_quality_montage",
+        "step_061000_quality_montage"
+      ],
+      "relation": "form",
+      "confidence": "INFERRED",
+      "confidence_score": 0.82,
+      "source_file": "outputs_v5_quality/step_061000.png"
+    }
+  ],
+  "input_tokens": 0,
+  "output_tokens": 0
+}

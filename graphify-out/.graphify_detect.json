@@ -1,11 +1,18 @@
 {
   "files": {
     "code": [
+      "ablation_v5.py",
+      "analyze_security.py",
       "evaluate_tifs.py",
       "evaluate_v4.py",
+      "finetune_v5_clean.py",
+      "finetune_v5_quality.py",
+      "pull_artifacts_from_hf.ps1",
+      "pull_artifacts_from_hf.py",
       "train_v4.py",
       "train_v4_5090.py",
       "train_v4_final_iterated.py",
+      "train_v5.py",
       "dscsp\\__init__.py",
       "dscsp\\augmentations\\differentiable.py",
       "dscsp\\augmentations\\__init__.py",
@@ -25,9 +32,13 @@
       "training_ops\\tifs_autopilot.py"
     ],
     "document": [
+      "AGENTS.md",
       "PROJECT_CONTEXT_MANUAL_2026-04-18.md",
       "requirements.txt",
+      "graphify-out\\graph.html",
+      "graphify-out\\GRAPH_REPORT.md",
       "outputs_tifs\\MAJOR_LOG.md",
+      "outputs_v5_ablation\\ablation_report.md",
       "training_ops\\README.md",
       "training_ops\\TRAINING_LOG.md",
       "training_ops\\chat_history_archive\\README.md",
@@ -41,18 +52,12 @@
     "paper": [
       "Idea.md"
     ],
-    "image": [
-      "outputs_v4\\step_000500.png",
-      "outputs_v4\\step_001000.png",
-      "outputs_v4\\step_001500.png",
-      "outputs_v4\\step_002000.png"
-    ],
+    "image": [],
     "video": []
   },
-  "total_files": 39,
-  "total_words": 157681,
+  "total_files": 46,
+  "total_words": 6473772,
   "needs_graph": true,
-  "warning": null,
   "skipped_sensitive": [],
   "graphifyignore_patterns": 0
 }

@@ -1,0 +1,39 @@
+{
+  "sources": {
+    "autopilot_state": "outputs_tifs/autopilot_state.json",
+    "eval_cycles": [
+      "outputs_tifs_eval/cycle_001_ber_recovery_clean_first.json",
+      "outputs_tifs_eval/cycle_002_ber_recovery_curriculum.json",
+      "outputs_tifs_eval/cycle_003_robust_balance.json",
+      "outputs_tifs_eval/cycle_004_detectability_harden.json",
+      "outputs_tifs_eval/cycle_005_ber_recovery_clean_first.json",
+      "outputs_tifs_eval/cycle_006_ber_recovery_curriculum.json",
+      "outputs_tifs_eval/cycle_007_robust_balance.json",
+      "outputs_tifs_eval/cycle_008_detectability_harden.json",
+      "outputs_tifs_eval/cycle_009_ber_recovery_clean_first.json",
+      "outputs_tifs_eval/cycle_010_ber_recovery_curriculum.json",
+      "outputs_tifs_eval/cycle_011_robust_balance.json"
+    ],
+    "tifs_ablation": "outputs_tifs_ablation/latest_ablation.json",
+    "v5_ablation": "outputs_v5_ablation/ablation_results.json",
+    "v5_security": "outputs_v5_analysis/security_analysis.json"
+  },
+  "headline_cycle_11": {
+    "clean_ber": 0.02431640625,
+    "jpeg_q75_ber": 0.13697265625,
+    "crop_q80_ber": 0.49546875,
+    "adaptive_auc": 0.6915,
+    "clean_psnr": 27.79993359565735
+  },
+  "model_metadata": {
+    "controller_params": 4392772,
+    "extractor_params": 11308353,
+    "discriminator_params": 2762945,
+    "ddim_steps": 20,
+    "num_bits": 256,
+    "base_channels": 48,
+    "extractor_grid_size": 16,
+    "message_bits_v5": 128,
+    "redundancy_factor_v5": 2
+  }
+}

@@ -28,6 +28,7 @@ from torchvision import datasets, models
 from torchvision.transforms import ToTensor
 
 import evaluate_v4 as ev
+import evaluate as _ev_real
 from dscsp.augmentations.differentiable import DiffJPEG
 from dscsp.utils.metrics import compute_ber, compute_psnr
 
@@ -56,16 +57,35 @@ def _bootstrap_ci(values: List[float], n_boot: int = 1000, alpha: float = 0.05) 
     return lo, hi
 
 
-def _eval_clean_series(controller, extractor, images, device: str, num_bits: int) -> Dict:
+def _make_payload(num_bits: int, msg_bits: int, coder, device: str):
+    """Generate a properly-encoded payload. Uses RedundantCoder for v5 checkpoints."""
+    if coder is not None:
+        msg = torch.randint(0, 2, (1, msg_bits), device=device).float()
+        return coder.encode(msg), msg
+    payload = torch.randint(0, 2, (1, num_bits), device=device).float()
+    return payload, payload
+
+
+def _decode_ber(pred_logits, msg_target, coder):
+    """BER using majority-vote decoding when coder is available (message BER)."""
+    if coder is not None:
+        decoded = coder.decode_hard(pred_logits)
+        return float(compute_ber(decoded, msg_target))
+    return float(compute_ber(pred_logits, msg_target))
+
+
+def _eval_clean_series(controller, extractor, images, device: str, num_bits: int,
+                       coder=None, msg_bits: int = None) -> Dict:
+    msg_bits = msg_bits or num_bits
     bers, psnrs = [], []
     with torch.no_grad():
         for i in range(len(images)):
             x = images[i:i + 1].to(device)
-            payload = torch.randint(0, 2, (1, num_bits), device=device).float()
+            payload, msg = _make_payload(num_bits, msg_bits, coder, device)
             delta = controller(x, payload)
             xs = (x + delta).clamp(-1, 1)
             pred = extractor(xs)
-            bers.append(float(compute_ber(pred, payload)))
+            bers.append(_decode_ber(pred, msg, coder))
             psnrs.append(float(compute_psnr(xs, x)))
 
     return {
@@ -76,18 +96,23 @@ def _eval_clean_series(controller, extractor, images, device: str, num_bits: int
     }
 
 
-def _eval_jpeg_series(controller, extractor, images, device: str, num_bits: int, quality: int) -> Dict:
-    diff_jpeg = DiffJPEG().to(device)
+def _eval_jpeg_series(controller, extractor, images, device: str, num_bits: int, quality: int,
+                      coder=None, msg_bits: int = None, real_attacks: bool = False) -> Dict:
+    msg_bits = msg_bits or num_bits
+    diff_jpeg = None if real_attacks else DiffJPEG().to(device)
     bers = []
     with torch.no_grad():
         for i in range(len(images)):
             x = images[i:i + 1].to(device)
-            payload = torch.randint(0, 2, (1, num_bits), device=device).float()
+            payload, msg = _make_payload(num_bits, msg_bits, coder, device)
             delta = controller(x, payload)
             xs = (x + delta).clamp(-1, 1)
-            xa = diff_jpeg(xs, quality=quality)
+            if real_attacks:
+                xa = _ev_real.real_jpeg(xs, quality, device)
+            else:
+                xa = diff_jpeg(xs, quality=quality)
             pred = extractor(xa)
-            bers.append(float(compute_ber(pred, payload)))
+            bers.append(_decode_ber(pred, msg, coder))
 
     return {
         "ber_mean": float(np.mean(bers)),
@@ -104,17 +129,19 @@ def _random_crop_resize(x: torch.Tensor, ratio: float) -> torch.Tensor:
     return F.interpolate(cropped, size=(h, w), mode="bilinear", align_corners=False)
 
 
-def _eval_crop_series(controller, extractor, images, device: str, num_bits: int, ratio: float) -> Dict:
+def _eval_crop_series(controller, extractor, images, device: str, num_bits: int, ratio: float,
+                      coder=None, msg_bits: int = None) -> Dict:
+    msg_bits = msg_bits or num_bits
     bers = []
     with torch.no_grad():
         for i in range(len(images)):
             x = images[i:i + 1].to(device)
-            payload = torch.randint(0, 2, (1, num_bits), device=device).float()
+            payload, msg = _make_payload(num_bits, msg_bits, coder, device)
             delta = controller(x, payload)
             xs = (x + delta).clamp(-1, 1)
             xa = _random_crop_resize(xs, ratio)
             pred = extractor(xa)
-            bers.append(float(compute_ber(pred, payload)))
+            bers.append(_decode_ber(pred, msg, coder))
 
     return {
         "ber_mean": float(np.mean(bers)),
@@ -229,9 +256,182 @@ def _adaptive_steganalysis(controller, images, device: str, num_bits: int, n_tra
     }
 
 
-def _load_dataset_images(dataset_name: str, n: int) -> torch.Tensor:
+def eval_multi_payload_capacity(
+    controller, extractor, images: torch.Tensor, device: str,
+    phys_bits: int, coder=None, payload_sizes=(64, 128, 256),
+) -> Dict:
+    """
+    Evaluate BER at multiple payload sizes to produce a capacity-tradeoff table.
+
+    For a v5 checkpoint (128 message bits, 256 physical, R=2):
+      - 64 bits:  decode first 64 message positions (perm subset)
+      - 128 bits: full model
+      - 256 bits: raw physical bits (no majority vote — treats each physical bit independently)
+
+    For a v4 checkpoint (256 physical = 256 message, no coder):
+      - 64 bits:  first 64 physical bits
+      - 128 bits: first 128 physical bits
+      - 256 bits: full model
+    """
+    results = {}
+
+    for n_bits in payload_sizes:
+        bers = []
+        with torch.no_grad():
+            for i in range(min(len(images), 200)):
+                x = images[i:i+1].to(device)
+
+                if coder is not None:
+                    # v5 path
+                    msg_bits = coder.M
+                    test_bits = min(n_bits, msg_bits)
+                    msg = torch.randint(0, 2, (1, msg_bits), device=device).float()
+                    physical = coder.encode(msg)
+                else:
+                    # v4 path: treat physical bits directly
+                    test_bits = min(n_bits, phys_bits)
+                    msg = torch.randint(0, 2, (1, test_bits), device=device).float()
+                    physical = torch.randint(0, 2, (1, phys_bits), device=device).float()
+                    physical[0, :test_bits] = msg[0]
+
+                delta = controller(x, physical)
+                xs = (x + delta).clamp(-1, 1)
+                logits = extractor(xs)  # (1, phys_bits)
+
+                if coder is not None and n_bits <= coder.M:
+                    # Subset of message bits via perm
+                    perm_sub = coder.perm[:test_bits].to(device)  # (test_bits, R)
+                    gathered = torch.stack(
+                        [logits.gather(1, perm_sub[:, r].unsqueeze(0).expand(1, -1))
+                         for r in range(coder.R)],
+                        dim=-1,
+                    )  # (1, test_bits, R)
+                    hard = (gathered.mean(-1) > 0).float()
+                    ber = (hard - msg[:, :test_bits]).abs().mean().item()
+                elif coder is not None:
+                    # 256-bit raw physical (no majority vote)
+                    hard_phys = (torch.sigmoid(logits) > 0.5).float()
+                    ber = (hard_phys - physical).abs().mean().item()
+                else:
+                    hard = (torch.sigmoid(logits[:, :test_bits]) > 0.5).float()
+                    ber = (hard - msg).abs().mean().item()
+
+                bers.append(ber)
+
+        results[n_bits] = {
+            "ber_mean": float(np.mean(bers)),
+            "ber_std": float(np.std(bers)),
+        }
+        print(f"  Capacity eval | {n_bits} bits: BER = {results[n_bits]['ber_mean']:.4f}")
+
+    return results
+
+
+def eval_multiple_detectors(
+    controller, images: torch.Tensor, device: str,
+    num_bits: int, n_train: int = 600, n_test: int = 200,
+) -> Dict:
+    """
+    Train ResNet-18 and ResNet-34 steganalysis classifiers, report AUC for each
+    and ensemble AUC (average score).  Uses the same adaptive augmentation as
+    _adaptive_steganalysis for a fair comparison.
+    """
+    assert len(images) >= n_train + n_test
+
+    diff_jpeg = DiffJPEG().to(device)
+    stego = []
+    with torch.no_grad():
+        for i in range(n_train + n_test):
+            x = images[i:i+1].to(device)
+            pay = torch.randint(0, 2, (1, num_bits), device=device).float()
+            xs = (x + controller(x, pay)).clamp(-1, 1)
+            stego.append(xs)
+    stego = torch.cat(stego, 0)
+
+    clean = images[:n_train + n_test].to(device)
+    clean_train, clean_test = clean[:n_train], clean[n_train:]
+    stego_train, stego_test = stego[:n_train], stego[n_train:]
+
+    def _train_clf(arch):
+        if arch == "resnet18":
+            clf = models.resnet18(weights=None)
+        else:
+            clf = models.resnet34(weights=None)
+        clf.fc = torch.nn.Linear(clf.fc.in_features, 1)
+        clf = clf.to(device)
+        opt = torch.optim.Adam(clf.parameters(), lr=1e-4)
+        clf.train()
+        batch = 16
+        for _ in range(12):
+            idx = torch.randperm(n_train)
+            for st in range(0, n_train, batch):
+                ed = min(st + batch, n_train)
+                ids = idx[st:ed]
+                if len(ids) == 0:
+                    continue
+                xc = _adaptive_attack(clean_train[ids], diff_jpeg)
+                xs = _adaptive_attack(stego_train[ids], diff_jpeg)
+                x_in = torch.cat([xc, xs], 0)
+                y = torch.cat([
+                    torch.zeros(len(ids), 1, device=device),
+                    torch.ones(len(ids), 1, device=device),
+                ], 0)
+                opt.zero_grad()
+                F.binary_cross_entropy_with_logits(clf(x_in), y).backward()
+                opt.step()
+        clf.eval()
+        return clf
+
+    scores_r18, scores_r34, labels = [], [], []
+    clf18 = _train_clf("resnet18")
+    clf34 = _train_clf("resnet34")
+    with torch.no_grad():
+        batch = 16
+        for st in range(0, n_test, batch):
+            ed = min(st + batch, n_test)
+            xc = clean_test[st:ed]
+            xs = stego_test[st:ed]
+            for x_batch, lbl in [(xc, 0), (xs, 1)]:
+                s18 = torch.sigmoid(clf18(x_batch)).cpu().numpy().flatten().tolist()
+                s34 = torch.sigmoid(clf34(x_batch)).cpu().numpy().flatten().tolist()
+                scores_r18.extend(s18)
+                scores_r34.extend(s34)
+                labels.extend([lbl] * len(s18))
+
+    scores_ens = [(a + b) / 2 for a, b in zip(scores_r18, scores_r34)]
+    auc18 = float(roc_auc_score(labels, scores_r18))
+    auc34 = float(roc_auc_score(labels, scores_r34))
+    auc_ens = float(roc_auc_score(labels, scores_ens))
+
+    print(f"  Multi-detector AUC | ResNet-18: {auc18:.4f}  ResNet-34: {auc34:.4f}  "
+          f"Ensemble: {auc_ens:.4f}")
+
+    del clf18, clf34
+    torch.cuda.empty_cache()
+    return {"auc_resnet18": auc18, "auc_resnet34": auc34, "auc_ensemble": auc_ens}
+
+
+def _load_dataset_images(dataset_name: str, n: int, celeba_dir: str = "") -> torch.Tensor:
     root = ".tifs_data"
     to_tensor = ToTensor()
+
+    if dataset_name == "celeba":
+        from pathlib import Path
+        from PIL import Image as _PilImage
+        if not celeba_dir:
+            raise ValueError("celeba_dir must be provided for CelebA-HQ evaluation")
+        paths = sorted(
+            p for p in Path(celeba_dir).iterdir()
+            if p.suffix.lower() in {".jpg", ".jpeg", ".png"}
+        )
+        if not paths:
+            raise RuntimeError(f"No .jpg/.png images found in {celeba_dir}")
+        imgs = []
+        for p in paths[:n]:
+            img = _PilImage.open(str(p)).convert("RGB").resize((256, 256), _PilImage.BICUBIC)
+            t = torch.from_numpy(np.array(img).astype(np.float32) / 127.5 - 1.0)
+            imgs.append(t.permute(2, 0, 1).unsqueeze(0))
+        return torch.cat(imgs, dim=0)[:n]
 
     if dataset_name == "cifar10":
         ds = datasets.CIFAR10(root=root, train=False, download=True, transform=to_tensor)
@@ -268,11 +468,15 @@ def _load_dataset_images(dataset_name: str, n: int) -> torch.Tensor:
 
 def evaluate_checkpoint(
     checkpoint: str,
-    num_samples: int,
-    cross_dataset_samples: int,
-    skip_cross_dataset: bool,
-    adaptive_train: int,
-    adaptive_test: int,
+    num_samples: int = 1000,
+    cross_dataset_samples: int = 400,
+    skip_cross_dataset: bool = False,
+    adaptive_train: int = 800,
+    adaptive_test: int = 200,
+    multi_payload: bool = False,
+    multiple_detectors: bool = False,
+    real_attacks: bool = False,
+    celeba_dir: str = "",
 ) -> Dict:
     device = "cuda" if torch.cuda.is_available() else "cpu"
     print(f"[eval] Loading checkpoint: {checkpoint}", flush=True)
@@ -289,12 +493,53 @@ def evaluate_checkpoint(
     print(f"[eval] Generating {n_base} base images", flush=True)
     images = ev.generate_images(diffusion, n_base, device)
 
+    # Load RedundantCoder for v5 checkpoints (message BER via majority-vote decoding)
+    ckpt_meta = torch.load(checkpoint, map_location="cpu", weights_only=False)
+    _msg_bits = int(ckpt_meta.get("message_bits", num_bits))
+    _R = int(ckpt_meta.get("redundancy_factor", 1))
+    del ckpt_meta
+    _coder = None
+    if _R > 1 and _msg_bits < num_bits:
+        from dscsp.utils.redundant_coding import RedundantCoder
+        _coder = RedundantCoder(message_bits=_msg_bits, physical_slots=num_bits, redundancy=_R)
+        print(f"[eval] RedundantCoder active: {_msg_bits} msg → {num_bits} physical (R={_R})")
+        print(f"[eval] BER reported as MESSAGE BER (majority-vote decoded)")
+    else:
+        print(f"[eval] No RedundantCoder — BER reported as physical BER")
+
     print(f"[eval] Running clean/jpeg/crop metrics on {num_samples} samples", flush=True)
-    clean = _eval_clean_series(controller, extractor, images[:num_samples], device, num_bits)
-    jpeg75 = _eval_jpeg_series(controller, extractor, images[:num_samples], device, num_bits, 75)
-    jpeg50 = _eval_jpeg_series(controller, extractor, images[:num_samples], device, num_bits, 50)
-    crop80 = _eval_crop_series(controller, extractor, images[:num_samples], device, num_bits, 0.80)
-    crop70 = _eval_crop_series(controller, extractor, images[:num_samples], device, num_bits, 0.70)
+    clean = _eval_clean_series(controller, extractor, images[:num_samples], device, num_bits,
+                               coder=_coder, msg_bits=_msg_bits)
+    jpeg75 = _eval_jpeg_series(controller, extractor, images[:num_samples], device, num_bits, 75,
+                               coder=_coder, msg_bits=_msg_bits)
+    jpeg50 = _eval_jpeg_series(controller, extractor, images[:num_samples], device, num_bits, 50,
+                               coder=_coder, msg_bits=_msg_bits)
+    crop80 = _eval_crop_series(controller, extractor, images[:num_samples], device, num_bits, 0.80,
+                               coder=_coder, msg_bits=_msg_bits)
+    crop70 = _eval_crop_series(controller, extractor, images[:num_samples], device, num_bits, 0.70,
+                               coder=_coder, msg_bits=_msg_bits)
+
+    real_jpeg_gap = {}
+    if real_attacks:
+        print("[eval] Running real-codec JPEG evaluation (libjpeg via Pillow)", flush=True)
+        real_jpeg75 = _eval_jpeg_series(controller, extractor, images[:num_samples], device,
+                                        num_bits, 75, coder=_coder, msg_bits=_msg_bits,
+                                        real_attacks=True)
+        real_jpeg50 = _eval_jpeg_series(controller, extractor, images[:num_samples], device,
+                                        num_bits, 50, coder=_coder, msg_bits=_msg_bits,
+                                        real_attacks=True)
+        real_jpeg_gap = {
+            "q75_proxy_ber": jpeg75["ber_mean"],
+            "q75_real_ber": real_jpeg75["ber_mean"],
+            "q75_gap": real_jpeg75["ber_mean"] - jpeg75["ber_mean"],
+            "q50_proxy_ber": jpeg50["ber_mean"],
+            "q50_real_ber": real_jpeg50["ber_mean"],
+            "q50_gap": real_jpeg50["ber_mean"] - jpeg50["ber_mean"],
+        }
+        print(f"[eval] STE gap Q75: proxy={jpeg75['ber_mean']:.6f}  "
+              f"real={real_jpeg75['ber_mean']:.6f}  gap={real_jpeg_gap['q75_gap']:+.6f}")
+        print(f"[eval] STE gap Q50: proxy={jpeg50['ber_mean']:.6f}  "
+              f"real={real_jpeg50['ber_mean']:.6f}  gap={real_jpeg_gap['q50_gap']:+.6f}")
 
     print(
         f"[eval] Running adaptive steganalysis (train={adaptive_train}, test={adaptive_test})",
@@ -319,10 +564,14 @@ def evaluate_checkpoint(
     cross_dataset = {}
     if not skip_cross_dataset:
         print(f"[eval] Running cross-dataset checks ({cross_dataset_samples} samples each)", flush=True)
-        for ds_name in ["cifar10", "stl10"]:
+        ds_names = ["cifar10", "stl10"]
+        if celeba_dir:
+            ds_names.append("celeba")
+        for ds_name in ds_names:
             try:
                 print(f"[eval] Loading dataset: {ds_name}", flush=True)
-                ds_images = _load_dataset_images(ds_name, cross_dataset_samples)
+                ds_images = _load_dataset_images(ds_name, cross_dataset_samples,
+                                                 celeba_dir=celeba_dir)
                 print(f"[eval] Evaluating dataset: {ds_name} (n={len(ds_images)})", flush=True)
                 ds_clean = _eval_clean_series(controller, extractor, ds_images, device, num_bits)
                 ds_crop = _eval_crop_series(controller, extractor, ds_images, device, num_bits, 0.80)
@@ -333,6 +582,35 @@ def evaluate_checkpoint(
                 }
             except Exception as exc:  # noqa: BLE001
                 cross_dataset[ds_name] = {"error": str(exc)}
+
+    # ── Optional: multi-payload capacity table ──
+    capacity_table = {}
+    if multi_payload:
+        print("[eval] Running multi-payload capacity evaluation (64/128/256 bits)", flush=True)
+        # Try to load RedundantCoder if checkpoint has it
+        ckpt_data = torch.load(checkpoint, map_location="cpu", weights_only=False)
+        msg_bits = int(ckpt_data.get("message_bits", num_bits))
+        R = int(ckpt_data.get("redundancy_factor", 1))
+        del ckpt_data
+        coder = None
+        if R > 1 and msg_bits < num_bits:
+            from dscsp.utils.redundant_coding import RedundantCoder
+            coder = RedundantCoder(message_bits=msg_bits, physical_slots=num_bits, redundancy=R)
+            print(f"[eval]   RedundantCoder: {msg_bits} msg → {num_bits} physical (R={R})")
+        capacity_table = eval_multi_payload_capacity(
+            controller, extractor, images[:num_samples], device,
+            phys_bits=num_bits, coder=coder,
+            payload_sizes=(64, 128, 256),
+        )
+
+    # ── Optional: multiple steganalysis detectors ──
+    multi_det = {}
+    if multiple_detectors:
+        print("[eval] Running multi-detector steganalysis (ResNet-18 + ResNet-34)", flush=True)
+        multi_det = eval_multiple_detectors(
+            controller, images, device, num_bits,
+            n_train=adaptive_train, n_test=adaptive_test,
+        )
 
     cross_dataset_valid = any(
         isinstance(v, dict)
@@ -417,6 +695,9 @@ def evaluate_checkpoint(
         },
         "ablation": ablation_status,
         "areas": areas,
+        "capacity_table": capacity_table,
+        "multi_detector": multi_det,
+        "real_jpeg_gap": real_jpeg_gap,
     }
 
     print("[eval] Completed full TIFS evaluation", flush=True)
@@ -428,23 +709,38 @@ def evaluate_checkpoint(
 def main() -> None:
     parser = argparse.ArgumentParser(description="TIFS-oriented DSCSP evaluation")
     parser.add_argument("--checkpoint", default="checkpoints_v4/dscsp_v4_final.pt")
-    parser.add_argument("--num-samples", type=int, default=600)
+    parser.add_argument("--num-samples", type=int, default=1000)
+    parser.add_argument("--fast", action="store_true",
+                        help="Override --num-samples to 200 for quick development runs")
     parser.add_argument("--cross-dataset-samples", type=int, default=400)
     parser.add_argument("--adaptive-train", type=int, default=800)
     parser.add_argument("--adaptive-test", type=int, default=200)
     parser.add_argument("--skip-cross-dataset", action="store_true")
+    parser.add_argument("--multi-payload", action="store_true",
+                        help="Evaluate BER at 64/128/256 payload bits (capacity table)")
+    parser.add_argument("--multiple-detectors", action="store_true",
+                        help="Run ResNet-18 and ResNet-34 steganalysis (ensemble AUC)")
+    parser.add_argument("--real-attacks", action="store_true",
+                        help="Route JPEG eval through real libjpeg (Pillow) and report STE gap")
+    parser.add_argument("--celeba-dir", default="",
+                        help="Directory of CelebA-HQ .jpg/.png files for held-out cross-dataset eval")
     parser.add_argument("--output", default="outputs_tifs_eval/tifs_eval_latest.json")
     args = parser.parse_args()
 
+    n_samples = 200 if args.fast else args.num_samples
     os.makedirs(os.path.dirname(args.output) or ".", exist_ok=True)
 
     result = evaluate_checkpoint(
         checkpoint=args.checkpoint,
-        num_samples=args.num_samples,
+        num_samples=n_samples,
         cross_dataset_samples=args.cross_dataset_samples,
         skip_cross_dataset=args.skip_cross_dataset,
         adaptive_train=args.adaptive_train,
         adaptive_test=args.adaptive_test,
+        multi_payload=args.multi_payload,
+        multiple_detectors=args.multiple_detectors,
+        real_attacks=args.real_attacks,
+        celeba_dir=args.celeba_dir,
     )
 
     with open(args.output, "w", encoding="utf-8") as f:
@@ -458,6 +754,17 @@ def main() -> None:
     print(f"JPEG Q75 BER: {result['jpeg']['q75_ber']:.6f}")
     print(f"Crop Q80 BER: {result['crop']['q80_ber']:.6f}")
     print(f"Adaptive AUC: {result['adaptive_steganalysis']['auc_adaptive']:.4f}")
+    if result.get("real_jpeg_gap"):
+        g = result["real_jpeg_gap"]
+        print(f"STE gap Q75: proxy={g['q75_proxy_ber']:.6f}  real={g['q75_real_ber']:.6f}  "
+              f"gap={g['q75_gap']:+.6f}")
+        print(f"STE gap Q50: proxy={g['q50_proxy_ber']:.6f}  real={g['q50_real_ber']:.6f}  "
+              f"gap={g['q50_gap']:+.6f}")
+    if result.get("multi_detector"):
+        md = result["multi_detector"]
+        print(f"ResNet-18 AUC: {md['auc_resnet18']:.4f}  "
+              f"ResNet-34 AUC: {md['auc_resnet34']:.4f}  "
+              f"Ensemble AUC: {md['auc_ensemble']:.4f}")
     print("Areas:")
     for k, v in result["areas"].items():
         print(f"  - {k}: {'PASS' if v.get('pass', False) else 'FAIL'}")

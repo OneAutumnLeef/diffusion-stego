@@ -1,0 +1,16 @@
+{
+  "figures": [
+    "figures/system_overview.png",
+    "figures/architecture_detail.png",
+    "figures/cycle_performance.png",
+    "figures/ablation_v5.png",
+    "figures/security_v5.png",
+    "figures/crop_failure.png"
+  ],
+  "tables": [
+    "paper_assets/generated_tables/main_quant_table.tex",
+    "paper_assets/generated_tables/cross_dataset_table.tex",
+    "paper_assets/generated_tables/v5_ablation_table.tex",
+    "paper_assets/generated_tables/cycle_summary_table.tex"
+  ]
+}

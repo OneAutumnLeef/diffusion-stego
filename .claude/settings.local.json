@@ -1,0 +1,20 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python -c \"import os; p=r'd:/Diffusion_@ - Copy/Diffusion/outputs_v5/step_050000.png'; print\\('exists:', os.path.exists\\(p\\), 'size:', os.path.getsize\\(p\\)\\)\")",
+      "Bash(python scripts/generate_paper_figures.py)",
+      "Read(//c//**)",
+      "Read(//c/Program Files/**)",
+      "Read(//c/Program Files \\(x86\\)/**)",
+      "Bash(python)",
+      "Bash(python \"d:/Diffusion_@ - Copy/Diffusion/scripts/check_tex.py\")",
+      "Bash(nvidia-smi --query-gpu=name,memory.total,memory.free --format=csv)",
+      "Bash(python -c \"import torch; print\\('torch', torch.__version__, 'cuda', torch.cuda.is_available\\(\\)\\)\")",
+      "Bash(conda env *)",
+      "Read(//c/Users/deraj/miniconda3/**)",
+      "Bash(/c/ProgramData/anaconda3/python.exe -c \"import torch; print\\('torch', torch.__version__, 'cuda', torch.cuda.is_available\\(\\), 'dev', torch.cuda.get_device_name\\(0\\) if torch.cuda.is_available\\(\\) else 'none'\\)\")",
+      "Bash(/c/ProgramData/anaconda3/python.exe -c \"import torch, torchvision, PIL, numpy; from diffusers import DDPMPipeline; print\\('deps ok'\\)\")",
+      "Bash(/c/ProgramData/anaconda3/python.exe evaluate_tifs.py --checkpoint checkpoints_tifs/ber_recovery/dscsp_v4_final.pt --fast --skip-cross-dataset --real-attacks --multiple-detectors --output outputs_tifs_eval/cycle_009_real_and_detectors.json)"
+    ]
+  }
+}

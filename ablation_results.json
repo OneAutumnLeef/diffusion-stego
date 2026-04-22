@@ -1,0 +1,46 @@
+{
+  "baseline": {
+    "variant": "baseline",
+    "overrides": {},
+    "ber": 0.0,
+    "psnr": 35.12180994033813,
+    "best_ber": 0.0,
+    "total_steps": 15000,
+    "training_time_sec": 4362.0
+  },
+  "no_ortho": {
+    "variant": "no_ortho",
+    "overrides": {
+      "lambda_ortho": 0.0
+    },
+    "ber": 0.0,
+    "psnr": 24.285648460388185,
+    "best_ber": 0.0,
+    "total_steps": 15000,
+    "training_time_sec": 4803.9
+  },
+  "no_curriculum": {
+    "variant": "no_curriculum",
+    "overrides": {
+      "robustness_start_step": 0,
+      "robustness_ramp_steps": 0,
+      "robustness_max_prob": 0.7
+    },
+    "ber": 0.0,
+    "psnr": 37.63077001571655,
+    "best_ber": 0.0,
+    "total_steps": 15000,
+    "training_time_sec": 4811.8
+  },
+  "no_lpips": {
+    "variant": "no_lpips",
+    "overrides": {
+      "lambda_perc": 0.0
+    },
+    "ber": 0.0,
+    "psnr": 34.98592437744141,
+    "best_ber": 0.0,
+    "total_steps": 15000,
+    "training_time_sec": 3991.1
+  }
+}
