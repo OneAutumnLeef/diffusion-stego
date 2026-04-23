@@ -443,13 +443,16 @@ def quick_eval(controller, extractor, coder, image_pool, config, device, n=200, 
         idx = torch.randint(0, pool_size, (1,))
         x_c = image_pool[idx].to(device)
         msg = torch.randint(0, 2, (1, msg_bits), device=device).float()
-        physical = coder.encode(msg)
+        if coder is not None:
+            physical = coder.encode(msg)
+        else:
+            physical = msg  # use_redundant_coding=False: message == physical payload
 
         delta = controller(x_c, physical)
         x_s = (x_c + delta).clamp(-1, 1)
         logits = extractor(x_s)
 
-        if eval_bits < msg_bits:
+        if coder is not None and eval_bits < msg_bits:
             # Subset evaluation: take first eval_bits message positions
             perm_sub = coder.perm[:eval_bits].to(device)  # (eval_bits, R)
             gathered = torch.stack(
@@ -459,8 +462,11 @@ def quick_eval(controller, extractor, coder, image_pool, config, device, n=200, 
             )  # (1, eval_bits, R)
             votes = (gathered.mean(-1) > 0).float()
             total_ber += (votes - msg[:, :eval_bits]).abs().mean().item()
-        else:
+        elif coder is not None:
             msg_hard = coder.decode_hard(logits)
+            total_ber += compute_ber(msg_hard, msg)
+        else:
+            msg_hard = (logits > 0).float()
             total_ber += compute_ber(msg_hard, msg)
 
         total_psnr += compute_psnr(x_s, x_c)
