@@ -50,7 +50,7 @@ All the codebase changes (C1 `--real-attacks`, C2 `--multiple-detectors`, C3 `wo
 The user provided this HF token with access to private `OneAutumnLeef/dscsp-checkpoints`:
 
 ```
-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
+<REDACTED: export HF_TOKEN from a local secret manager; see docs/SECRETS.md>
 ```
 
 Export as `HF_TOKEN` — never echo it, never pass on CLI, never commit it. The token is also useful for pulling real v5 checkpoints if needed for ablation cross-checks, but this sprint does not require them.
@@ -79,7 +79,7 @@ Success criterion: `grep -nE 'TBD|X_\\mathrm|Y_\\mathrm|\\Delta Z' latest_paper_
    ```
 2. Authenticate HF (use env var, do not persist if machine is shared):
    ```bash
-   export HF_TOKEN=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
+   export HF_TOKEN=<REDACTED: export HF_TOKEN from a local secret manager; see docs/SECRETS.md>
    python -c "from huggingface_hub import whoami; print(whoami(token='$HF_TOKEN')['name'])"
    # expect: OneAutumnLeef
    ```
