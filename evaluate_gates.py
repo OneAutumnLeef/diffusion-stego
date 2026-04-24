@@ -37,6 +37,21 @@ from dscsp.models.diffusion_wrapper import DiffusionWrapper
 from dscsp.utils.metrics import compute_ber
 
 
+def load_hidden_model(ckpt_path: str, device: str):
+    """Load a HiDDeN baseline checkpoint; returns (encoder, decoder, config)."""
+    from hidden_baseline import HiDDeNEncoder, HiDDeNDecoder
+    ckpt = torch.load(ckpt_path, map_location=device, weights_only=False)
+    cfg = ckpt["config"]
+    encoder = HiDDeNEncoder(
+        num_bits=cfg["num_bits"], max_perturbation=cfg["max_perturbation"],
+    ).to(device)
+    decoder = HiDDeNDecoder(num_bits=cfg["num_bits"]).to(device)
+    encoder.load_state_dict(ckpt["encoder"])
+    decoder.load_state_dict(ckpt["decoder"])
+    encoder.eval(); decoder.eval()
+    return encoder, decoder, cfg
+
+
 GATES = {
     "clean_ber_max": 0.01,
     "jpeg_q75_real_ber_max": 0.10,
@@ -292,14 +307,18 @@ def evaluate_checkpoint(
     adaptive_train: int = 800,
     adaptive_test: int = 200,
     seed: int = 0,
+    model_type: str = "dscsp",
 ) -> Dict:
     device = "cuda" if torch.cuda.is_available() else "cpu"
     random.seed(seed)
     np.random.seed(seed)
     torch.manual_seed(seed)
 
-    print(f"[gates] checkpoint={checkpoint}", flush=True)
-    controller, extractor, config = ev.load_v4_model(checkpoint, device)
+    print(f"[gates] checkpoint={checkpoint}  model_type={model_type}", flush=True)
+    if model_type == "hidden":
+        controller, extractor, config = load_hidden_model(checkpoint, device)
+    else:
+        controller, extractor, config = ev.load_v4_model(checkpoint, device)
     num_bits = int(config["num_bits"])
 
     diffusion = DiffusionWrapper(
@@ -394,6 +413,8 @@ def main():
     parser.add_argument("--adaptive-train", type=int, default=800)
     parser.add_argument("--adaptive-test", type=int, default=200)
     parser.add_argument("--seed", type=int, default=0)
+    parser.add_argument("--model-type", choices=["dscsp", "hidden"], default="dscsp",
+                        help="Which checkpoint schema to load.")
     parser.add_argument("--output", default="outputs_tifs_eval/gates_latest.json")
     args = parser.parse_args()
 
@@ -404,6 +425,7 @@ def main():
         adaptive_train=args.adaptive_train,
         adaptive_test=args.adaptive_test,
         seed=args.seed,
+        model_type=args.model_type,
     )
 
     with open(args.output, "w", encoding="utf-8") as f:
