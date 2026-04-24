@@ -1,0 +1,18 @@
+{
+  "step": 30000,
+  "total_steps": 30000,
+  "ber": 0.023438,
+  "ber_active": 0.023438,
+  "active_bits": 256,
+  "phase": "TRAIN",
+  "psnr": 37.29,
+  "best_ber": 0.0,
+  "best_ber_active": 0.0,
+  "msg_loss": 0.090299,
+  "perc_loss": 0.009716,
+  "delta_rms": 0.027531,
+  "attack_prob": 0.0,
+  "lr": 2.520239379220342e-05,
+  "avg_step_time_s": 2.398,
+  "eta_min": 0.0
+}

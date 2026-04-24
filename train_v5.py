@@ -362,7 +362,8 @@ def get_active_bits(step, config):
 
 # ─── Discriminator Step ─────────────────────────────────────────────────────
 
-def train_discriminator_step(discriminator, disc_optimizer, x_clean, x_stego, label_smoothing=0.1):
+def train_discriminator_step(discriminator, disc_optimizer, x_clean, x_stego,
+                             label_smoothing=0.1, lambda_gp=0.0, device: str = "cuda"):
     disc_optimizer.zero_grad()
     logits_clean = discriminator(x_clean.detach())
     logits_stego = discriminator(x_stego.detach())
@@ -372,6 +373,10 @@ def train_discriminator_step(discriminator, disc_optimizer, x_clean, x_stego, la
         F.binary_cross_entropy_with_logits(logits_clean, target_clean) +
         F.binary_cross_entropy_with_logits(logits_stego, target_stego)
     ) / 2
+    if lambda_gp > 0:
+        loss_disc = loss_disc + lambda_gp * compute_gradient_penalty(
+            discriminator, x_clean.detach(), x_stego.detach(), device
+        )
     loss_disc.backward()
     disc_optimizer.step()
     with torch.no_grad():
@@ -383,6 +388,35 @@ def train_discriminator_step(discriminator, disc_optimizer, x_clean, x_stego, la
 
 
 # ─── Auxiliary Losses ───────────────────────────────────────────────────────
+
+def compute_mode_spread_loss(delta: torch.Tensor, k: int = 8) -> torch.Tensor:
+    """Singular-value concentration penalty (Instruction 4A)."""
+    B, C, H, W = delta.shape
+    mat = delta.reshape(B * C, H * W)
+    mat = mat - mat.mean(dim=0, keepdim=True)
+    _, sigma, _ = torch.linalg.svd(mat, full_matrices=False)
+    sig2 = sigma.pow(2)
+    k_eff = min(k, sig2.shape[0])
+    total = sig2.sum().clamp_min(1e-12)
+    return sig2[:k_eff].sum() / total
+
+
+def compute_gradient_penalty(discriminator: nn.Module,
+                             x_clean: torch.Tensor, x_stego: torch.Tensor,
+                             device: str) -> torch.Tensor:
+    """WGAN-GP 1-centred gradient penalty (Instruction 4C)."""
+    B = x_clean.shape[0]
+    alpha = torch.rand(B, 1, 1, 1, device=device)
+    x_hat = (alpha * x_clean + (1 - alpha) * x_stego).detach()
+    x_hat.requires_grad_(True)
+    d_hat = discriminator(x_hat)
+    grads = torch.autograd.grad(
+        outputs=d_hat.sum(), inputs=x_hat,
+        create_graph=True, retain_graph=True,
+    )[0]
+    grad_norm = grads.reshape(B, -1).norm(p=2, dim=1)
+    return ((grad_norm - 1.0) ** 2).mean()
+
 
 def compute_spectral_loss(x_stego, x_clean):
     """Log-magnitude FFT MSE — penalises frequency-domain artifacts."""
@@ -784,10 +818,12 @@ def train(config=None):
 
             # Discriminator update
             if discriminator is not None and step >= config["adv_start_step"]:
+                lambda_gp_now = float(config.get("lambda_gp", 0.0))
                 for _ in range(config["disc_steps_per_gen_step"]):
                     disc_loss_val, disc_acc_val = train_discriminator_step(
                         discriminator, disc_optimizer, x_clean, x_stego,
                         label_smoothing=config["disc_label_smoothing"],
+                        lambda_gp=lambda_gp_now, device=device,
                     )
 
             # Generator update
@@ -849,6 +885,15 @@ def train(config=None):
                 loss = loss + config["lambda_srm_match"] * srm_loss
                 srm_match_val = srm_loss.item()
             loss_dict["srm_match"] = srm_match_val
+
+            # Mode-spread regularizer (Instruction 4A)
+            spread_val = 0.0
+            lambda_spread = float(config.get("lambda_spread", 0.0))
+            if lambda_spread > 0 and step >= int(config.get("lambda_spread_start_step", 1000)):
+                sp = compute_mode_spread_loss(delta, k=int(config.get("lambda_spread_k", 8)))
+                loss = loss + lambda_spread * sp
+                spread_val = sp.item()
+            loss_dict["spread"] = spread_val
 
             loss.backward()
             torch.nn.utils.clip_grad_norm_(
