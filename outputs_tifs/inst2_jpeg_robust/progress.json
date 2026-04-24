@@ -1,18 +1,18 @@
 {
-  "step": 4350,
+  "step": 4750,
   "total_steps": 8000,
-  "ber": 0.000977,
-  "ber_active": 0.000977,
+  "ber": 0.004883,
+  "ber_active": 0.004883,
   "active_bits": 256,
   "phase": "TRAIN",
-  "psnr": 27.34,
+  "psnr": 27.37,
   "best_ber": 0.0,
   "best_ber_active": 0.0,
-  "msg_loss": 0.005578,
-  "perc_loss": 0.086988,
-  "delta_rms": 0.085915,
+  "msg_loss": 0.011048,
+  "perc_loss": 0.09951,
+  "delta_rms": 0.085649,
   "attack_prob": 0.45,
-  "lr": 3.508801250356246e-05,
-  "avg_step_time_s": 0.154,
-  "eta_min": 9.3
+  "lr": 2.9033755248448814e-05,
+  "avg_step_time_s": 0.151,
+  "eta_min": 8.2
 }
