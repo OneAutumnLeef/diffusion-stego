@@ -1,6 +1,6 @@
 {
-  "final_ber": 0.00638671875,
-  "final_psnr": 35.307828216552736,
+  "final_ber": 0.00435546875,
+  "final_psnr": 35.15671497344971,
   "best_ber": 0.0,
   "best_ber_active": 0.0,
   "disc_acc": null,

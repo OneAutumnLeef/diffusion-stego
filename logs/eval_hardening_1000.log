@@ -1,0 +1,86 @@
+[eval] Loading checkpoint: checkpoints_tifs/hardening/dscsp_v5_final.pt
+Loading pipeline components...:   0%|          | 0/2 [00:00<?, ?it/s]An error occurred while trying to fetch /workspace/.cache/huggingface/hub/models--google--ddpm-celebahq-256/snapshots/cd5c944777ea2668051904ead6cc120739b86c4d: Error no file named diffusion_pytorch_model.safetensors found in directory /workspace/.cache/huggingface/hub/models--google--ddpm-celebahq-256/snapshots/cd5c944777ea2668051904ead6cc120739b86c4d.
+Defaulting to unsafe serialization. Pass `allow_pickle=False` to raise an error instead.
+Loading pipeline components...: 100%|██████████| 2/2 [00:01<00:00,  1.61it/s]Loading pipeline components...: 100%|██████████| 2/2 [00:01<00:00,  1.61it/s]
+/workspace/diffusion-stego/dscsp/models/diffusion_wrapper.py:37: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.detach().clone() or sourceTensor.detach().clone().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  self.final_alpha_cumprod = torch.tensor(
+[eval] Generating 1000 base images
+    Generated 20/1000
+    Generated 40/1000
+    Generated 60/1000
+    Generated 80/1000
+    Generated 100/1000
+    Generated 120/1000
+    Generated 140/1000
+    Generated 160/1000
+    Generated 180/1000
+    Generated 200/1000
+    Generated 220/1000
+    Generated 240/1000
+    Generated 260/1000
+    Generated 280/1000
+    Generated 300/1000
+    Generated 320/1000
+    Generated 340/1000
+    Generated 360/1000
+    Generated 380/1000
+    Generated 400/1000
+    Generated 420/1000
+    Generated 440/1000
+    Generated 460/1000
+    Generated 480/1000
+    Generated 500/1000
+    Generated 520/1000
+    Generated 540/1000
+    Generated 560/1000
+    Generated 580/1000
+    Generated 600/1000
+    Generated 620/1000
+    Generated 640/1000
+    Generated 660/1000
+    Generated 680/1000
+    Generated 700/1000
+    Generated 720/1000
+    Generated 740/1000
+    Generated 760/1000
+    Generated 780/1000
+    Generated 800/1000
+    Generated 820/1000
+    Generated 840/1000
+    Generated 860/1000
+    Generated 880/1000
+    Generated 900/1000
+    Generated 920/1000
+    Generated 940/1000
+    Generated 960/1000
+    Generated 980/1000
+    Generated 1000/1000
+[eval] No RedundantCoder — BER reported as physical BER
+[eval] Running clean/jpeg/crop metrics on 1000 samples
+[eval] Running real-codec JPEG evaluation (libjpeg via Pillow)
+[eval] STE gap Q75: proxy=0.241160  real=0.392203  gap=+0.151043
+[eval] STE gap Q50: proxy=0.306340  real=0.414531  gap=+0.108191
+[eval] Running adaptive steganalysis (train=800, test=200)
+[eval] Running multi-detector steganalysis (ResNet-18 + ResNet-34)
+  Multi-detector AUC | ResNet-18: 0.9988  ResNet-34: 0.9921  Ensemble: 0.9990
+[eval] Completed full TIFS evaluation
+========================================================================
+TIFS Evaluation Summary
+========================================================================
+Checkpoint: checkpoints_tifs/hardening/dscsp_v5_final.pt
+Clean BER: 0.043789  (CI95: 0.041749, 0.045887)
+JPEG Q75 BER: 0.241160
+Crop Q80 BER: 0.496004
+Adaptive AUC: 0.9954
+STE gap Q75: proxy=0.241160  real=0.392203  gap=+0.151043
+STE gap Q50: proxy=0.306340  real=0.414531  gap=+0.108191
+ResNet-18 AUC: 0.9988  ResNet-34 AUC: 0.9921  Ensemble AUC: 0.9990
+Areas:
+  - detectability: FAIL
+  - crop_robustness: FAIL
+  - ablation: PASS
+  - statistical_analysis: PASS
+  - cross_dataset: FAIL
+  - adaptive_steganalysis: FAIL
+  - ber_focus: FAIL
+Saved: outputs_tifs_eval/hardening_1000.json

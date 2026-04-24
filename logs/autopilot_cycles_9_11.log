@@ -1,0 +1,654 @@
+========================================================================
+Cycle 9/11 | variant=ber_recovery_clean_first | step 20000 -> 21200
+========================================================================
+Device: cuda
+GPU: NVIDIA GeForce RTX 5090
+VRAM: 31.4 GB
+
+Loading diffusion model...
+Loading pipeline components...:   0%|          | 0/2 [00:00<?, ?it/s]An error occurred while trying to fetch /workspace/.cache/huggingface/hub/models--google--ddpm-celebahq-256/snapshots/cd5c944777ea2668051904ead6cc120739b86c4d: Error no file named diffusion_pytorch_model.safetensors found in directory /workspace/.cache/huggingface/hub/models--google--ddpm-celebahq-256/snapshots/cd5c944777ea2668051904ead6cc120739b86c4d.
+Defaulting to unsafe serialization. Pass `allow_pickle=False` to raise an error instead.
+Loading pipeline components...:  50%|█████     | 1/2 [00:00<00:00,  2.01it/s]Loading pipeline components...: 100%|██████████| 2/2 [00:00<00:00,  3.97it/s]
+/workspace/diffusion-stego/dscsp/models/diffusion_wrapper.py:37: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.detach().clone() or sourceTensor.detach().clone().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  self.final_alpha_cumprod = torch.tensor(
+  UNet params: 113.7M (frozen)
+
+Initializing content-adaptive controller...
+  Controller params: 4.39M
+Initializing global-pool extractor...
+  Extractor params: 11.31M (spatial_map)
+Setting up [LPIPS] perceptual loss: trunk [vgg], v[0.1], spatial [off]
+/usr/local/lib/python3.12/dist-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+  warnings.warn(
+/usr/local/lib/python3.12/dist-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=VGG16_Weights.IMAGENET1K_V1`. You can also use `weights=VGG16_Weights.DEFAULT` to get the most up-to-date weights.
+  warnings.warn(msg)
+Loading model from: /usr/local/lib/python3.12/dist-packages/lpips/weights/v0.1/vgg.pth
+  JPEG-heavy attack layer (JPEG weight: 0.0)
+Resuming from checkpoints_tifs/ber_recovery/dscsp_v4_final.pt...
+  Loaded controller weights (strict)
+  Loaded extractor weights (strict)
+  Resumed at step 20000, best BER: 0.0000
+Generating image pool...
+  Generating 128 clean images...
+    4/128    8/128    12/128    16/128    20/128    24/128    28/128    32/128    36/128    40/128    44/128    48/128    52/128    56/128    60/128    64/128    68/128    72/128    76/128    80/128    84/128    88/128    92/128    96/128    100/128    104/128    108/128    112/128    116/128    120/128    124/128    128/128  Image pool: torch.Size([128, 3, 256, 256]), range: [-1.000, 1.000]
+
+Starting DSCSP v4 training for 21200 steps (from step 20000)...
+  Total trainable params: 15.70M
+  Batch size: 4
+  Payload: 256 bits
+  Active bits curriculum: 16 -> 256 over 2500 steps
+  Max perturbation: 0.14
+  Extractor bootstrap: 900 steps, amp=0.18
+  Controller bootstrap: 900 steps, align_w=20.0
+  Lambda perc: 0.0, spec: 0.0, adv: 0.0
+  Adversarial: starts step 999999, ramps 4000 steps, 3 D steps/G step
+  Attacks: starts step 999999, max prob 0.0, JPEG weight 0.0
+  LR: controller=8e-05, extractor=0.00025
+
+BOOT-EXT Step 20010/21200 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 21.0dB | msg: 0.0014 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1800 | atk: 0.00 | lr: 8.0e-05 | 0.07s/step | ETA: 1min
+BOOT-EXT Step 20020/21200 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 21.0dB | msg: 0.0007 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1800 | atk: 0.00 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 20030/21200 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 21.1dB | msg: 0.0004 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1800 | atk: 0.00 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 20040/21200 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 20.9dB | msg: 0.0003 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1800 | atk: 0.00 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 20050/21200 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 21.0dB | msg: 0.0003 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1800 | atk: 0.00 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 20060/21200 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 20.9dB | msg: 0.0003 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1800 | atk: 0.00 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 20070/21200 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 20.9dB | msg: 0.0002 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1800 | atk: 0.00 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 20080/21200 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 21.0dB | msg: 0.0002 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1800 | atk: 0.00 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 20090/21200 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 21.0dB | msg: 0.0002 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1800 | atk: 0.00 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 20100/21200 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 20.9dB | msg: 0.0002 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1800 | atk: 0.00 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 20110/21200 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 21.1dB | msg: 0.0002 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1800 | atk: 0.00 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 20120/21200 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 21.0dB | msg: 0.0001 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1800 | atk: 0.00 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 20130/21200 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 21.1dB | msg: 0.0002 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1800 | atk: 0.00 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 20140/21200 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 21.1dB | msg: 0.0001 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1800 | atk: 0.00 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 20150/21200 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 21.1dB | msg: 0.0002 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1800 | atk: 0.00 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 20160/21200 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 21.1dB | msg: 0.0001 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1800 | atk: 0.00 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 20170/21200 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 21.0dB | msg: 0.0001 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1800 | atk: 0.00 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 20180/21200 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 21.0dB | msg: 0.0001 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1800 | atk: 0.00 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 20190/21200 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 21.1dB | msg: 0.0001 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1800 | atk: 0.00 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 20200/21200 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 21.0dB | msg: 0.0001 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1800 | atk: 0.00 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 20210/21200 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 21.0dB | msg: 0.0001 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1800 | atk: 0.00 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 20220/21200 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 20.9dB | msg: 0.0001 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1800 | atk: 0.00 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 20230/21200 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 21.0dB | msg: 0.0001 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1800 | atk: 0.00 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 20240/21200 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 21.0dB | msg: 0.0001 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1800 | atk: 0.00 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 20250/21200 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 21.1dB | msg: 0.0001 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1800 | atk: 0.00 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 20260/21200 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 20.9dB | msg: 0.0001 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1800 | atk: 0.00 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 20270/21200 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 21.1dB | msg: 0.0001 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1800 | atk: 0.00 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 20280/21200 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 21.0dB | msg: 0.0001 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1800 | atk: 0.00 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 20290/21200 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 21.0dB | msg: 0.0001 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1800 | atk: 0.00 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 20300/21200 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 21.0dB | msg: 0.0001 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1800 | atk: 0.00 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 20310/21200 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 21.0dB | msg: 0.0001 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1800 | atk: 0.00 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 20320/21200 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 21.0dB | msg: 0.0001 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1800 | atk: 0.00 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 20330/21200 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 21.0dB | msg: 0.0006 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1800 | atk: 0.00 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 20340/21200 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 20.9dB | msg: 0.0004 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1800 | atk: 0.00 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 20350/21200 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 21.0dB | msg: 0.0009 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1800 | atk: 0.00 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 20360/21200 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 21.0dB | msg: 0.0007 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1800 | atk: 0.00 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 20370/21200 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 21.0dB | msg: 0.0003 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1800 | atk: 0.00 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 20380/21200 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 21.0dB | msg: 0.0002 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1800 | atk: 0.00 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 20390/21200 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 21.1dB | msg: 0.0002 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1800 | atk: 0.00 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 20400/21200 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 21.0dB | msg: 0.0001 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1800 | atk: 0.00 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+  Saved checkpoint: checkpoints_tifs/ber_recovery/dscsp_v4_step_020400.pt
+BOOT-EXT Step 20410/21200 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 21.0dB | msg: 0.0001 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1800 | atk: 0.00 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 20420/21200 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 21.1dB | msg: 0.0001 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1800 | atk: 0.00 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 20430/21200 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 21.0dB | msg: 0.0001 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1800 | atk: 0.00 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 20440/21200 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 21.0dB | msg: 0.0001 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1800 | atk: 0.00 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 20450/21200 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 21.0dB | msg: 0.0001 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1800 | atk: 0.00 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 20460/21200 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 21.0dB | msg: 0.0001 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1800 | atk: 0.00 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 20470/21200 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 20.9dB | msg: 0.0001 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1800 | atk: 0.00 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 20480/21200 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 20.9dB | msg: 0.0001 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1800 | atk: 0.00 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 20490/21200 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 20.9dB | msg: 0.0001 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1800 | atk: 0.00 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 20500/21200 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 20.9dB | msg: 0.0001 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1800 | atk: 0.00 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 20510/21200 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 20.9dB | msg: 0.0001 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1800 | atk: 0.00 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 20520/21200 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 21.0dB | msg: 0.0001 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1800 | atk: 0.00 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 20530/21200 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 21.0dB | msg: 0.0001 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1800 | atk: 0.00 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 20540/21200 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 21.0dB | msg: 0.0001 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1800 | atk: 0.00 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 20550/21200 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 21.0dB | msg: 0.0001 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1800 | atk: 0.00 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 20560/21200 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 21.1dB | msg: 0.0001 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1800 | atk: 0.00 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 20570/21200 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 21.0dB | msg: 0.0001 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1800 | atk: 0.00 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 20580/21200 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 21.0dB | msg: 0.0001 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1800 | atk: 0.00 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 20590/21200 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 20.9dB | msg: 0.0001 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1800 | atk: 0.00 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 20600/21200 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 21.0dB | msg: 0.0001 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1800 | atk: 0.00 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 20610/21200 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 21.0dB | msg: 0.0001 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1800 | atk: 0.00 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 20620/21200 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 21.1dB | msg: 0.0001 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1800 | atk: 0.00 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 20630/21200 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 21.0dB | msg: 0.0001 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1800 | atk: 0.00 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 20640/21200 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 21.0dB | msg: 0.0001 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1800 | atk: 0.00 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 20650/21200 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 20.9dB | msg: 0.0001 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1800 | atk: 0.00 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 20660/21200 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 21.0dB | msg: 0.0001 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1800 | atk: 0.00 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 20670/21200 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 21.0dB | msg: 0.0001 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1800 | atk: 0.00 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 20680/21200 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 21.1dB | msg: 0.0001 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1800 | atk: 0.00 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 20690/21200 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 21.0dB | msg: 0.0001 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1800 | atk: 0.00 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 20700/21200 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 21.0dB | msg: 0.0001 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1800 | atk: 0.00 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 20710/21200 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 21.0dB | msg: 0.0001 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1800 | atk: 0.00 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 20720/21200 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 21.0dB | msg: 0.0001 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1800 | atk: 0.00 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 20730/21200 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 21.0dB | msg: 0.0001 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1800 | atk: 0.00 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 20740/21200 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 21.0dB | msg: 0.0001 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1800 | atk: 0.00 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 20750/21200 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 21.0dB | msg: 0.0001 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1800 | atk: 0.00 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 20760/21200 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 21.0dB | msg: 0.0001 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1800 | atk: 0.00 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 20770/21200 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 21.0dB | msg: 0.0001 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1800 | atk: 0.00 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 20780/21200 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 21.0dB | msg: 0.0001 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1800 | atk: 0.00 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 20790/21200 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 20.9dB | msg: 0.0001 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1800 | atk: 0.00 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 20800/21200 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 20.9dB | msg: 0.0001 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1800 | atk: 0.00 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 20810/21200 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 21.0dB | msg: 0.0001 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1800 | atk: 0.00 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 20820/21200 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 21.0dB | msg: 0.0001 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1800 | atk: 0.00 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 20830/21200 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 21.0dB | msg: 0.0001 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1800 | atk: 0.00 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 20840/21200 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 21.0dB | msg: 0.0001 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1800 | atk: 0.00 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 20850/21200 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 20.9dB | msg: 0.0001 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1800 | atk: 0.00 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 20860/21200 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 21.0dB | msg: 0.0001 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1800 | atk: 0.00 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 20870/21200 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 20.9dB | msg: 0.0001 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1800 | atk: 0.00 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 20880/21200 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 21.0dB | msg: 0.0001 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1800 | atk: 0.00 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 20890/21200 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 21.0dB | msg: 0.0001 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1800 | atk: 0.00 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 20900/21200 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 21.0dB | msg: 0.0001 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1800 | atk: 0.00 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-CTRL Step 20910/21200 | BER: 0.0918 | A-BER(256): 0.0918 | PSNR: 25.3dB | msg: 0.4686 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1090 | atk: 0.00 | lr: 8.0e-05 | 0.08s/step | ETA: 0min
+BOOT-CTRL Step 20920/21200 | BER: 0.0225 | A-BER(256): 0.0225 | PSNR: 26.4dB | msg: 0.0818 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.0957 | atk: 0.00 | lr: 8.0e-05 | 0.05s/step | ETA: 0min
+BOOT-CTRL Step 20930/21200 | BER: 0.0107 | A-BER(256): 0.0107 | PSNR: 27.0dB | msg: 0.0352 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.0898 | atk: 0.00 | lr: 8.0e-05 | 0.05s/step | ETA: 0min
+BOOT-CTRL Step 20940/21200 | BER: 0.0029 | A-BER(256): 0.0029 | PSNR: 27.4dB | msg: 0.0103 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.0855 | atk: 0.00 | lr: 8.0e-05 | 0.05s/step | ETA: 0min
+BOOT-CTRL Step 20950/21200 | BER: 0.0068 | A-BER(256): 0.0068 | PSNR: 27.8dB | msg: 0.0155 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.0816 | atk: 0.00 | lr: 8.0e-05 | 0.05s/step | ETA: 0min
+BOOT-CTRL Step 20960/21200 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 28.1dB | msg: 0.0020 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.0791 | atk: 0.00 | lr: 8.0e-05 | 0.05s/step | ETA: 0min
+BOOT-CTRL Step 20970/21200 | BER: 0.0020 | A-BER(256): 0.0020 | PSNR: 28.4dB | msg: 0.0102 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.0766 | atk: 0.00 | lr: 8.0e-05 | 0.05s/step | ETA: 0min
+BOOT-CTRL Step 20980/21200 | BER: 0.0010 | A-BER(256): 0.0010 | PSNR: 29.0dB | msg: 0.0023 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.0713 | atk: 0.00 | lr: 8.0e-05 | 0.05s/step | ETA: 0min
+BOOT-CTRL Step 20990/21200 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 29.1dB | msg: 0.0003 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.0705 | atk: 0.00 | lr: 8.0e-05 | 0.05s/step | ETA: 0min
+BOOT-CTRL Step 21000/21200 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 29.4dB | msg: 0.0003 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.0687 | atk: 0.00 | lr: 8.0e-05 | 0.05s/step | ETA: 0min
+BOOT-CTRL Step 21010/21200 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 29.4dB | msg: 0.0004 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.0676 | atk: 0.00 | lr: 8.0e-05 | 0.05s/step | ETA: 0min
+BOOT-CTRL Step 21020/21200 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 29.5dB | msg: 0.0002 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.0673 | atk: 0.00 | lr: 8.0e-05 | 0.05s/step | ETA: 0min
+BOOT-CTRL Step 21030/21200 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 29.6dB | msg: 0.0003 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.0664 | atk: 0.00 | lr: 8.0e-05 | 0.05s/step | ETA: 0min
+BOOT-CTRL Step 21040/21200 | BER: 0.0020 | A-BER(256): 0.0020 | PSNR: 29.6dB | msg: 0.0048 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.0669 | atk: 0.00 | lr: 8.0e-05 | 0.05s/step | ETA: 0min
+BOOT-CTRL Step 21050/21200 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 29.6dB | msg: 0.0002 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.0666 | atk: 0.00 | lr: 8.0e-05 | 0.05s/step | ETA: 0min
+BOOT-CTRL Step 21060/21200 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 29.6dB | msg: 0.0001 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.0664 | atk: 0.00 | lr: 8.0e-05 | 0.05s/step | ETA: 0min
+BOOT-CTRL Step 21070/21200 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 29.7dB | msg: 0.0003 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.0660 | atk: 0.00 | lr: 8.0e-05 | 0.05s/step | ETA: 0min
+BOOT-CTRL Step 21080/21200 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 29.7dB | msg: 0.0003 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.0661 | atk: 0.00 | lr: 7.9e-05 | 0.05s/step | ETA: 0min
+BOOT-CTRL Step 21090/21200 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 29.7dB | msg: 0.0002 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.0657 | atk: 0.00 | lr: 7.9e-05 | 0.05s/step | ETA: 0min
+BOOT-CTRL Step 21100/21200 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 29.6dB | msg: 0.0001 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.0660 | atk: 0.00 | lr: 7.9e-05 | 0.05s/step | ETA: 0min
+BOOT-CTRL Step 21110/21200 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 29.7dB | msg: 0.0002 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.0656 | atk: 0.00 | lr: 7.9e-05 | 0.05s/step | ETA: 0min
+BOOT-CTRL Step 21120/21200 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 29.7dB | msg: 0.0002 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.0656 | atk: 0.00 | lr: 7.9e-05 | 0.05s/step | ETA: 0min
+BOOT-CTRL Step 21130/21200 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 29.7dB | msg: 0.0001 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.0657 | atk: 0.00 | lr: 7.9e-05 | 0.05s/step | ETA: 0min
+BOOT-CTRL Step 21140/21200 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 29.7dB | msg: 0.0001 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.0656 | atk: 0.00 | lr: 7.9e-05 | 0.05s/step | ETA: 0min
+BOOT-CTRL Step 21150/21200 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 29.8dB | msg: 0.0001 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.0655 | atk: 0.00 | lr: 7.9e-05 | 0.05s/step | ETA: 0min
+BOOT-CTRL Step 21160/21200 | BER: 0.0010 | A-BER(256): 0.0010 | PSNR: 29.7dB | msg: 0.0019 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.0658 | atk: 0.00 | lr: 7.9e-05 | 0.05s/step | ETA: 0min
+BOOT-CTRL Step 21170/21200 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 29.7dB | msg: 0.0001 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.0658 | atk: 0.00 | lr: 7.9e-05 | 0.05s/step | ETA: 0min
+BOOT-CTRL Step 21180/21200 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 29.7dB | msg: 0.0001 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.0655 | atk: 0.00 | lr: 7.9e-05 | 0.05s/step | ETA: 0min
+BOOT-CTRL Step 21190/21200 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 29.8dB | msg: 0.0001 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.0653 | atk: 0.00 | lr: 7.9e-05 | 0.05s/step | ETA: 0min
+BOOT-CTRL Step 21200/21200 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 29.7dB | msg: 0.0001 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.0656 | atk: 0.00 | lr: 7.9e-05 | 0.05s/step | ETA: 0min
+
+============================================================
+FINAL EVALUATION (200 samples)
+============================================================
+  Average BER:  0.000020 (target: 0.0000)
+  Average PSNR: 29.7 dB (target: >= 35)
+  Best BER during training: 0.000000
+  Best active-bit BER during training: 0.000000
+
+  SUCCESS: Clean BER target met!
+  Saved final model: checkpoints_tifs/ber_recovery/dscsp_v4_final.pt
+  Saved results: outputs_tifs/cycle_009_ber_recovery_clean_first/train_v4_results.json
+[eval] Loading checkpoint: checkpoints_tifs/ber_recovery/dscsp_v4_final.pt
+Loading pipeline components...:   0%|          | 0/2 [00:00<?, ?it/s]An error occurred while trying to fetch /workspace/.cache/huggingface/hub/models--google--ddpm-celebahq-256/snapshots/cd5c944777ea2668051904ead6cc120739b86c4d: Error no file named diffusion_pytorch_model.safetensors found in directory /workspace/.cache/huggingface/hub/models--google--ddpm-celebahq-256/snapshots/cd5c944777ea2668051904ead6cc120739b86c4d.
+Defaulting to unsafe serialization. Pass `allow_pickle=False` to raise an error instead.
+Loading pipeline components...:  50%|█████     | 1/2 [00:00<00:00,  1.24it/s]Loading pipeline components...: 100%|██████████| 2/2 [00:00<00:00,  2.46it/s]
+[eval] Generating 400 base images
+    Generated 20/400
+    Generated 40/400
+    Generated 60/400
+    Generated 80/400
+    Generated 100/400
+    Generated 120/400
+    Generated 140/400
+    Generated 160/400
+    Generated 180/400
+    Generated 200/400
+    Generated 220/400
+    Generated 240/400
+    Generated 260/400
+    Generated 280/400
+    Generated 300/400
+    Generated 320/400
+    Generated 340/400
+    Generated 360/400
+    Generated 380/400
+    Generated 400/400
+[eval] No RedundantCoder — BER reported as physical BER
+[eval] Running clean/jpeg/crop metrics on 200 samples
+[eval] Running adaptive steganalysis (train=300, test=100)
+[eval] Running cross-dataset checks (200 samples each)
+[eval] Loading dataset: cifar10
+[eval] Evaluating dataset: cifar10 (n=200)
+[eval] Loading dataset: stl10
+[eval] Evaluating dataset: stl10 (n=200)
+[eval] Completed full TIFS evaluation
+========================================================================
+Cycle 10/11 | variant=ber_recovery_curriculum | step 21200 -> 22400
+========================================================================
+Device: cuda
+GPU: NVIDIA GeForce RTX 5090
+VRAM: 31.4 GB
+
+Loading diffusion model...
+Loading pipeline components...:   0%|          | 0/2 [00:00<?, ?it/s]An error occurred while trying to fetch /workspace/.cache/huggingface/hub/models--google--ddpm-celebahq-256/snapshots/cd5c944777ea2668051904ead6cc120739b86c4d: Error no file named diffusion_pytorch_model.safetensors found in directory /workspace/.cache/huggingface/hub/models--google--ddpm-celebahq-256/snapshots/cd5c944777ea2668051904ead6cc120739b86c4d.
+Defaulting to unsafe serialization. Pass `allow_pickle=False` to raise an error instead.
+Loading pipeline components...:  50%|█████     | 1/2 [00:00<00:00,  2.45it/s]Loading pipeline components...: 100%|██████████| 2/2 [00:00<00:00,  4.84it/s]
+/workspace/diffusion-stego/dscsp/models/diffusion_wrapper.py:37: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.detach().clone() or sourceTensor.detach().clone().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  self.final_alpha_cumprod = torch.tensor(
+  UNet params: 113.7M (frozen)
+
+Initializing content-adaptive controller...
+  Controller params: 4.39M
+Initializing global-pool extractor...
+  Extractor params: 11.31M (spatial_map)
+Initializing SN-discriminator...
+  Discriminator params: 2.76M
+Setting up [LPIPS] perceptual loss: trunk [vgg], v[0.1], spatial [off]
+/usr/local/lib/python3.12/dist-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+  warnings.warn(
+/usr/local/lib/python3.12/dist-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=VGG16_Weights.IMAGENET1K_V1`. You can also use `weights=VGG16_Weights.DEFAULT` to get the most up-to-date weights.
+  warnings.warn(msg)
+Loading model from: /usr/local/lib/python3.12/dist-packages/lpips/weights/v0.1/vgg.pth
+  JPEG-heavy attack layer (JPEG weight: 0.45)
+Resuming from checkpoints_tifs/ber_recovery/dscsp_v4_final.pt...
+  Loaded controller weights (strict)
+  Loaded extractor weights (strict)
+  Resumed at step 21200, best BER: 0.0000
+Generating image pool...
+  Generating 128 clean images...
+    4/128    8/128    12/128    16/128    20/128    24/128    28/128    32/128    36/128    40/128    44/128    48/128    52/128    56/128    60/128    64/128    68/128    72/128    76/128    80/128    84/128    88/128    92/128    96/128    100/128    104/128    108/128    112/128    116/128    120/128    124/128    128/128  Image pool: torch.Size([128, 3, 256, 256]), range: [-1.000, 1.000]
+
+Starting DSCSP v4 training for 22400 steps (from step 21200)...
+  Total trainable params: 18.46M
+  Batch size: 4
+  Payload: 256 bits
+  Active bits curriculum: 32 -> 256 over 3000 steps
+  Max perturbation: 0.1
+  Extractor bootstrap: 700 steps, amp=0.16
+  Controller bootstrap: 700 steps, align_w=16.0
+  Lambda perc: 0.1, spec: 0.004, adv: 0.15
+  Adversarial: starts step 1200, ramps 3000 steps, 3 D steps/G step
+  Attacks: starts step 1000, max prob 0.45, JPEG weight 0.45
+  LR: controller=8e-05, extractor=0.00025
+
+BOOT-EXT Step 21210/22400 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 22.0dB | msg: 0.0001 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1600 | atk: 0.10 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 21220/22400 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 22.0dB | msg: 0.0015 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1600 | atk: 0.10 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 21230/22400 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 22.0dB | msg: 0.0013 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1600 | atk: 0.10 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 21240/22400 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 22.0dB | msg: 0.0007 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1600 | atk: 0.10 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 21250/22400 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 22.0dB | msg: 0.0004 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1600 | atk: 0.10 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 21260/22400 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 22.0dB | msg: 0.0003 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1600 | atk: 0.10 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 21270/22400 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 22.0dB | msg: 0.0088 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1600 | atk: 0.10 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 21280/22400 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 22.1dB | msg: 0.0032 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1600 | atk: 0.10 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 21290/22400 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 22.0dB | msg: 0.0158 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1600 | atk: 0.10 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 21300/22400 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 22.0dB | msg: 0.0016 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1600 | atk: 0.10 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 21310/22400 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 22.0dB | msg: 0.0007 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1600 | atk: 0.10 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 21320/22400 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 22.0dB | msg: 0.0004 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1600 | atk: 0.10 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 21330/22400 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 22.0dB | msg: 0.0004 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1600 | atk: 0.10 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 21340/22400 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 22.0dB | msg: 0.0004 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1600 | atk: 0.10 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 21350/22400 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 22.0dB | msg: 0.0003 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1600 | atk: 0.10 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 21360/22400 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 22.0dB | msg: 0.0014 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1600 | atk: 0.10 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 21370/22400 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 22.1dB | msg: 0.0023 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1600 | atk: 0.10 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 21380/22400 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 22.0dB | msg: 0.0018 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1600 | atk: 0.10 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 21390/22400 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 22.0dB | msg: 0.0007 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1600 | atk: 0.10 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 21400/22400 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 22.0dB | msg: 0.0005 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1600 | atk: 0.10 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 21410/22400 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 22.1dB | msg: 0.0005 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1600 | atk: 0.10 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 21420/22400 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 22.0dB | msg: 0.0005 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1600 | atk: 0.10 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 21430/22400 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 22.0dB | msg: 0.0006 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1600 | atk: 0.10 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 21440/22400 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 22.0dB | msg: 0.0005 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1600 | atk: 0.10 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 21450/22400 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 22.0dB | msg: 0.0004 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1600 | atk: 0.10 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 21460/22400 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 22.0dB | msg: 0.0004 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1600 | atk: 0.10 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 21470/22400 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 22.0dB | msg: 0.0003 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1600 | atk: 0.10 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 21480/22400 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 22.0dB | msg: 0.0003 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1600 | atk: 0.10 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 21490/22400 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 22.0dB | msg: 0.0003 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1600 | atk: 0.10 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 21500/22400 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 22.0dB | msg: 0.0003 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1600 | atk: 0.10 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 21510/22400 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 22.0dB | msg: 0.0003 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1600 | atk: 0.10 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 21520/22400 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 22.0dB | msg: 0.0003 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1600 | atk: 0.10 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 21530/22400 | BER: 0.0049 | A-BER(256): 0.0049 | PSNR: 22.0dB | msg: 0.0102 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1600 | atk: 0.10 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 21540/22400 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 22.0dB | msg: 0.0006 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1600 | atk: 0.10 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 21550/22400 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 22.1dB | msg: 0.0006 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1600 | atk: 0.10 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 21560/22400 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 21.9dB | msg: 0.0004 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1600 | atk: 0.10 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 21570/22400 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 22.0dB | msg: 0.0004 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1600 | atk: 0.10 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 21580/22400 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 22.0dB | msg: 0.0004 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1600 | atk: 0.10 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 21590/22400 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 22.1dB | msg: 0.0003 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1600 | atk: 0.10 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 21600/22400 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 22.0dB | msg: 0.0003 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1600 | atk: 0.10 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+  Saved checkpoint: checkpoints_tifs/ber_recovery/dscsp_v4_step_021600.pt
+BOOT-EXT Step 21610/22400 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 21.9dB | msg: 0.0003 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1600 | atk: 0.10 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 21620/22400 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 22.0dB | msg: 0.0004 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1600 | atk: 0.10 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 21630/22400 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 22.0dB | msg: 0.0005 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1600 | atk: 0.10 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 21640/22400 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 22.0dB | msg: 0.0006 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1600 | atk: 0.10 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 21650/22400 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 22.0dB | msg: 0.0003 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1600 | atk: 0.10 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 21660/22400 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 22.0dB | msg: 0.0006 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1600 | atk: 0.10 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 21670/22400 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 22.0dB | msg: 0.0003 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1600 | atk: 0.10 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 21680/22400 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 22.1dB | msg: 0.0003 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1600 | atk: 0.10 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 21690/22400 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 22.0dB | msg: 0.0003 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1600 | atk: 0.10 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 21700/22400 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 21.9dB | msg: 0.0003 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1600 | atk: 0.10 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 21710/22400 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 22.0dB | msg: 0.0003 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1600 | atk: 0.10 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 21720/22400 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 22.0dB | msg: 0.0002 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1600 | atk: 0.10 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 21730/22400 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 22.0dB | msg: 0.0002 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1600 | atk: 0.10 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 21740/22400 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 22.0dB | msg: 0.0002 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1600 | atk: 0.10 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 21750/22400 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 22.1dB | msg: 0.0002 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1600 | atk: 0.10 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 21760/22400 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 22.0dB | msg: 0.0003 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1600 | atk: 0.10 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 21770/22400 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 22.0dB | msg: 0.0002 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1600 | atk: 0.10 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 21780/22400 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 22.0dB | msg: 0.0002 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1600 | atk: 0.10 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 21790/22400 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 22.0dB | msg: 0.0002 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1600 | atk: 0.10 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 21800/22400 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 22.1dB | msg: 0.0008 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1600 | atk: 0.10 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 21810/22400 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 22.1dB | msg: 0.0004 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1600 | atk: 0.10 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 21820/22400 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 22.0dB | msg: 0.0003 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1600 | atk: 0.10 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 21830/22400 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 22.0dB | msg: 0.0004 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1600 | atk: 0.10 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 21840/22400 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 22.0dB | msg: 0.0007 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1600 | atk: 0.10 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 21850/22400 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 22.1dB | msg: 0.0006 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1600 | atk: 0.10 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 21860/22400 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 22.0dB | msg: 0.0004 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1600 | atk: 0.10 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 21870/22400 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 22.0dB | msg: 0.0003 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1600 | atk: 0.10 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 21880/22400 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 22.0dB | msg: 0.0003 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1600 | atk: 0.10 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 21890/22400 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 22.0dB | msg: 0.0003 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1600 | atk: 0.10 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 21900/22400 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 22.0dB | msg: 0.0005 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1600 | atk: 0.10 | lr: 8.0e-05 | 0.02s/step | ETA: 0min
+BOOT-CTRL Step 21910/22400 | BER: 0.0010 | A-BER(256): 0.0010 | PSNR: 32.6dB | msg: 0.0051 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.0468 | atk: 0.10 | lr: 8.0e-05 | 0.05s/step | ETA: 0min
+BOOT-CTRL Step 21920/22400 | BER: 0.0010 | A-BER(256): 0.0010 | PSNR: 32.6dB | msg: 0.0057 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.0470 | atk: 0.10 | lr: 8.0e-05 | 0.05s/step | ETA: 0min
+BOOT-CTRL Step 21930/22400 | BER: 0.0010 | A-BER(256): 0.0010 | PSNR: 32.7dB | msg: 0.0163 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.0470 | atk: 0.10 | lr: 8.0e-05 | 0.05s/step | ETA: 0min
+BOOT-CTRL Step 21940/22400 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 32.6dB | msg: 0.0139 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.0470 | atk: 0.10 | lr: 8.0e-05 | 0.05s/step | ETA: 0min
+BOOT-CTRL Step 21950/22400 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 32.5dB | msg: 0.0132 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.0472 | atk: 0.10 | lr: 8.0e-05 | 0.05s/step | ETA: 0min
+BOOT-CTRL Step 21960/22400 | BER: 0.0010 | A-BER(256): 0.0010 | PSNR: 32.7dB | msg: 0.0045 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.0470 | atk: 0.10 | lr: 8.0e-05 | 0.05s/step | ETA: 0min
+BOOT-CTRL Step 21970/22400 | BER: 0.0039 | A-BER(256): 0.0039 | PSNR: 32.6dB | msg: 0.0245 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.0469 | atk: 0.10 | lr: 8.0e-05 | 0.05s/step | ETA: 0min
+BOOT-CTRL Step 21980/22400 | BER: 0.0010 | A-BER(256): 0.0010 | PSNR: 32.5dB | msg: 0.0068 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.0474 | atk: 0.10 | lr: 8.0e-05 | 0.05s/step | ETA: 0min
+BOOT-CTRL Step 21990/22400 | BER: 0.0010 | A-BER(256): 0.0010 | PSNR: 32.6dB | msg: 0.0044 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.0470 | atk: 0.10 | lr: 8.0e-05 | 0.05s/step | ETA: 0min
+  Refreshing image pool...
+  Generating 128 clean images...
+    4/128    8/128    12/128    16/128    20/128    24/128    28/128    32/128    36/128    40/128    44/128    48/128    52/128    56/128    60/128    64/128    68/128    72/128    76/128    80/128    84/128    88/128    92/128    96/128    100/128    104/128    108/128    112/128    116/128    120/128    124/128    128/128  Image pool: torch.Size([128, 3, 256, 256]), range: [-1.000, 1.000]
+BOOT-CTRL Step 22000/22400 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 32.6dB | msg: 0.0042 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.0473 | atk: 0.10 | lr: 8.0e-05 | 1.92s/step | ETA: 13min
+BOOT-CTRL Step 22010/22400 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 32.5dB | msg: 0.0023 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.0473 | atk: 0.10 | lr: 8.0e-05 | 0.05s/step | ETA: 0min
+BOOT-CTRL Step 22020/22400 | BER: 0.0020 | A-BER(256): 0.0020 | PSNR: 32.5dB | msg: 0.0087 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.0473 | atk: 0.10 | lr: 8.0e-05 | 0.05s/step | ETA: 0min
+BOOT-CTRL Step 22030/22400 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 32.5dB | msg: 0.0063 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.0478 | atk: 0.10 | lr: 8.0e-05 | 0.05s/step | ETA: 0min
+BOOT-CTRL Step 22040/22400 | BER: 0.0010 | A-BER(256): 0.0010 | PSNR: 32.5dB | msg: 0.0098 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.0478 | atk: 0.10 | lr: 8.0e-05 | 0.05s/step | ETA: 0min
+BOOT-CTRL Step 22050/22400 | BER: 0.0020 | A-BER(256): 0.0020 | PSNR: 32.5dB | msg: 0.0129 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.0474 | atk: 0.10 | lr: 8.0e-05 | 0.05s/step | ETA: 0min
+BOOT-CTRL Step 22060/22400 | BER: 0.4922 | A-BER(256): 0.4922 | PSNR: 32.5dB | msg: 0.6973 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.0476 | atk: 0.10 | lr: 8.0e-05 | 0.05s/step | ETA: 0min
+BOOT-CTRL Step 22070/22400 | BER: 0.0010 | A-BER(256): 0.0010 | PSNR: 32.4dB | msg: 0.0071 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.0478 | atk: 0.10 | lr: 8.0e-05 | 0.05s/step | ETA: 0min
+BOOT-CTRL Step 22080/22400 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 32.5dB | msg: 0.0015 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.0479 | atk: 0.10 | lr: 8.0e-05 | 0.05s/step | ETA: 0min
+BOOT-CTRL Step 22090/22400 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 32.5dB | msg: 0.0060 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.0481 | atk: 0.10 | lr: 8.0e-05 | 0.05s/step | ETA: 0min
+BOOT-CTRL Step 22100/22400 | BER: 0.4922 | A-BER(256): 0.4922 | PSNR: 32.5dB | msg: 0.7020 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.0477 | atk: 0.10 | lr: 8.0e-05 | 0.05s/step | ETA: 0min
+BOOT-CTRL Step 22110/22400 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 32.4dB | msg: 0.0084 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.0484 | atk: 0.10 | lr: 8.0e-05 | 0.05s/step | ETA: 0min
+BOOT-CTRL Step 22120/22400 | BER: 0.0010 | A-BER(256): 0.0010 | PSNR: 32.4dB | msg: 0.0028 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.0478 | atk: 0.10 | lr: 8.0e-05 | 0.05s/step | ETA: 0min
+BOOT-CTRL Step 22130/22400 | BER: 0.0010 | A-BER(256): 0.0010 | PSNR: 32.4dB | msg: 0.0042 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.0480 | atk: 0.10 | lr: 8.0e-05 | 0.05s/step | ETA: 0min
+BOOT-CTRL Step 22140/22400 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 32.4dB | msg: 0.0169 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.0485 | atk: 0.10 | lr: 8.0e-05 | 0.04s/step | ETA: 0min
+BOOT-CTRL Step 22150/22400 | BER: 0.0039 | A-BER(256): 0.0039 | PSNR: 32.4dB | msg: 0.0191 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.0485 | atk: 0.10 | lr: 8.0e-05 | 0.05s/step | ETA: 0min
+BOOT-CTRL Step 22160/22400 | BER: 0.0098 | A-BER(256): 0.0098 | PSNR: 32.3dB | msg: 0.0254 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.0489 | atk: 0.10 | lr: 8.0e-05 | 0.05s/step | ETA: 0min
+BOOT-CTRL Step 22170/22400 | BER: 0.0020 | A-BER(256): 0.0020 | PSNR: 32.4dB | msg: 0.0096 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.0482 | atk: 0.10 | lr: 8.0e-05 | 0.05s/step | ETA: 0min
+BOOT-CTRL Step 22180/22400 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 32.3dB | msg: 0.0068 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.0487 | atk: 0.10 | lr: 8.0e-05 | 0.05s/step | ETA: 0min
+BOOT-CTRL Step 22190/22400 | BER: 0.0010 | A-BER(256): 0.0010 | PSNR: 32.3dB | msg: 0.0068 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.0486 | atk: 0.10 | lr: 8.0e-05 | 0.05s/step | ETA: 0min
+BOOT-CTRL Step 22200/22400 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 32.4dB | msg: 0.0059 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.0482 | atk: 0.10 | lr: 8.0e-05 | 0.05s/step | ETA: 0min
+BOOT-CTRL Step 22210/22400 | BER: 0.0039 | A-BER(256): 0.0039 | PSNR: 32.2dB | msg: 0.0156 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.0493 | atk: 0.10 | lr: 8.0e-05 | 0.05s/step | ETA: 0min
+BOOT-CTRL Step 22220/22400 | BER: 0.0020 | A-BER(256): 0.0020 | PSNR: 32.2dB | msg: 0.0054 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.0493 | atk: 0.10 | lr: 8.0e-05 | 0.05s/step | ETA: 0min
+BOOT-CTRL Step 22230/22400 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 32.3dB | msg: 0.0028 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.0486 | atk: 0.10 | lr: 8.0e-05 | 0.05s/step | ETA: 0min
+BOOT-CTRL Step 22240/22400 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 32.3dB | msg: 0.0016 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.0486 | atk: 0.10 | lr: 8.0e-05 | 0.05s/step | ETA: 0min
+BOOT-CTRL Step 22250/22400 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 32.2dB | msg: 0.0029 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.0489 | atk: 0.10 | lr: 8.0e-05 | 0.05s/step | ETA: 0min
+BOOT-CTRL Step 22260/22400 | BER: 0.0039 | A-BER(256): 0.0039 | PSNR: 32.3dB | msg: 0.0187 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.0488 | atk: 0.10 | lr: 8.0e-05 | 0.05s/step | ETA: 0min
+BOOT-CTRL Step 22270/22400 | BER: 0.0039 | A-BER(256): 0.0039 | PSNR: 32.2dB | msg: 0.0143 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.0499 | atk: 0.10 | lr: 8.0e-05 | 0.05s/step | ETA: 0min
+BOOT-CTRL Step 22280/22400 | BER: 0.0020 | A-BER(256): 0.0020 | PSNR: 32.1dB | msg: 0.0064 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.0497 | atk: 0.10 | lr: 8.0e-05 | 0.05s/step | ETA: 0min
+BOOT-CTRL Step 22290/22400 | BER: 0.0010 | A-BER(256): 0.0010 | PSNR: 32.2dB | msg: 0.0050 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.0491 | atk: 0.10 | lr: 8.0e-05 | 0.05s/step | ETA: 0min
+BOOT-CTRL Step 22300/22400 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 32.2dB | msg: 0.0023 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.0491 | atk: 0.10 | lr: 8.0e-05 | 0.05s/step | ETA: 0min
+BOOT-CTRL Step 22310/22400 | BER: 0.0029 | A-BER(256): 0.0029 | PSNR: 32.2dB | msg: 0.0101 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.0492 | atk: 0.10 | lr: 8.0e-05 | 0.05s/step | ETA: 0min
+BOOT-CTRL Step 22320/22400 | BER: 0.0029 | A-BER(256): 0.0029 | PSNR: 32.1dB | msg: 0.0066 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.0498 | atk: 0.10 | lr: 8.0e-05 | 0.04s/step | ETA: 0min
+BOOT-CTRL Step 22330/22400 | BER: 0.0029 | A-BER(256): 0.0029 | PSNR: 32.2dB | msg: 0.0186 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.0494 | atk: 0.10 | lr: 8.0e-05 | 0.05s/step | ETA: 0min
+BOOT-CTRL Step 22340/22400 | BER: 0.0039 | A-BER(256): 0.0039 | PSNR: 32.1dB | msg: 0.0283 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.0500 | atk: 0.10 | lr: 7.9e-05 | 0.05s/step | ETA: 0min
+BOOT-CTRL Step 22350/22400 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 32.0dB | msg: 0.0019 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.0502 | atk: 0.10 | lr: 7.9e-05 | 0.05s/step | ETA: 0min
+BOOT-CTRL Step 22360/22400 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 32.2dB | msg: 0.0021 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.0492 | atk: 0.10 | lr: 7.9e-05 | 0.05s/step | ETA: 0min
+BOOT-CTRL Step 22370/22400 | BER: 0.0020 | A-BER(256): 0.0020 | PSNR: 32.2dB | msg: 0.0124 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.0497 | atk: 0.10 | lr: 7.9e-05 | 0.05s/step | ETA: 0min
+BOOT-CTRL Step 22380/22400 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 32.1dB | msg: 0.0046 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.0497 | atk: 0.10 | lr: 7.9e-05 | 0.05s/step | ETA: 0min
+BOOT-CTRL Step 22390/22400 | BER: 0.0010 | A-BER(256): 0.0010 | PSNR: 32.0dB | msg: 0.0057 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.0501 | atk: 0.10 | lr: 7.9e-05 | 0.05s/step | ETA: 0min
+BOOT-CTRL Step 22400/22400 | BER: 0.0039 | A-BER(256): 0.0039 | PSNR: 32.0dB | msg: 0.0127 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.0506 | atk: 0.10 | lr: 7.9e-05 | 0.05s/step | ETA: 0min
+
+============================================================
+FINAL EVALUATION (200 samples)
+============================================================
+  Average BER:  0.001680 (target: 0.0000)
+  Average PSNR: 32.0 dB (target: >= 35)
+  Best BER during training: 0.000000
+  Best active-bit BER during training: 0.000000
+  Discriminator accuracy: 0.5000 (target: ~0.50)
+
+  WARNING: Clean BER not yet at target
+  Saved final model: checkpoints_tifs/ber_recovery/dscsp_v4_final.pt
+  Saved results: outputs_tifs/cycle_010_ber_recovery_curriculum/train_v4_results.json
+[eval] Loading checkpoint: checkpoints_tifs/ber_recovery/dscsp_v4_final.pt
+Loading pipeline components...:   0%|          | 0/2 [00:00<?, ?it/s]An error occurred while trying to fetch /workspace/.cache/huggingface/hub/models--google--ddpm-celebahq-256/snapshots/cd5c944777ea2668051904ead6cc120739b86c4d: Error no file named diffusion_pytorch_model.safetensors found in directory /workspace/.cache/huggingface/hub/models--google--ddpm-celebahq-256/snapshots/cd5c944777ea2668051904ead6cc120739b86c4d.
+Defaulting to unsafe serialization. Pass `allow_pickle=False` to raise an error instead.
+Loading pipeline components...:  50%|█████     | 1/2 [00:00<00:00,  1.68it/s]Loading pipeline components...: 100%|██████████| 2/2 [00:00<00:00,  3.34it/s]
+[eval] Generating 400 base images
+    Generated 20/400
+    Generated 40/400
+    Generated 60/400
+    Generated 80/400
+    Generated 100/400
+    Generated 120/400
+    Generated 140/400
+    Generated 160/400
+    Generated 180/400
+    Generated 200/400
+    Generated 220/400
+    Generated 240/400
+    Generated 260/400
+    Generated 280/400
+    Generated 300/400
+    Generated 320/400
+    Generated 340/400
+    Generated 360/400
+    Generated 380/400
+    Generated 400/400
+[eval] No RedundantCoder — BER reported as physical BER
+[eval] Running clean/jpeg/crop metrics on 200 samples
+[eval] Running adaptive steganalysis (train=300, test=100)
+[eval] Running cross-dataset checks (200 samples each)
+[eval] Loading dataset: cifar10
+[eval] Evaluating dataset: cifar10 (n=200)
+[eval] Loading dataset: stl10
+[eval] Evaluating dataset: stl10 (n=200)
+[eval] Completed full TIFS evaluation
+========================================================================
+Cycle 11/11 | variant=robust_balance | step 22400 -> 23600
+========================================================================
+Device: cuda
+GPU: NVIDIA GeForce RTX 5090
+VRAM: 31.4 GB
+
+Loading diffusion model...
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading pipeline components...:   0%|          | 0/2 [00:00<?, ?it/s]An error occurred while trying to fetch /workspace/.cache/huggingface/hub/models--google--ddpm-celebahq-256/snapshots/cd5c944777ea2668051904ead6cc120739b86c4d: Error no file named diffusion_pytorch_model.safetensors found in directory /workspace/.cache/huggingface/hub/models--google--ddpm-celebahq-256/snapshots/cd5c944777ea2668051904ead6cc120739b86c4d.
+Defaulting to unsafe serialization. Pass `allow_pickle=False` to raise an error instead.
+Loading pipeline components...:  50%|█████     | 1/2 [00:00<00:00,  3.65it/s]Loading pipeline components...: 100%|██████████| 2/2 [00:00<00:00,  7.26it/s]
+/workspace/diffusion-stego/dscsp/models/diffusion_wrapper.py:37: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.detach().clone() or sourceTensor.detach().clone().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  self.final_alpha_cumprod = torch.tensor(
+  UNet params: 113.7M (frozen)
+
+Initializing content-adaptive controller...
+  Controller params: 4.39M
+Initializing global-pool extractor...
+  Extractor params: 11.31M (spatial_map)
+Initializing SN-discriminator...
+  Discriminator params: 2.76M
+Setting up [LPIPS] perceptual loss: trunk [vgg], v[0.1], spatial [off]
+/usr/local/lib/python3.12/dist-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+  warnings.warn(
+/usr/local/lib/python3.12/dist-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=VGG16_Weights.IMAGENET1K_V1`. You can also use `weights=VGG16_Weights.DEFAULT` to get the most up-to-date weights.
+  warnings.warn(msg)
+Loading model from: /usr/local/lib/python3.12/dist-packages/lpips/weights/v0.1/vgg.pth
+  JPEG-heavy attack layer (JPEG weight: 0.6)
+Resuming from checkpoints_tifs/ber_recovery/dscsp_v4_final.pt...
+  Loaded controller weights (strict)
+  Loaded extractor weights (strict)
+  Loaded discriminator weights (strict)
+  Resumed at step 22400, best BER: 0.0000
+Generating image pool...
+  Generating 128 clean images...
+    4/128    8/128    12/128    16/128    20/128    24/128    28/128    32/128    36/128    40/128    44/128    48/128    52/128    56/128    60/128    64/128    68/128    72/128    76/128    80/128    84/128    88/128    92/128    96/128    100/128    104/128    108/128    112/128    116/128    120/128    124/128    128/128  Image pool: torch.Size([128, 3, 256, 256]), range: [-1.000, 1.000]
+
+Starting DSCSP v4 training for 23600 steps (from step 22400)...
+  Total trainable params: 18.46M
+  Batch size: 4
+  Payload: 256 bits
+  Active bits curriculum: 256 -> 256 over 0 steps
+  Max perturbation: 0.09
+  Extractor bootstrap: 400 steps, amp=0.14
+  Controller bootstrap: 450 steps, align_w=10.0
+  Lambda perc: 0.15, spec: 0.006, adv: 0.35
+  Adversarial: starts step 800, ramps 3000 steps, 3 D steps/G step
+  Attacks: starts step 500, max prob 0.7, JPEG weight 0.6
+  LR: controller=7e-05, extractor=0.0002
+
+BOOT-EXT Step 22410/23600 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 23.2dB | msg: 0.0001 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1400 | atk: 0.15 | lr: 7.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 22420/23600 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 23.1dB | msg: 0.0003 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1400 | atk: 0.15 | lr: 7.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 22430/23600 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 23.3dB | msg: 0.0004 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1400 | atk: 0.15 | lr: 7.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 22440/23600 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 23.2dB | msg: 0.0003 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1400 | atk: 0.15 | lr: 7.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 22450/23600 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 23.1dB | msg: 0.0002 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1400 | atk: 0.15 | lr: 7.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 22460/23600 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 23.3dB | msg: 0.0001 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1400 | atk: 0.15 | lr: 7.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 22470/23600 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 23.1dB | msg: 0.0001 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1400 | atk: 0.15 | lr: 7.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 22480/23600 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 23.1dB | msg: 0.0001 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1400 | atk: 0.15 | lr: 7.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 22490/23600 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 23.1dB | msg: 0.0001 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1400 | atk: 0.15 | lr: 7.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 22500/23600 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 23.2dB | msg: 0.0001 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1400 | atk: 0.15 | lr: 7.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 22510/23600 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 23.1dB | msg: 0.0001 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1400 | atk: 0.15 | lr: 7.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 22520/23600 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 23.1dB | msg: 0.0001 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1400 | atk: 0.15 | lr: 7.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 22530/23600 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 23.1dB | msg: 0.0001 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1400 | atk: 0.15 | lr: 7.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 22540/23600 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 23.2dB | msg: 0.0001 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1400 | atk: 0.15 | lr: 7.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 22550/23600 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 23.2dB | msg: 0.0001 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1400 | atk: 0.15 | lr: 7.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 22560/23600 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 23.2dB | msg: 0.0001 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1400 | atk: 0.15 | lr: 7.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 22570/23600 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 23.2dB | msg: 0.0001 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1400 | atk: 0.15 | lr: 7.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 22580/23600 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 23.2dB | msg: 0.0001 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1400 | atk: 0.15 | lr: 7.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 22590/23600 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 23.1dB | msg: 0.0001 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1400 | atk: 0.15 | lr: 7.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 22600/23600 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 23.1dB | msg: 0.0003 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1400 | atk: 0.15 | lr: 7.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 22610/23600 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 23.2dB | msg: 0.0003 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1400 | atk: 0.15 | lr: 7.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 22620/23600 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 23.1dB | msg: 0.0002 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1400 | atk: 0.15 | lr: 7.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 22630/23600 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 23.1dB | msg: 0.0002 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1400 | atk: 0.15 | lr: 7.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 22640/23600 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 23.2dB | msg: 0.0012 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1400 | atk: 0.15 | lr: 7.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 22650/23600 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 23.1dB | msg: 0.0003 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1400 | atk: 0.15 | lr: 7.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 22660/23600 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 23.2dB | msg: 0.0004 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1400 | atk: 0.15 | lr: 7.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 22670/23600 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 23.2dB | msg: 0.0008 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1400 | atk: 0.15 | lr: 7.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 22680/23600 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 23.2dB | msg: 0.0004 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1400 | atk: 0.15 | lr: 7.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 22690/23600 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 23.2dB | msg: 0.0003 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1400 | atk: 0.15 | lr: 7.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 22700/23600 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 23.2dB | msg: 0.0003 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1400 | atk: 0.15 | lr: 7.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 22710/23600 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 23.1dB | msg: 0.0002 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1400 | atk: 0.15 | lr: 7.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 22720/23600 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 23.2dB | msg: 0.0002 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1400 | atk: 0.15 | lr: 7.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 22730/23600 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 23.2dB | msg: 0.0067 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1400 | atk: 0.15 | lr: 7.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 22740/23600 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 23.1dB | msg: 0.0006 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1400 | atk: 0.15 | lr: 7.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 22750/23600 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 23.1dB | msg: 0.0006 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1400 | atk: 0.15 | lr: 7.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 22760/23600 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 23.2dB | msg: 0.0003 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1400 | atk: 0.15 | lr: 7.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 22770/23600 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 23.2dB | msg: 0.0006 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1400 | atk: 0.15 | lr: 7.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 22780/23600 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 23.2dB | msg: 0.0004 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1400 | atk: 0.15 | lr: 7.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 22790/23600 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 23.2dB | msg: 0.0003 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1400 | atk: 0.15 | lr: 7.0e-05 | 0.02s/step | ETA: 0min
+BOOT-EXT Step 22800/23600 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 23.2dB | msg: 0.0003 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.1400 | atk: 0.15 | lr: 7.0e-05 | 0.02s/step | ETA: 0min
+  Saved checkpoint: checkpoints_tifs/ber_recovery/dscsp_v4_step_022800.pt
+BOOT-CTRL Step 22810/23600 | BER: 0.0010 | A-BER(256): 0.0010 | PSNR: 33.1dB | msg: 0.0015 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.0444 | atk: 0.20 | lr: 7.0e-05 | 0.06s/step | ETA: 1min
+BOOT-CTRL Step 22820/23600 | BER: 0.0010 | A-BER(256): 0.0010 | PSNR: 32.9dB | msg: 0.0027 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.0455 | atk: 0.20 | lr: 7.0e-05 | 0.05s/step | ETA: 1min
+BOOT-CTRL Step 22830/23600 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 33.0dB | msg: 0.0010 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.0450 | atk: 0.20 | lr: 7.0e-05 | 0.05s/step | ETA: 1min
+BOOT-CTRL Step 22840/23600 | BER: 0.0010 | A-BER(256): 0.0010 | PSNR: 33.0dB | msg: 0.0011 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.0450 | atk: 0.20 | lr: 7.0e-05 | 0.05s/step | ETA: 1min
+BOOT-CTRL Step 22850/23600 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 33.0dB | msg: 0.0006 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.0447 | atk: 0.20 | lr: 7.0e-05 | 0.05s/step | ETA: 1min
+BOOT-CTRL Step 22860/23600 | BER: 0.0020 | A-BER(256): 0.0020 | PSNR: 32.9dB | msg: 0.0054 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.0452 | atk: 0.20 | lr: 7.0e-05 | 0.05s/step | ETA: 1min
+BOOT-CTRL Step 22870/23600 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 32.9dB | msg: 0.0003 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.0452 | atk: 0.20 | lr: 7.0e-05 | 0.05s/step | ETA: 1min
+BOOT-CTRL Step 22880/23600 | BER: 0.4717 | A-BER(256): 0.4717 | PSNR: 32.8dB | msg: 0.8423 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.0456 | atk: 0.20 | lr: 7.0e-05 | 0.05s/step | ETA: 1min
+BOOT-CTRL Step 22890/23600 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 32.9dB | msg: 0.0025 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.0455 | atk: 0.20 | lr: 7.0e-05 | 0.05s/step | ETA: 1min
+BOOT-CTRL Step 22900/23600 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 33.0dB | msg: 0.0004 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.0449 | atk: 0.20 | lr: 7.0e-05 | 0.05s/step | ETA: 1min
+BOOT-CTRL Step 22910/23600 | BER: 0.0010 | A-BER(256): 0.0010 | PSNR: 33.0dB | msg: 0.0018 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.0453 | atk: 0.20 | lr: 7.0e-05 | 0.05s/step | ETA: 1min
+BOOT-CTRL Step 22920/23600 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 32.9dB | msg: 0.0007 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.0451 | atk: 0.20 | lr: 7.0e-05 | 0.05s/step | ETA: 1min
+BOOT-CTRL Step 22930/23600 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 32.9dB | msg: 0.0004 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.0452 | atk: 0.20 | lr: 7.0e-05 | 0.05s/step | ETA: 1min
+BOOT-CTRL Step 22940/23600 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 32.8dB | msg: 0.0004 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.0460 | atk: 0.20 | lr: 7.0e-05 | 0.05s/step | ETA: 1min
+BOOT-CTRL Step 22950/23600 | BER: 0.0020 | A-BER(256): 0.0020 | PSNR: 32.9dB | msg: 0.0052 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.0456 | atk: 0.20 | lr: 7.0e-05 | 0.05s/step | ETA: 1min
+BOOT-CTRL Step 22960/23600 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 32.9dB | msg: 0.0007 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.0455 | atk: 0.20 | lr: 7.0e-05 | 0.05s/step | ETA: 1min
+BOOT-CTRL Step 22970/23600 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 32.9dB | msg: 0.0004 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.0452 | atk: 0.20 | lr: 7.0e-05 | 0.05s/step | ETA: 1min
+BOOT-CTRL Step 22980/23600 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 32.9dB | msg: 0.0003 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.0459 | atk: 0.20 | lr: 7.0e-05 | 0.06s/step | ETA: 1min
+BOOT-CTRL Step 22990/23600 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 32.8dB | msg: 0.0003 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.0458 | atk: 0.20 | lr: 7.0e-05 | 0.05s/step | ETA: 1min
+BOOT-CTRL Step 23000/23600 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 32.9dB | msg: 0.0002 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.0456 | atk: 0.20 | lr: 7.0e-05 | 0.05s/step | ETA: 1min
+BOOT-CTRL Step 23010/23600 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 32.8dB | msg: 0.0003 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.0458 | atk: 0.20 | lr: 7.0e-05 | 0.05s/step | ETA: 1min
+BOOT-CTRL Step 23020/23600 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 32.8dB | msg: 0.0002 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.0457 | atk: 0.20 | lr: 7.0e-05 | 0.05s/step | ETA: 1min
+BOOT-CTRL Step 23030/23600 | BER: 0.0010 | A-BER(256): 0.0010 | PSNR: 32.8dB | msg: 0.0020 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.0464 | atk: 0.20 | lr: 7.0e-05 | 0.05s/step | ETA: 1min
+BOOT-CTRL Step 23040/23600 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 32.8dB | msg: 0.0002 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.0456 | atk: 0.20 | lr: 7.0e-05 | 0.05s/step | ETA: 0min
+BOOT-CTRL Step 23050/23600 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 32.8dB | msg: 0.0004 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.0458 | atk: 0.20 | lr: 7.0e-05 | 0.05s/step | ETA: 0min
+BOOT-CTRL Step 23060/23600 | BER: 0.0010 | A-BER(256): 0.0010 | PSNR: 32.8dB | msg: 0.0018 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.0463 | atk: 0.20 | lr: 7.0e-05 | 0.05s/step | ETA: 0min
+BOOT-CTRL Step 23070/23600 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 32.8dB | msg: 0.0010 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.0465 | atk: 0.20 | lr: 7.0e-05 | 0.05s/step | ETA: 0min
+BOOT-CTRL Step 23080/23600 | BER: 0.0010 | A-BER(256): 0.0010 | PSNR: 32.6dB | msg: 0.0045 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.0467 | atk: 0.20 | lr: 7.0e-05 | 0.05s/step | ETA: 0min
+BOOT-CTRL Step 23090/23600 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 32.7dB | msg: 0.0003 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.0463 | atk: 0.20 | lr: 7.0e-05 | 0.05s/step | ETA: 0min
+BOOT-CTRL Step 23100/23600 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 32.9dB | msg: 0.0011 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.0460 | atk: 0.20 | lr: 7.0e-05 | 0.05s/step | ETA: 0min
+BOOT-CTRL Step 23110/23600 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 32.8dB | msg: 0.0021 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.0462 | atk: 0.20 | lr: 7.0e-05 | 0.05s/step | ETA: 0min
+BOOT-CTRL Step 23120/23600 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 32.7dB | msg: 0.0007 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.0464 | atk: 0.20 | lr: 7.0e-05 | 0.05s/step | ETA: 0min
+BOOT-CTRL Step 23130/23600 | BER: 0.0010 | A-BER(256): 0.0010 | PSNR: 32.8dB | msg: 0.0012 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.0458 | atk: 0.20 | lr: 7.0e-05 | 0.05s/step | ETA: 0min
+BOOT-CTRL Step 23140/23600 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 32.7dB | msg: 0.0002 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.0466 | atk: 0.20 | lr: 7.0e-05 | 0.05s/step | ETA: 0min
+BOOT-CTRL Step 23150/23600 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 32.6dB | msg: 0.0009 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.0470 | atk: 0.20 | lr: 7.0e-05 | 0.05s/step | ETA: 0min
+BOOT-CTRL Step 23160/23600 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 32.7dB | msg: 0.0003 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.0465 | atk: 0.20 | lr: 7.0e-05 | 0.05s/step | ETA: 0min
+BOOT-CTRL Step 23170/23600 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 32.6dB | msg: 0.0006 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.0473 | atk: 0.20 | lr: 7.0e-05 | 0.05s/step | ETA: 0min
+BOOT-CTRL Step 23180/23600 | BER: 0.0010 | A-BER(256): 0.0010 | PSNR: 32.6dB | msg: 0.0023 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.0468 | atk: 0.20 | lr: 7.0e-05 | 0.05s/step | ETA: 0min
+BOOT-CTRL Step 23190/23600 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 32.6dB | msg: 0.0003 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.0470 | atk: 0.20 | lr: 7.0e-05 | 0.05s/step | ETA: 0min
+BOOT-CTRL Step 23200/23600 | BER: 0.0020 | A-BER(256): 0.0020 | PSNR: 32.7dB | msg: 0.0042 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.0465 | atk: 0.20 | lr: 7.0e-05 | 0.05s/step | ETA: 0min
+BOOT-CTRL Step 23210/23600 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 32.6dB | msg: 0.0003 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.0469 | atk: 0.20 | lr: 7.0e-05 | 0.06s/step | ETA: 0min
+BOOT-CTRL Step 23220/23600 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 32.7dB | msg: 0.0005 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.0466 | atk: 0.20 | lr: 7.0e-05 | 0.05s/step | ETA: 0min
+BOOT-CTRL Step 23230/23600 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 32.6dB | msg: 0.0002 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.0468 | atk: 0.20 | lr: 7.0e-05 | 0.05s/step | ETA: 0min
+BOOT-CTRL Step 23240/23600 | BER: 0.0010 | A-BER(256): 0.0010 | PSNR: 32.7dB | msg: 0.0039 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.0469 | atk: 0.20 | lr: 7.0e-05 | 0.05s/step | ETA: 0min
+BOOT-CTRL Step 23250/23600 | BER: 0.0020 | A-BER(256): 0.0020 | PSNR: 32.7dB | msg: 0.0035 | perc: 0.0000 | spec: 0.0000 | d_rms: 0.0470 | atk: 0.20 | lr: 7.0e-05 | 0.05s/step | ETA: 0min
+TRAIN Step 23260/23600 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 32.5dB | msg: 0.0020 | perc: 0.1978 | spec: 0.0564 | d_rms: 0.0480 | atk: 0.70 | lr: 7.0e-05 | 0.15s/step | ETA: 1min | D_loss: 0.658 D_acc: 0.50 adv: 0.7481
+TRAIN Step 23270/23600 | BER: 0.0000 | A-BER(256): 0.0000 | PSNR: 31.0dB | msg: 0.0007 | perc: 0.1849 | spec: 0.0384 | d_rms: 0.0565 | atk: 0.70 | lr: 7.0e-05 | 0.14s/step | ETA: 1min | D_loss: 0.561 D_acc: 1.00 adv: 1.1494
+TRAIN Step 23280/23600 | BER: 0.0049 | A-BER(256): 0.0049 | PSNR: 29.0dB | msg: 0.0157 | perc: 0.0892 | spec: 0.0223 | d_rms: 0.0710 | atk: 0.70 | lr: 7.0e-05 | 0.14s/step | ETA: 1min | D_loss: 0.569 D_acc: 1.00 adv: 0.8828
+TRAIN Step 23290/23600 | BER: 0.0928 | A-BER(256): 0.0928 | PSNR: 28.7dB | msg: 0.2306 | perc: 0.0503 | spec: 0.0156 | d_rms: 0.0736 | atk: 0.70 | lr: 7.0e-05 | 0.14s/step | ETA: 1min | D_loss: 0.616 D_acc: 1.00 adv: 0.7832
+TRAIN Step 23300/23600 | BER: 0.0889 | A-BER(256): 0.0889 | PSNR: 29.0dB | msg: 0.2496 | perc: 0.0915 | spec: 0.0211 | d_rms: 0.0718 | atk: 0.70 | lr: 7.0e-05 | 0.14s/step | ETA: 1min | D_loss: 0.567 D_acc: 0.62 adv: 1.6331
+TRAIN Step 23310/23600 | BER: 0.0098 | A-BER(256): 0.0098 | PSNR: 28.8dB | msg: 0.0407 | perc: 0.0579 | spec: 0.0177 | d_rms: 0.0733 | atk: 0.70 | lr: 7.0e-05 | 0.14s/step | ETA: 1min | D_loss: 0.604 D_acc: 1.00 adv: 0.8537
+TRAIN Step 23320/23600 | BER: 0.1055 | A-BER(256): 0.1055 | PSNR: 29.0dB | msg: 0.2667 | perc: 0.0543 | spec: 0.0212 | d_rms: 0.0725 | atk: 0.70 | lr: 7.0e-05 | 0.14s/step | ETA: 1min | D_loss: 0.586 D_acc: 1.00 adv: 0.8394
+TRAIN Step 23330/23600 | BER: 0.0303 | A-BER(256): 0.0303 | PSNR: 28.6dB | msg: 0.0808 | perc: 0.0444 | spec: 0.0177 | d_rms: 0.0745 | atk: 0.70 | lr: 7.0e-05 | 0.14s/step | ETA: 1min | D_loss: 0.564 D_acc: 1.00 adv: 0.9141
+TRAIN Step 23340/23600 | BER: 0.0010 | A-BER(256): 0.0010 | PSNR: 28.4dB | msg: 0.0052 | perc: 0.0517 | spec: 0.0125 | d_rms: 0.0757 | atk: 0.70 | lr: 7.0e-05 | 0.14s/step | ETA: 1min | D_loss: 0.558 D_acc: 1.00 adv: 0.9557
+TRAIN Step 23350/23600 | BER: 0.5195 | A-BER(256): 0.5195 | PSNR: 28.5dB | msg: 0.7103 | perc: 0.0616 | spec: 0.0175 | d_rms: 0.0754 | atk: 0.70 | lr: 7.0e-05 | 0.14s/step | ETA: 1min | D_loss: 0.540 D_acc: 1.00 adv: 0.9820
+TRAIN Step 23360/23600 | BER: 0.0703 | A-BER(256): 0.0703 | PSNR: 28.1dB | msg: 0.1560 | perc: 0.0371 | spec: 0.0172 | d_rms: 0.0787 | atk: 0.70 | lr: 7.0e-05 | 0.14s/step | ETA: 1min | D_loss: 0.562 D_acc: 1.00 adv: 0.7204
+TRAIN Step 23370/23600 | BER: 0.0176 | A-BER(256): 0.0176 | PSNR: 28.2dB | msg: 0.0401 | perc: 0.0291 | spec: 0.0106 | d_rms: 0.0783 | atk: 0.70 | lr: 7.0e-05 | 0.13s/step | ETA: 1min | D_loss: 0.622 D_acc: 0.50 adv: 0.9593
+TRAIN Step 23380/23600 | BER: 0.0195 | A-BER(256): 0.0195 | PSNR: 28.1dB | msg: 0.0423 | perc: 0.0353 | spec: 0.0123 | d_rms: 0.0790 | atk: 0.70 | lr: 7.0e-05 | 0.13s/step | ETA: 0min | D_loss: 0.565 D_acc: 1.00 adv: 1.1537
+TRAIN Step 23390/23600 | BER: 0.1650 | A-BER(256): 0.1650 | PSNR: 28.0dB | msg: 0.3630 | perc: 0.0334 | spec: 0.0142 | d_rms: 0.0796 | atk: 0.70 | lr: 7.0e-05 | 0.14s/step | ETA: 0min | D_loss: 0.545 D_acc: 1.00 adv: 0.9855
+TRAIN Step 23400/23600 | BER: 0.1055 | A-BER(256): 0.1055 | PSNR: 28.0dB | msg: 0.2651 | perc: 0.0412 | spec: 0.0129 | d_rms: 0.0802 | atk: 0.70 | lr: 7.0e-05 | 0.14s/step | ETA: 0min | D_loss: 0.552 D_acc: 1.00 adv: 0.9544
+TRAIN Step 23410/23600 | BER: 0.0020 | A-BER(256): 0.0020 | PSNR: 28.0dB | msg: 0.0129 | perc: 0.0373 | spec: 0.0095 | d_rms: 0.0798 | atk: 0.70 | lr: 7.0e-05 | 0.13s/step | ETA: 0min | D_loss: 0.552 D_acc: 1.00 adv: 0.9511
+TRAIN Step 23420/23600 | BER: 0.4746 | A-BER(256): 0.4746 | PSNR: 27.8dB | msg: 0.7111 | perc: 0.0534 | spec: 0.0155 | d_rms: 0.0812 | atk: 0.70 | lr: 7.0e-05 | 0.14s/step | ETA: 0min | D_loss: 0.558 D_acc: 1.00 adv: 0.9240
+TRAIN Step 23430/23600 | BER: 0.0215 | A-BER(256): 0.0215 | PSNR: 27.8dB | msg: 0.0525 | perc: 0.0346 | spec: 0.0111 | d_rms: 0.0814 | atk: 0.70 | lr: 7.0e-05 | 0.14s/step | ETA: 0min | D_loss: 0.722 D_acc: 0.50 adv: 1.0620
+TRAIN Step 23440/23600 | BER: 0.4736 | A-BER(256): 0.4736 | PSNR: 27.8dB | msg: 0.6978 | perc: 0.0355 | spec: 0.0157 | d_rms: 0.0820 | atk: 0.70 | lr: 7.0e-05 | 0.13s/step | ETA: 0min | D_loss: 0.580 D_acc: 1.00 adv: 0.8744
+TRAIN Step 23450/23600 | BER: 0.2256 | A-BER(256): 0.2256 | PSNR: 27.8dB | msg: 0.4964 | perc: 0.0369 | spec: 0.0155 | d_rms: 0.0819 | atk: 0.70 | lr: 7.0e-05 | 0.13s/step | ETA: 0min | D_loss: 0.579 D_acc: 1.00 adv: 0.9006
+TRAIN Step 23460/23600 | BER: 0.5215 | A-BER(256): 0.5215 | PSNR: 27.9dB | msg: 0.7316 | perc: 0.0551 | spec: 0.0118 | d_rms: 0.0806 | atk: 0.70 | lr: 7.0e-05 | 0.14s/step | ETA: 0min | D_loss: 0.591 D_acc: 0.50 adv: 0.7594
+TRAIN Step 23470/23600 | BER: 0.0098 | A-BER(256): 0.0098 | PSNR: 27.8dB | msg: 0.0310 | perc: 0.0564 | spec: 0.0126 | d_rms: 0.0813 | atk: 0.70 | lr: 7.0e-05 | 0.14s/step | ETA: 0min | D_loss: 0.517 D_acc: 1.00 adv: 1.0523
+TRAIN Step 23480/23600 | BER: 0.0215 | A-BER(256): 0.0215 | PSNR: 27.8dB | msg: 0.0435 | perc: 0.0385 | spec: 0.0131 | d_rms: 0.0821 | atk: 0.70 | lr: 7.0e-05 | 0.14s/step | ETA: 0min | D_loss: 0.589 D_acc: 0.62 adv: 0.9546
+TRAIN Step 23490/23600 | BER: 0.2295 | A-BER(256): 0.2295 | PSNR: 27.9dB | msg: 0.4609 | perc: 0.0376 | spec: 0.0165 | d_rms: 0.0818 | atk: 0.70 | lr: 7.0e-05 | 0.13s/step | ETA: 0min | D_loss: 0.686 D_acc: 0.50 adv: 1.3559
+TRAIN Step 23500/23600 | BER: 0.0273 | A-BER(256): 0.0273 | PSNR: 27.7dB | msg: 0.0785 | perc: 0.0378 | spec: 0.0137 | d_rms: 0.0823 | atk: 0.70 | lr: 7.0e-05 | 0.14s/step | ETA: 0min | D_loss: 0.555 D_acc: 1.00 adv: 0.9528
+TRAIN Step 23510/23600 | BER: 0.0176 | A-BER(256): 0.0176 | PSNR: 27.9dB | msg: 0.0460 | perc: 0.0602 | spec: 0.0147 | d_rms: 0.0808 | atk: 0.70 | lr: 7.0e-05 | 0.14s/step | ETA: 0min | D_loss: 0.505 D_acc: 1.00 adv: 1.5409
+TRAIN Step 23520/23600 | BER: 0.1113 | A-BER(256): 0.1113 | PSNR: 27.9dB | msg: 0.2685 | perc: 0.0674 | spec: 0.0144 | d_rms: 0.0813 | atk: 0.70 | lr: 7.0e-05 | 0.14s/step | ETA: 0min | D_loss: 0.592 D_acc: 0.50 adv: 1.2022
+TRAIN Step 23530/23600 | BER: 0.4951 | A-BER(256): 0.4951 | PSNR: 27.9dB | msg: 0.7176 | perc: 0.0323 | spec: 0.0130 | d_rms: 0.0811 | atk: 0.70 | lr: 7.0e-05 | 0.14s/step | ETA: 0min | D_loss: 0.621 D_acc: 0.50 adv: 1.0852
+TRAIN Step 23540/23600 | BER: 0.4727 | A-BER(256): 0.4727 | PSNR: 27.7dB | msg: 0.6982 | perc: 0.0348 | spec: 0.0109 | d_rms: 0.0822 | atk: 0.70 | lr: 7.0e-05 | 0.13s/step | ETA: 0min | D_loss: 0.577 D_acc: 1.00 adv: 0.9827
+TRAIN Step 23550/23600 | BER: 0.2324 | A-BER(256): 0.2324 | PSNR: 27.8dB | msg: 0.4860 | perc: 0.0450 | spec: 0.0155 | d_rms: 0.0818 | atk: 0.70 | lr: 7.0e-05 | 0.14s/step | ETA: 0min | D_loss: 0.561 D_acc: 1.00 adv: 0.9143
+TRAIN Step 23560/23600 | BER: 0.5156 | A-BER(256): 0.5156 | PSNR: 27.8dB | msg: 0.7252 | perc: 0.0401 | spec: 0.0121 | d_rms: 0.0817 | atk: 0.70 | lr: 7.0e-05 | 0.14s/step | ETA: 0min | D_loss: 0.554 D_acc: 0.88 adv: 1.4701
+TRAIN Step 23570/23600 | BER: 0.4951 | A-BER(256): 0.4951 | PSNR: 27.7dB | msg: 0.6967 | perc: 0.0302 | spec: 0.0119 | d_rms: 0.0829 | atk: 0.70 | lr: 7.0e-05 | 0.14s/step | ETA: 0min | D_loss: 0.591 D_acc: 0.88 adv: 0.8616
+TRAIN Step 23580/23600 | BER: 0.4785 | A-BER(256): 0.4785 | PSNR: 27.8dB | msg: 0.7058 | perc: 0.0554 | spec: 0.0191 | d_rms: 0.0825 | atk: 0.70 | lr: 7.0e-05 | 0.14s/step | ETA: 0min | D_loss: 0.652 D_acc: 0.50 adv: 1.2465
+TRAIN Step 23590/23600 | BER: 0.2266 | A-BER(256): 0.2266 | PSNR: 27.7dB | msg: 0.4823 | perc: 0.0377 | spec: 0.0128 | d_rms: 0.0824 | atk: 0.70 | lr: 7.0e-05 | 0.14s/step | ETA: 0min | D_loss: 0.600 D_acc: 0.50 adv: 1.1293
+TRAIN Step 23600/23600 | BER: 0.0127 | A-BER(256): 0.0127 | PSNR: 27.8dB | msg: 0.0355 | perc: 0.0529 | spec: 0.0137 | d_rms: 0.0818 | atk: 0.70 | lr: 7.0e-05 | 0.14s/step | ETA: 0min | D_loss: 0.587 D_acc: 0.50 adv: 1.5327
+
+============================================================
+FINAL EVALUATION (200 samples)
+============================================================
+  Average BER:  0.020059 (target: 0.0000)
+  Average PSNR: 27.8 dB (target: >= 35)
+  Best BER during training: 0.000000
+  Best active-bit BER during training: 0.000000
+  Discriminator accuracy: 0.5000 (target: ~0.50)
+
+  WARNING: Clean BER not yet at target
+  Saved final model: checkpoints_tifs/ber_recovery/dscsp_v4_final.pt
+  Saved results: outputs_tifs/cycle_011_robust_balance/train_v4_results.json
+[eval] Loading checkpoint: checkpoints_tifs/ber_recovery/dscsp_v4_final.pt
+Loading pipeline components...:   0%|          | 0/2 [00:00<?, ?it/s]An error occurred while trying to fetch /workspace/.cache/huggingface/hub/models--google--ddpm-celebahq-256/snapshots/cd5c944777ea2668051904ead6cc120739b86c4d: Error no file named diffusion_pytorch_model.safetensors found in directory /workspace/.cache/huggingface/hub/models--google--ddpm-celebahq-256/snapshots/cd5c944777ea2668051904ead6cc120739b86c4d.
+Defaulting to unsafe serialization. Pass `allow_pickle=False` to raise an error instead.
+Loading pipeline components...:  50%|█████     | 1/2 [00:00<00:00,  2.22it/s]Loading pipeline components...: 100%|██████████| 2/2 [00:00<00:00,  4.39it/s]
+[eval] Generating 400 base images
+    Generated 20/400
+    Generated 40/400
+    Generated 60/400
+    Generated 80/400
+    Generated 100/400
+    Generated 120/400
+    Generated 140/400
+    Generated 160/400
+    Generated 180/400
+    Generated 200/400
+    Generated 220/400
+    Generated 240/400
+    Generated 260/400
+    Generated 280/400
+    Generated 300/400
+    Generated 320/400
+    Generated 340/400
+    Generated 360/400
+    Generated 380/400
+    Generated 400/400
+[eval] No RedundantCoder — BER reported as physical BER
+[eval] Running clean/jpeg/crop metrics on 200 samples
+[eval] Running adaptive steganalysis (train=300, test=100)
+[eval] Running cross-dataset checks (200 samples each)
+[eval] Loading dataset: cifar10
+[eval] Evaluating dataset: cifar10 (n=200)
+[eval] Loading dataset: stl10
+[eval] Evaluating dataset: stl10 (n=200)
+[eval] Completed full TIFS evaluation
+Reached max cycles without meeting all targets.

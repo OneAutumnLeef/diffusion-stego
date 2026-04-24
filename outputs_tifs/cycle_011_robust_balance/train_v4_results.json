@@ -1,9 +1,9 @@
 {
-  "final_ber": 0.0221875,
-  "final_psnr": 27.79435252189636,
+  "final_ber": 0.02005859375,
+  "final_psnr": 27.80915798187256,
   "best_ber": 0.0,
   "best_ber_active": 0.0,
-  "disc_acc": 0.995,
+  "disc_acc": 0.5,
   "config": {
     "model_id": "google/ddpm-celebahq-256",
     "num_bits": 256,

@@ -5,14 +5,14 @@
   "ber_active": 0.0,
   "active_bits": 256,
   "phase": "BOOT-CTRL",
-  "psnr": 30.72,
+  "psnr": 29.7,
   "best_ber": 0.0,
   "best_ber_active": 0.0,
-  "msg_loss": 0.000117,
+  "msg_loss": 0.000139,
   "perc_loss": 0.0,
-  "delta_rms": 0.058569,
+  "delta_rms": 0.06564,
   "attack_prob": 0.0,
   "lr": 7.937710782892975e-05,
-  "avg_step_time_s": 0.041,
+  "avg_step_time_s": 0.047,
   "eta_min": 0.0
 }

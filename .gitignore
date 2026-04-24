@@ -19,3 +19,7 @@ outputs_v5_ablation/no_redundant/
 
 # Scheduled task lock
 .claude/scheduled_tasks.lock
+
+# Local STL10 artifacts over GitHub LFS per-file limit
+.tifs_data/stl10_binary.tar.gz
+.tifs_data/stl10_binary/unlabeled_X.bin
