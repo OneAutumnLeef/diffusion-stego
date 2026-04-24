@@ -72,3 +72,29 @@
 - Reason: reached max cycles without meeting all required targets
 - Last cycle: 11
 - Best checkpoint: checkpoints_tifs/ber_recovery/dscsp_v4_final.pt
+
+## Autopilot Start 2026-04-23 22:03:51 UTC
+- Max cycles: 8
+- Steps per cycle: 2500
+
+### Major Milestone | Cycle 1 | ber_recovery_clean_first
+- Checkpoint: checkpoints_tifs/ber_recovery/major_cycle_001_ber_recovery_clean_first.pt
+- Clean BER: 0.007812
+- JPEG Q75 BER: 0.009707
+- Crop Q80 BER: 0.496133
+- Adaptive AUC: 0.7394
+- Eval JSON: outputs_tifs_eval/cycle_001_ber_recovery_clean_first.json
+
+## Autopilot Stop
+- Reason: reached max cycles without meeting all required targets
+- Last cycle: 8
+- Best checkpoint: checkpoints_tifs/ber_recovery/dscsp_v4_final.pt
+
+## Autopilot Start 2026-04-23 23:06:15 UTC
+- Max cycles: 11
+- Steps per cycle: 1200
+
+## Autopilot Stop
+- Reason: reached max cycles without meeting all required targets
+- Last cycle: 11
+- Best checkpoint: checkpoints_tifs/ber_recovery/dscsp_v4_final.pt

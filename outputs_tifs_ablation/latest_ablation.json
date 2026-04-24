@@ -2,27 +2,27 @@
   "variants": {
     "ber_recovery_clean_first": {
       "n": 3,
-      "clean_ber_mean": 0.0025008138020833335,
-      "crop80_ber_mean": 0.49926513671874995,
-      "auc_adaptive_mean": 0.9861712962962964
+      "clean_ber_mean": 0.002623697916666667,
+      "crop80_ber_mean": 0.4994921875,
+      "auc_adaptive_mean": 0.8770000000000001
     },
     "ber_recovery_curriculum": {
       "n": 3,
-      "clean_ber_mean": 0.013396809895833334,
-      "crop80_ber_mean": 0.4996931966145833,
-      "auc_adaptive_mean": 0.9413259259259258
+      "clean_ber_mean": 0.0112890625,
+      "crop80_ber_mean": 0.5005078125,
+      "auc_adaptive_mean": 0.9462999999999999
     },
     "robust_balance": {
       "n": 3,
-      "clean_ber_mean": 0.041003417968750004,
-      "crop80_ber_mean": 0.4984895833333334,
-      "auc_adaptive_mean": 0.7978611111111111
+      "clean_ber_mean": 0.028710937500000002,
+      "crop80_ber_mean": 0.4989518229166667,
+      "auc_adaptive_mean": 0.9616666666666666
     },
     "detectability_harden": {
       "n": 2,
-      "clean_ber_mean": 0.13499755859375,
-      "crop80_ber_mean": 0.49998779296875,
-      "auc_adaptive_mean": 0.7660416666666667
+      "clean_ber_mean": 0.037822265625000004,
+      "crop80_ber_mean": 0.49618164062500003,
+      "auc_adaptive_mean": 0.8935
     }
   },
   "n_cycles": 11

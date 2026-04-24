@@ -2,49 +2,49 @@
   "checkpoint": "checkpoints_tifs/ber_recovery/dscsp_v4_final.pt",
   "num_samples": 200,
   "clean": {
-    "ber": 1.953125e-05,
-    "psnr": 30.67528796195984,
+    "ber": 5.859375e-05,
+    "psnr": 29.72301424026489,
     "ber_ci95": [
       0.0,
-      5.859375e-05
+      0.00015625
     ]
   },
   "jpeg": {
-    "q75_ber": 3.90625e-05,
-    "q50_ber": 0.00033203125,
+    "q75_ber": 5.859375e-05,
+    "q50_ber": 0.0003515625,
     "q75_ber_ci95": [
       0.0,
-      0.0001171875
+      0.00013671875
     ]
   },
   "crop": {
-    "q80_ber": 0.4998828125,
-    "q70_ber": 0.50501953125,
+    "q80_ber": 0.5016796875,
+    "q70_ber": 0.49724609375,
     "q80_ber_ci95": [
-      0.4954296875,
-      0.5041997070312499
+      0.49703076171875,
+      0.50623291015625
     ]
   },
   "adaptive_steganalysis": {
     "auc_clean": 1.0,
-    "auc_adaptive": 0.999,
-    "accuracy_adaptive": 0.98
+    "auc_adaptive": 1.0,
+    "accuracy_adaptive": 0.995
   },
   "cross_dataset": {
     "cifar10": {
       "n": 200,
-      "clean_ber": 0.0,
-      "crop80_ber": 0.50189453125
+      "clean_ber": 5.859375e-05,
+      "crop80_ber": 0.50134765625
     },
     "stl10": {
       "n": 200,
-      "clean_ber": 0.001640625,
-      "crop80_ber": 0.50294921875
+      "clean_ber": 0.0022265625,
+      "crop80_ber": 0.496875
     }
   },
   "statistics": {
-    "p_clean_vs_crop80": 2.6636561730242945e-241,
-    "p_clean_vs_jpeg75": 0.6558532764186373
+    "p_clean_vs_crop80": 6.729692903815499e-237,
+    "p_clean_vs_jpeg75": 1.0
   },
   "ablation": {
     "has_report": true,
@@ -52,12 +52,12 @@
   },
   "areas": {
     "detectability": {
-      "current": 0.999,
+      "current": 1.0,
       "target": 0.7,
       "pass": false
     },
     "crop_robustness": {
-      "current": 0.4998828125,
+      "current": 0.5016796875,
       "target": 0.35,
       "pass": false
     },
@@ -77,16 +77,19 @@
       "pass": true
     },
     "adaptive_steganalysis": {
-      "current": 0.999,
+      "current": 1.0,
       "target": 0.7,
       "pass": false
     },
     "ber_focus": {
-      "clean_ber": 1.953125e-05,
-      "jpeg_q75_ber": 3.90625e-05,
+      "clean_ber": 5.859375e-05,
+      "jpeg_q75_ber": 5.859375e-05,
       "clean_target": 0.1,
       "jpeg_q75_target": 0.2,
       "pass": true
     }
-  }
+  },
+  "capacity_table": {},
+  "multi_detector": {},
+  "real_jpeg_gap": {}
 }

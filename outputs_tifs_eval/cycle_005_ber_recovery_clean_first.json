@@ -1,39 +1,50 @@
 {
   "checkpoint": "checkpoints_tifs/ber_recovery/dscsp_v4_final.pt",
-  "num_samples": 320,
+  "num_samples": 200,
   "clean": {
-    "ber": 2.44140625e-05,
-    "psnr": 31.862227100133897,
+    "ber": 0.0,
+    "psnr": 31.37618597984314,
     "ber_ci95": [
       0.0,
-      6.103515625e-05
+      0.0
     ]
   },
   "jpeg": {
-    "q75_ber": 0.0002197265625,
-    "q50_ber": 0.00157470703125,
+    "q75_ber": 0.0001171875,
+    "q50_ber": 0.0010546875,
     "q75_ber_ci95": [
-      0.00010986328125,
-      0.0003662109375
+      3.90625e-05,
+      0.00021484375
     ]
   },
   "crop": {
-    "q80_ber": 0.5001708984375,
-    "q70_ber": 0.5005126953125,
+    "q80_ber": 0.5006640625,
+    "q70_ber": 0.498671875,
     "q80_ber_ci95": [
-      0.49683837890625,
-      0.503406982421875
+      0.49593554687499997,
+      0.50476708984375
     ]
   },
   "adaptive_steganalysis": {
-    "auc_clean": 1.0,
-    "auc_adaptive": 0.9989583333333334,
-    "accuracy_adaptive": 0.975
+    "auc_clean": 0.9999,
+    "auc_adaptive": 0.8916000000000001,
+    "accuracy_adaptive": 0.735
   },
-  "cross_dataset": {},
+  "cross_dataset": {
+    "cifar10": {
+      "n": 200,
+      "clean_ber": 0.00021484375,
+      "crop80_ber": 0.500078125
+    },
+    "stl10": {
+      "n": 200,
+      "clean_ber": 0.00259765625,
+      "crop80_ber": 0.50443359375
+    }
+  },
   "statistics": {
-    "p_clean_vs_crop80": 0.0,
-    "p_clean_vs_jpeg75": 0.0033456593542789703
+    "p_clean_vs_crop80": 6.838599106755692e-241,
+    "p_clean_vs_jpeg75": 0.013936174825177883
   },
   "ablation": {
     "has_report": true,
@@ -41,12 +52,12 @@
   },
   "areas": {
     "detectability": {
-      "current": 0.9989583333333334,
+      "current": 0.8916000000000001,
       "target": 0.7,
       "pass": false
     },
     "crop_robustness": {
-      "current": 0.5001708984375,
+      "current": 0.5006640625,
       "target": 0.35,
       "pass": false
     },
@@ -61,21 +72,24 @@
       "pass": true
     },
     "cross_dataset": {
-      "current": "no",
+      "current": "yes",
       "target": "yes",
-      "pass": false
+      "pass": true
     },
     "adaptive_steganalysis": {
-      "current": 0.9989583333333334,
+      "current": 0.8916000000000001,
       "target": 0.7,
       "pass": false
     },
     "ber_focus": {
-      "clean_ber": 2.44140625e-05,
-      "jpeg_q75_ber": 0.0002197265625,
+      "clean_ber": 0.0,
+      "jpeg_q75_ber": 0.0001171875,
       "clean_target": 0.1,
       "jpeg_q75_target": 0.2,
       "pass": true
     }
-  }
+  },
+  "capacity_table": {},
+  "multi_detector": {},
+  "real_jpeg_gap": {}
 }
