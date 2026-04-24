@@ -286,13 +286,21 @@ class AttackLayer(nn.Module):
         self.brightness_range = cfg.get('brightness_range', (-0.1, 0.1))
         self.contrast_range = cfg.get('contrast_range', (0.8, 1.2))
         self.real_jpeg_prob = float(cfg.get('real_jpeg_prob', 0.0) or 0.0)
+        # Optional second quality range for the real-libjpeg branch.
+        self.real_jpeg_quality_range = cfg.get(
+            'real_jpeg_quality_range', self.jpeg_quality_range
+        )
+
+    def set_real_jpeg_prob(self, p: float):
+        """Update the real-libjpeg probability at runtime (used by train schedules)."""
+        self.real_jpeg_prob = float(max(0.0, min(1.0, p)))
 
     def _apply_single(self, x, attack_name):
         """Apply a single named attack. Returns attacked tensor."""
         if attack_name == 'jpeg':
             if self.real_jpeg_prob > 0.0 and self.training and torch.rand(1).item() < self.real_jpeg_prob:
-                q = int(torch.randint(int(self.jpeg_quality_range[0]),
-                                      int(self.jpeg_quality_range[1]) + 1, (1,)).item())
+                qr = self.real_jpeg_quality_range
+                q = int(torch.randint(int(qr[0]), int(qr[1]) + 1, (1,)).item())
                 return real_jpeg_ste(x, q)
             quality = random.randint(*self.jpeg_quality_range)
             return self.diff_jpeg(x, quality)

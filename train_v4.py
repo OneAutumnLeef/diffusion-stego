@@ -30,7 +30,7 @@ from dscsp.models.discriminator import SRMFilterLayer
 from dscsp.losses.composite_loss import DSCSPLoss
 from dscsp.utils.metrics import compute_ber, compute_psnr
 from dscsp.utils.visualization import save_comparison
-from dscsp.augmentations.differentiable import AttackLayer
+from dscsp.augmentations.differentiable import AttackLayer, crop_resize
 
 
 # ─── Configuration ──────────────────────────────────────────────────────────
@@ -156,11 +156,16 @@ class GlobalExtractor(nn.Module):
         not change which maximum is selected.
     """
 
-    def __init__(self, num_bits: int = 256, mode: str = "global_fc", grid_size: int = 16):
+    def __init__(self, num_bits: int = 256, mode: str = "global_fc", grid_size: int = 16,
+                 shift_pool_mode: str = "max", shift_pool_kernel: int = 5):
         super().__init__()
         self.num_bits = num_bits
         self.mode = mode
         self.grid_size = max(1, int(grid_size))
+        # Only relevant when mode == "shift_pool". "max" is the legacy behaviour;
+        # "mean" gives smoother ±2-px shift tolerance and preserves per-bit sign.
+        self.shift_pool_mode = shift_pool_mode
+        self.shift_pool_kernel = int(shift_pool_kernel)
 
         backbone = tv_models.resnet18(weights=None)
 
@@ -216,9 +221,16 @@ class GlobalExtractor(nn.Module):
             )
 
         if self.mode == "shift_pool":
-            # Max over ±2-pixel neighbourhood — a random crop shifting the grid
-            # by ≤2 pixels will not change the maximum, giving crop-shift tolerance.
-            logits_map = F.max_pool2d(logits_map, kernel_size=5, stride=1, padding=2)
+            # Pool over a (shift_pool_kernel)x(shift_pool_kernel) neighbourhood.
+            # "max" = crop-robust but scrambles per-bit sign at sub-grid shifts.
+            # "mean" = preserves per-bit sign under the same ±pixel displacement
+            # while still tolerating translation; preferred when 256 bits are
+            # packed without redundancy (Instruction 3, Part B).
+            k, pad = self.shift_pool_kernel, self.shift_pool_kernel // 2
+            if self.shift_pool_mode == "mean":
+                logits_map = F.avg_pool2d(logits_map, kernel_size=k, stride=1, padding=pad)
+            else:
+                logits_map = F.max_pool2d(logits_map, kernel_size=k, stride=1, padding=pad)
 
         logits = logits_map.flatten(1)
         if logits.shape[1] > self.num_bits:
@@ -327,6 +339,10 @@ class JPEGHeavyAttackLayer(nn.Module):
         self.base_attack = AttackLayer(config)
         self.jpeg_weight = config.get("jpeg_weight", 0.6)
 
+    def set_real_jpeg_prob(self, p: float):
+        """Forward runtime updates to the underlying AttackLayer."""
+        self.base_attack.set_real_jpeg_prob(p)
+
     def forward(self, x, attack_prob=0.0, combined=False, n_combined=2):
         if attack_prob <= 0 or random.random() > attack_prob:
             return x
@@ -355,6 +371,18 @@ def get_attack_prob(step, config):
         return max_prob * (step - start) / ramp
     else:
         return max_prob
+
+
+def get_real_jpeg_prob(step, config):
+    """Two-stage schedule: `real_jpeg_prob_start` until `real_jpeg_ramp_step`,
+    then `real_jpeg_prob_end`. Supports Instruction-2 (0.20 -> 0.50 at 2000)
+    and Instruction-2 fallback (0.70 constant)."""
+    p_start = float(config.get("real_jpeg_prob_start", config.get("real_jpeg_prob", 0.0)))
+    p_end = float(config.get("real_jpeg_prob_end", p_start))
+    ramp_step = int(config.get("real_jpeg_ramp_step", 0))
+    if ramp_step <= 0 or p_start == p_end:
+        return p_end
+    return p_start if step < ramp_step else p_end
 
 
 def should_use_combined_attack(step, config):
@@ -400,7 +428,8 @@ def get_active_bits(step, config):
 
 # ─── Discriminator Training Step ────────────────────────────────────────────
 
-def train_discriminator_step(discriminator, disc_optimizer, x_clean, x_stego, label_smoothing=0.1):
+def train_discriminator_step(discriminator, disc_optimizer, x_clean, x_stego,
+                             label_smoothing=0.1, lambda_gp=0.0, device: str = "cuda"):
     disc_optimizer.zero_grad()
     logits_clean = discriminator(x_clean.detach())
     logits_stego = discriminator(x_stego.detach())
@@ -412,6 +441,12 @@ def train_discriminator_step(discriminator, disc_optimizer, x_clean, x_stego, la
     loss_stego = F.binary_cross_entropy_with_logits(logits_stego, target_stego)
     loss_disc = (loss_clean + loss_stego) / 2
 
+    gp_val = 0.0
+    if lambda_gp > 0:
+        gp = compute_gradient_penalty(discriminator, x_clean.detach(), x_stego.detach(), device)
+        loss_disc = loss_disc + lambda_gp * gp
+        gp_val = gp.item()
+
     loss_disc.backward()
     disc_optimizer.step()
 
@@ -420,10 +455,64 @@ def train_discriminator_step(discriminator, disc_optimizer, x_clean, x_stego, la
         pred_stego = (torch.sigmoid(logits_stego) > 0.5).float()
         acc = (pred_clean.sum() + pred_stego.sum()) / (pred_clean.numel() + pred_stego.numel())
 
-    return loss_disc.item(), acc.item()
+    return loss_disc.item(), acc.item(), gp_val
 
 
 # ─── Spectral Loss ──────────────────────────────────────────────────────────
+
+def compute_mode_spread_loss(delta: torch.Tensor, k: int = 8) -> torch.Tensor:
+    """Instruction 4 (Component A): singular-value concentration penalty.
+
+    Flattens the per-sample perturbation to a 2-D matrix of shape (B*C, H*W),
+    centres per-feature, and computes its singular spectrum. The loss is the
+    fraction of squared spectral energy carried by the top-k modes — minimising
+    this pushes perturbation energy away from a few dominant patterns and
+    reduces the adaptive-steganalysis signal that concentrated modes provide.
+    """
+    B, C, H, W = delta.shape
+    mat = delta.reshape(B * C, H * W)
+    mat = mat - mat.mean(dim=0, keepdim=True)
+    # torch.linalg.svd — returns S sorted descending; operate in fp32 for speed.
+    # full_matrices=False keeps this O(min(B*C, HW)).
+    _, sigma, _ = torch.linalg.svd(mat, full_matrices=False)
+    sig2 = sigma.pow(2)
+    k_eff = min(k, sig2.shape[0])
+    total = sig2.sum().clamp_min(1e-12)
+    top = sig2[:k_eff].sum()
+    return top / total
+
+
+def compute_srm_match_loss(x_stego: torch.Tensor, x_clean: torch.Tensor,
+                           srm_layer: nn.Module) -> torch.Tensor:
+    """Instruction 4 (Component B): SRM feature-matching between stego and clean.
+    Gradient flows through x_stego only; x_clean is detached."""
+    feats_stego = srm_layer(x_stego)
+    feats_clean = srm_layer(x_clean).detach()
+    return F.mse_loss(feats_stego.mean(0), feats_clean.mean(0))
+
+
+def compute_gradient_penalty(discriminator: nn.Module,
+                             x_clean: torch.Tensor, x_stego: torch.Tensor,
+                             device: str) -> torch.Tensor:
+    """Instruction 4 (Component C): WGAN-GP style 1-centred gradient penalty.
+
+    x_hat = alpha * x_clean + (1 - alpha) * x_stego  where alpha is uniform in
+    [0, 1] per-sample. Loss = E[(||grad D(x_hat)||_2 - 1)^2] — prevents the
+    discriminator from collapsing to near-zero or near-infinite gradients,
+    the most common failure mode when pushing AUC below 0.80.
+    """
+    B = x_clean.shape[0]
+    alpha = torch.rand(B, 1, 1, 1, device=device)
+    x_hat = (alpha * x_clean + (1 - alpha) * x_stego).detach()
+    x_hat.requires_grad_(True)
+    d_hat = discriminator(x_hat)
+    grads = torch.autograd.grad(
+        outputs=d_hat.sum(), inputs=x_hat,
+        create_graph=True, retain_graph=True,
+    )[0]
+    grad_norm = grads.reshape(B, -1).norm(p=2, dim=1)
+    return ((grad_norm - 1.0) ** 2).mean()
+
 
 def compute_spectral_loss(x_stego, x_clean):
     """
@@ -529,6 +618,9 @@ def train(config=None):
         num_bits=config["num_bits"],
         max_perturbation=config["max_perturbation"],
         base_channels=config["base_channels"],
+        carrier_type=config.get("carrier_type", "nearest"),
+        spread_image_size=config.get("spread_image_size", 256),
+        spread_seed=config.get("spread_seed", 20260424),
     ).to(device)
     ctrl_params = sum(p.numel() for p in controller.parameters())
     print(f"  Controller params: {ctrl_params / 1e6:.2f}M")
@@ -538,6 +630,8 @@ def train(config=None):
         num_bits=config["num_bits"],
         mode=config.get("extractor_mode", "global_fc"),
         grid_size=config.get("extractor_grid_size", 16),
+        shift_pool_mode=config.get("shift_pool_mode", "max"),
+        shift_pool_kernel=config.get("shift_pool_kernel", 5),
     ).to(device)
     ext_params = sum(p.numel() for p in extractor.parameters())
     print(f"  Extractor params: {ext_params / 1e6:.2f}M ({config.get('extractor_mode', 'global_fc')})")
@@ -833,12 +927,15 @@ def train(config=None):
             # ── Discriminator update ──
             disc_loss_val = 0.0
             disc_acc_val = 0.0
+            disc_gp_val = 0.0
             if discriminator is not None and step >= config["adv_start_step"]:
+                lambda_gp_now = float(config.get("lambda_gp", 0.0))
                 for _ in range(config["disc_steps_per_gen_step"]):
-                    disc_loss_val, disc_acc_val = train_discriminator_step(
+                    disc_loss_val, disc_acc_val, disc_gp_val = train_discriminator_step(
                         discriminator, disc_optimizer,
                         x_clean, x_stego,
                         label_smoothing=config["disc_label_smoothing"],
+                        lambda_gp=lambda_gp_now, device=device,
                     )
 
             # ── Generator (Controller + Extractor) update ──
@@ -849,11 +946,21 @@ def train(config=None):
             x_stego = (x_clean + delta).clamp(-1, 1)
             delta_norms = delta.pow(2).mean()
 
-            # Apply JPEG-heavy differentiable attack
+            # Instruction 3 (Part B): always-on crop-resize pre-attack.
+            # Applied independently of the main schedule so crop tolerance is
+            # pressured from step 0. A no-op when `crop_always_prob` is 0.
+            crop_always_prob = float(config.get("crop_always_prob", 0.0))
+            x_pre = x_stego
+            if crop_always_prob > 0 and random.random() < crop_always_prob:
+                x_pre = crop_resize(x_pre, config.get("crop_ratio_range", (0.7, 0.95)))
+
+            # Apply JPEG-heavy differentiable attack (+ real-libjpeg STE mix)
             attack_prob = get_attack_prob(step, config)
+            real_jpeg_p = get_real_jpeg_prob(step, config)
+            attack_layer.set_real_jpeg_prob(real_jpeg_p)
             use_combined = should_use_combined_attack(step, config)
             x_for_extraction = attack_layer(
-                x_stego, attack_prob=attack_prob,
+                x_pre, attack_prob=attack_prob,
                 combined=use_combined, n_combined=config["n_combined"],
             )
 
@@ -882,6 +989,29 @@ def train(config=None):
             spec_loss = compute_spectral_loss(x_stego, x_clean)
             loss = loss + config["lambda_spec"] * spec_loss
             loss_dict["spec"] = spec_loss.item()
+
+            # ── Instruction 4 (Component A): mode-spread regularizer ──
+            # Ramps in from step >= lambda_spread_start_step (default 1000).
+            spread_val = 0.0
+            lambda_spread = float(config.get("lambda_spread", 0.0))
+            if lambda_spread > 0 and step >= int(config.get("lambda_spread_start_step", 1000)):
+                spread = compute_mode_spread_loss(
+                    delta, k=int(config.get("lambda_spread_k", 8)),
+                )
+                loss = loss + lambda_spread * spread
+                spread_val = spread.item()
+            loss_dict["spread"] = spread_val
+
+            # ── Instruction 4 (Component B): explicit SRM feature match ──
+            srm_val = 0.0
+            lambda_srm_match = float(config.get("lambda_srm_match", 0.0))
+            if lambda_srm_match > 0 and discriminator is not None and getattr(discriminator, "srm", None) is not None:
+                # Reuse the (frozen) discriminator SRM filter bank — they share
+                # the same high-pass kernels, and this saves memory.
+                srm_loss = compute_srm_match_loss(x_stego, x_clean, discriminator.srm)
+                loss = loss + lambda_srm_match * srm_loss
+                srm_val = srm_loss.item()
+            loss_dict["srm_match"] = srm_val
 
             loss.backward()
 

@@ -60,6 +60,9 @@ def load_v4_model(ckpt_path, device):
         num_bits=config["num_bits"],
         max_perturbation=config["max_perturbation"],
         base_channels=config.get("base_channels", 48),
+        carrier_type=config.get("carrier_type", "nearest"),
+        spread_image_size=config.get("spread_image_size", 256),
+        spread_seed=config.get("spread_seed", 20260424),
     ).to(device)
     _load_flexible(controller, ckpt["controller"], "controller")
     controller.eval()
@@ -70,6 +73,8 @@ def load_v4_model(ckpt_path, device):
         num_bits=config["num_bits"],
         mode=config.get("extractor_mode", "global_fc"),
         grid_size=config.get("extractor_grid_size", 16),
+        shift_pool_mode=config.get("shift_pool_mode", "max"),
+        shift_pool_kernel=config.get("shift_pool_kernel", 5),
     ).to(device)
     _load_flexible(extractor, ckpt["extractor"], "extractor")
     extractor.eval()

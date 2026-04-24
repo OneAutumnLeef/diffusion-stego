@@ -96,10 +96,14 @@ class ContentAdaptiveController(nn.Module):
         num_bits: int = 256,
         max_perturbation: float = 0.1,
         base_channels: int = 48,
+        carrier_type: str = "nearest",
+        spread_image_size: int = 256,
+        spread_seed: int = 20260424,
     ):
         super().__init__()
         self.num_bits = num_bits
         self.max_perturbation = max_perturbation
+        self.carrier_type = carrier_type
         ch = base_channels
 
         # Message preparation: bits -> spatial feature map
@@ -115,6 +119,25 @@ class ContentAdaptiveController(nn.Module):
         self.payload_direct = nn.Linear(num_bits, 3 * 16 * 16)
         self.payload_fixed_gain = nn.Parameter(torch.tensor(0.18))
         self.payload_grid_h, self.payload_grid_w = self._infer_payload_grid(num_bits)
+
+        # Spread-spectrum carrier (Instruction 3 — translation-tolerant).
+        # Each bit gets a pseudorandom binary mask in {-1, +1}^(H*W). The
+        # carrier for payload b is sum_i (2*b_i - 1) * m_i * gain, which
+        # distributes each bit's energy across the entire image rather than
+        # concentrating it in a 16x16 grid region.
+        if carrier_type == "spread_spectrum":
+            gen = torch.Generator(device="cpu").manual_seed(int(spread_seed))
+            Himg, Wimg = int(spread_image_size), int(spread_image_size)
+            masks = torch.randint(0, 2, (num_bits, Himg * Wimg), generator=gen, dtype=torch.int8)
+            masks = masks.float() * 2.0 - 1.0  # {-1, +1}
+            self.register_buffer("spread_masks", masks)  # (num_bits, H*W)
+            self.spread_image_size = Himg
+            # Per-channel phase rolls so the 3 RGB channels use shifted masks.
+            self.spread_channel_rolls = (0, Himg // 3, (2 * Himg) // 3)
+        else:
+            self.spread_masks = None
+            self.spread_image_size = None
+            self.spread_channel_rolls = None
 
         # Initial convolution: image (3ch) + message (ch) -> ch
         self.initial = ConvBlock(3 + ch, ch)
@@ -183,18 +206,36 @@ class ContentAdaptiveController(nn.Module):
         # Final with skip from initial
         delta = self.final(torch.cat([u1, d0], dim=1))  # (B, 3, 256, 256)
 
-        # Fixed payload carrier guarantees a message-conditioned signal path.
-        signed = payload[:, : self.payload_grid_h * self.payload_grid_w] * 2.0 - 1.0
-        carrier = signed.view(B, 1, self.payload_grid_h, self.payload_grid_w)
-        carrier = F.interpolate(carrier, size=(H, W), mode='nearest')
-
-        sh = max(1, H // max(1, 2 * self.payload_grid_h))
-        sw = max(1, W // max(1, 2 * self.payload_grid_w))
-        carrier_rgb = torch.cat([
-            carrier,
-            torch.roll(carrier, shifts=sh, dims=2),
-            torch.roll(carrier, shifts=sw, dims=3),
-        ], dim=1)
+        # Carrier branch: either (legacy) nearest-neighbour grid or
+        # (Instruction 3) spread-spectrum — each bit's energy distributed
+        # across the whole image via a pseudorandom ±1 mask.
+        if self.carrier_type == "spread_spectrum":
+            signed = payload * 2.0 - 1.0                         # (B, num_bits)
+            masks = self.spread_masks                            # (num_bits, Himg*Wimg)
+            carrier_flat = signed @ masks                        # (B, Himg*Wimg)
+            carrier_flat = carrier_flat / (self.num_bits ** 0.5) # normalise energy
+            Himg = self.spread_image_size
+            carrier = carrier_flat.view(B, 1, Himg, Himg)
+            if (H, W) != (Himg, Himg):
+                carrier = F.interpolate(carrier, size=(H, W), mode="bilinear",
+                                        align_corners=False)
+            r0, r1, r2 = self.spread_channel_rolls
+            carrier_rgb = torch.cat([
+                torch.roll(carrier, shifts=r0, dims=2),
+                torch.roll(carrier, shifts=r1, dims=3),
+                torch.roll(carrier, shifts=r2, dims=2),
+            ], dim=1)
+        else:
+            signed = payload[:, : self.payload_grid_h * self.payload_grid_w] * 2.0 - 1.0
+            carrier = signed.view(B, 1, self.payload_grid_h, self.payload_grid_w)
+            carrier = F.interpolate(carrier, size=(H, W), mode='nearest')
+            sh = max(1, H // max(1, 2 * self.payload_grid_h))
+            sw = max(1, W // max(1, 2 * self.payload_grid_w))
+            carrier_rgb = torch.cat([
+                carrier,
+                torch.roll(carrier, shifts=sh, dims=2),
+                torch.roll(carrier, shifts=sw, dims=3),
+            ], dim=1)
 
         direct = self.payload_direct(payload).view(B, 3, 16, 16)
         direct = F.interpolate(direct, size=(H, W), mode='bilinear', align_corners=False)

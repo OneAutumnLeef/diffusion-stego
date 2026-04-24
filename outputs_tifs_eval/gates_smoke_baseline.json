@@ -1,0 +1,83 @@
+{
+  "checkpoint": "checkpoints_tifs/ber_recovery/dscsp_v4_final.pt",
+  "num_samples": 50,
+  "seed": 0,
+  "gates": {
+    "clean_ber": {
+      "value": 0.014921875,
+      "ci95": [
+        0.00984375,
+        0.021330078125
+      ],
+      "max": 0.01,
+      "pass": false
+    },
+    "jpeg_q75_real_ber": {
+      "value": 0.34390625,
+      "ci95": [
+        0.333513671875,
+        0.355
+      ],
+      "max": 0.1,
+      "pass": false
+    },
+    "crop_q80_ber": {
+      "value": 0.49625,
+      "ci95": [
+        0.487498046875,
+        0.5049238281249999
+      ],
+      "max": 0.2,
+      "pass": false
+    },
+    "adaptive_auc_ens": {
+      "value": 0.9692000000000001,
+      "ci95": [
+        0.9363645458183273,
+        0.9911682055399438
+      ],
+      "max": 0.7,
+      "pass": false
+    }
+  },
+  "all_gates_pass": false,
+  "detail": {
+    "clean": {
+      "mean": 0.014921875,
+      "ci95": [
+        0.00984375,
+        0.021330078125
+      ],
+      "n": 50
+    },
+    "jpeg_q75_real": {
+      "mean": 0.34390625,
+      "ci95": [
+        0.333513671875,
+        0.355
+      ],
+      "n": 50,
+      "quality": 75
+    },
+    "crop_q80": {
+      "mean": 0.49625,
+      "ci95": [
+        0.487498046875,
+        0.5049238281249999
+      ],
+      "n": 50,
+      "ratio": 0.8
+    },
+    "adaptive_auc": {
+      "auc_resnet18": 0.9628000000000001,
+      "auc_resnet34": 0.9472,
+      "auc_ensemble": 0.9692000000000001,
+      "auc_ensemble_ci95": [
+        0.9363645458183273,
+        0.9911682055399438
+      ],
+      "n_train": 200,
+      "n_test": 50
+    }
+  }
+}

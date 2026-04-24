@@ -39,7 +39,7 @@ from dscsp.losses.composite_loss import DSCSPLoss
 from dscsp.utils.metrics import compute_ber, compute_psnr
 from dscsp.utils.visualization import save_comparison
 from dscsp.utils.redundant_coding import RedundantCoder
-from dscsp.augmentations.differentiable import AttackLayer
+from dscsp.augmentations.differentiable import AttackLayer, crop_resize
 
 
 # ─── Configuration ──────────────────────────────────────────────────────────
@@ -154,11 +154,14 @@ CONFIG = {
 class GlobalExtractor(nn.Module):
     """ResNet-18 extractor with selectable head (global_fc, spatial_map, or shift_pool)."""
 
-    def __init__(self, num_bits: int = 256, mode: str = "global_fc", grid_size: int = 16):
+    def __init__(self, num_bits: int = 256, mode: str = "global_fc", grid_size: int = 16,
+                 shift_pool_mode: str = "max", shift_pool_kernel: int = 5):
         super().__init__()
         self.num_bits = num_bits
         self.mode = mode
         self.grid_size = max(1, int(grid_size))
+        self.shift_pool_mode = shift_pool_mode
+        self.shift_pool_kernel = int(shift_pool_kernel)
 
         backbone = tv_models.resnet18(weights=None)
         backbone.fc = nn.Linear(512, num_bits)
@@ -203,7 +206,11 @@ class GlobalExtractor(nn.Module):
             )
 
         if self.mode == "shift_pool":
-            logits_map = F.max_pool2d(logits_map, kernel_size=5, stride=1, padding=2)
+            k, pad = self.shift_pool_kernel, self.shift_pool_kernel // 2
+            if self.shift_pool_mode == "mean":
+                logits_map = F.avg_pool2d(logits_map, kernel_size=k, stride=1, padding=pad)
+            else:
+                logits_map = F.max_pool2d(logits_map, kernel_size=k, stride=1, padding=pad)
 
         logits = logits_map.flatten(1)
         if logits.shape[1] > self.num_bits:
@@ -286,6 +293,9 @@ class JPEGHeavyAttackLayer(nn.Module):
         self.base_attack = AttackLayer(config)
         self.jpeg_weight = config.get("jpeg_weight", 0.80)
 
+    def set_real_jpeg_prob(self, p: float):
+        self.base_attack.set_real_jpeg_prob(p)
+
     def forward(self, x, attack_prob=0.0, combined=False, n_combined=2):
         if attack_prob <= 0 or random.random() > attack_prob:
             return x
@@ -310,6 +320,17 @@ def get_attack_prob(step, config):
         return max_prob * (step - start) / ramp
     else:
         return max_prob
+
+
+def get_real_jpeg_prob(step, config):
+    """Two-stage schedule: `real_jpeg_prob_start` until `real_jpeg_ramp_step`,
+    then `real_jpeg_prob_end`."""
+    p_start = float(config.get("real_jpeg_prob_start", config.get("real_jpeg_prob", 0.0)))
+    p_end = float(config.get("real_jpeg_prob_end", p_start))
+    ramp_step = int(config.get("real_jpeg_ramp_step", 0))
+    if ramp_step <= 0 or p_start == p_end:
+        return p_end
+    return p_start if step < ramp_step else p_end
 
 
 def should_use_combined_attack(step, config):
@@ -528,6 +549,9 @@ def train(config=None):
         num_bits=phys_bits,
         max_perturbation=config["max_perturbation"],
         base_channels=config["base_channels"],
+        carrier_type=config.get("carrier_type", "nearest"),
+        spread_image_size=config.get("spread_image_size", 256),
+        spread_seed=config.get("spread_seed", 20260424),
     ).to(device)
     print(f"  Controller params: {sum(p.numel() for p in controller.parameters()) / 1e6:.2f}M")
 
@@ -536,6 +560,8 @@ def train(config=None):
         num_bits=phys_bits,
         mode=config.get("extractor_mode", "global_fc"),
         grid_size=config.get("extractor_grid_size", 16),
+        shift_pool_mode=config.get("shift_pool_mode", "max"),
+        shift_pool_kernel=config.get("shift_pool_kernel", 5),
     ).to(device)
     print(f"  Extractor params: {sum(p.numel() for p in extractor.parameters()) / 1e6:.2f}M")
 
@@ -772,11 +798,19 @@ def train(config=None):
             x_stego = (x_clean + delta).clamp(-1, 1)
             delta_norms = delta.pow(2).mean()
 
-            # Attack
+            # Instruction 3 (Part B): always-on crop-resize pre-attack.
+            crop_always_prob = float(config.get("crop_always_prob", 0.0))
+            x_pre = x_stego
+            if crop_always_prob > 0 and random.random() < crop_always_prob:
+                x_pre = crop_resize(x_pre, config.get("crop_ratio_range", (0.75, 0.95)))
+
+            # Attack (+ real-libjpeg STE mix)
             attack_prob = get_attack_prob(step, config)
+            real_jpeg_p = get_real_jpeg_prob(step, config)
+            attack_layer.set_real_jpeg_prob(real_jpeg_p)
             use_combined = should_use_combined_attack(step, config)
             x_for_ext = attack_layer(
-                x_stego, attack_prob=attack_prob,
+                x_pre, attack_prob=attack_prob,
                 combined=use_combined, n_combined=config["n_combined"],
             )
 
