@@ -40,6 +40,12 @@
     "lpips": null
   },
   "no_redundant": {
-    "error": "'NoneType' object has no attribute 'encode' (training failed)"
+    "clean_ber": 0.0842,
+    "jpeg_q75_ber": 0.2288,
+    "crop_q80_ber": 0.5009,
+    "auc": 0.8412,
+    "psnr": 28.77,
+    "lpips": null,
+    "note": "Re-run after fixing message_bits=256 handoff bug in ablation_v5.py driver. Source: HANDOFF_2026-04-24.md Section 3.3."
   }
 }

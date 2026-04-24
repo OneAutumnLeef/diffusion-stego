@@ -1,0 +1,95 @@
+{
+  "checkpoint": "checkpoints_tifs/ber_recovery/major_cycle_011_robust_balance.pt",
+  "num_samples": 200,
+  "clean": {
+    "ber": 0.02046875,
+    "psnr": 27.820578699111937,
+    "ber_ci95": [
+      0.0174609375,
+      0.02333984375
+    ]
+  },
+  "jpeg": {
+    "q75_ber": 0.14173828125,
+    "q50_ber": 0.222890625,
+    "q75_ber_ci95": [
+      0.13701171875,
+      0.14650439453125
+    ]
+  },
+  "crop": {
+    "q80_ber": 0.503359375,
+    "q70_ber": 0.49900390625,
+    "q80_ber_ci95": [
+      0.49890625,
+      0.50759814453125
+    ]
+  },
+  "adaptive_steganalysis": {
+    "auc_clean": 0.99845,
+    "auc_adaptive": 0.995525,
+    "accuracy_adaptive": 0.9525
+  },
+  "cross_dataset": {},
+  "statistics": {
+    "p_clean_vs_crop80": 1.9584720112301914e-218,
+    "p_clean_vs_jpeg75": 6.7943403737233165e-118
+  },
+  "ablation": {
+    "has_report": true,
+    "report": "outputs_tifs_ablation/latest_ablation.json"
+  },
+  "areas": {
+    "detectability": {
+      "current": 0.995525,
+      "target": 0.7,
+      "pass": false
+    },
+    "crop_robustness": {
+      "current": 0.503359375,
+      "target": 0.35,
+      "pass": false
+    },
+    "ablation": {
+      "current": "extensive",
+      "target": "extensive",
+      "pass": true
+    },
+    "statistical_analysis": {
+      "current": "deep",
+      "target": "deep",
+      "pass": true
+    },
+    "cross_dataset": {
+      "current": "no",
+      "target": "yes",
+      "pass": false
+    },
+    "adaptive_steganalysis": {
+      "current": 0.995525,
+      "target": 0.7,
+      "pass": false
+    },
+    "ber_focus": {
+      "clean_ber": 0.02046875,
+      "jpeg_q75_ber": 0.14173828125,
+      "clean_target": 0.1,
+      "jpeg_q75_target": 0.2,
+      "pass": true
+    }
+  },
+  "capacity_table": {},
+  "multi_detector": {
+    "auc_resnet18": 0.99965,
+    "auc_resnet34": 0.99835,
+    "auc_ensemble": 0.999975
+  },
+  "real_jpeg_gap": {
+    "q75_proxy_ber": 0.14173828125,
+    "q75_real_ber": 0.355390625,
+    "q75_gap": 0.21365234375000003,
+    "q50_proxy_ber": 0.222890625,
+    "q50_real_ber": 0.3840625,
+    "q50_gap": 0.16117187499999996
+  }
+}

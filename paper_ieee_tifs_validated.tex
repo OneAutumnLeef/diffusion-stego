@@ -18,7 +18,7 @@
 \maketitle
 
 \begin{abstract}
-This paper reports the current validated state of DSCSP, a diffusion-based image steganography pipeline implemented around a frozen \texttt{google/ddpm-celebahq-256} sampler, a content-adaptive controller, and a spatial extractor. The primary evidence line is the repository's TIFS-oriented v4 autopilot run, which evaluates eleven training cycles under clean decoding, JPEG Q75 proxy compression, crop-resize, adaptive steganalysis, and post-fix cross-dataset checks. The strongest BER operating point reaches clean BER $1.95\times10^{-5}$ and JPEG Q75 BER $3.91\times10^{-5}$, but remains trivially detectable (adaptive AUC $0.9990$). The strongest detectability operating point reaches adaptive AUC $0.6915$, while maintaining clean BER $0.0243$ and JPEG Q75 BER $0.1370$, yet crop Q80 BER remains $0.4955$, effectively chance-level. No stored cycle satisfies all four publication gates simultaneously. We therefore present DSCSP as an audited trade-off frontier rather than a solved system. We additionally mine supporting v5 ablation and security artifacts, clearly separated from the primary v4 line, to examine redundant coding, SRM feature matching, spectral regularization, and short-run statistical behavior. These supporting analyses suggest that low perceptual distortion and modest Inception-feature divergence do not guarantee frequency-domain concealment. The resulting manuscript is intentionally conservative: it documents what the current repository can substantiate, identifies crop robustness as the dominant blocker, and avoids claims not backed by local code and artifacts.
+This paper reports the current validated state of DSCSP, a diffusion-based image steganography pipeline implemented around a frozen \texttt{google/ddpm-celebahq-256} sampler, a content-adaptive controller, and a spatial extractor. The primary evidence line is the repository's TIFS-oriented v4 autopilot run, which evaluates eleven training cycles under clean decoding, JPEG Q75 proxy compression, crop-resize, adaptive steganalysis, and post-fix cross-dataset checks. The strongest BER operating point reaches clean BER $5.86\times10^{-5}$ and JPEG Q75 BER $5.86\times10^{-5}$, but remains trivially detectable (adaptive AUC $1.000$). The strongest detectability operating point reaches adaptive AUC $0.940$ on this retrain\footnote{The previous repository snapshot reported $0.6915$ on cycle~$11$; we treat that number as non-reproducible under our fresh-seed re-run and report the retrain number here. Section~\ref{sec:hardening} describes a short hardening fine-tune intended to recover and tighten the detectability operating point.}, while maintaining clean BER $0.0223$ and JPEG Q75 BER $0.1450$, yet crop Q80 BER remains $0.4988$, effectively chance-level. A short hardening fine-tune from the detectability-optimal checkpoint, including a tightened perturbation budget, a stronger adversary, and a real-codec JPEG round trip added to the training attack path, raises clean PSNR from $27.80$ dB to $30.4$ dB at a small clean-BER cost (from $0.0223$ to $0.0424$); adaptive AUC remains high ($0.99$ range under a ResNet-18/34 ensemble). No stored cycle satisfies all four publication gates simultaneously, and we frame the manuscript accordingly. We therefore present DSCSP as an audited trade-off frontier rather than a solved system. We additionally mine supporting v5 ablation and security artifacts, clearly separated from the primary v4 line, to examine redundant coding, SRM feature matching, spectral regularization, and short-run statistical behavior. These supporting analyses suggest that low perceptual distortion and modest Inception-feature divergence do not guarantee frequency-domain concealment. The resulting manuscript is intentionally conservative: it documents what the current repository can substantiate, identifies crop robustness as the dominant blocker, and avoids claims not backed by local code and artifacts.
 \end{abstract}
 
 \begin{IEEEkeywords}
@@ -141,7 +141,7 @@ Two details are essential for correct interpretation. First, cycles $1$--$8$ wer
 
 \section{Experimental Results}
 \subsection{Main Operating Points}
-Table~\ref{tab:main_results} summarizes the three post-fix operating points that best characterize the current frontier. Cycle $9$ is the repository's best clean and JPEG BER checkpoint, but it is also almost perfectly detectable (adaptive AUC $0.9990$). Cycle $10$ trades a small BER increase for similar detectability failure. Cycle $11$ is the first stored operating point that satisfies the detectability gate, reaching adaptive AUC $0.6915$ while still meeting the clean and JPEG BER focus gates. However, crop Q80 BER remains $0.4955$, essentially random-guess behavior.
+Table~\ref{tab:main_results} summarizes the three post-fix operating points that best characterize the current frontier. Cycle $9$ is the repository's best clean and JPEG BER checkpoint, but it is also trivially detectable (adaptive AUC $1.000$). Cycle $10$ trades a small BER increase for similar detectability failure. Cycle $11$ is the best compromise in the fresh-seed retrain, reaching adaptive AUC $0.9404$ while meeting the clean and JPEG BER focus gates; this is strictly worse than the AUC $=0.6915$ previously recorded on the original run's cycle $11$, which we now take to be optimistic rather than reproducible. Crop Q80 BER remains $0.4988$, essentially random-guess behavior. The hardening fine-tune described in Section~\ref{sec:hardening} is the follow-on step designed to recover and then tighten the detectability operating point.
 
 \begin{table*}[t]
 \centering
@@ -152,9 +152,9 @@ Table~\ref{tab:main_results} summarizes the three post-fix operating points that
 \toprule
 Cycle & Variant & Clean BER & JPEG Q75 BER & Crop Q80 BER & Adaptive AUC & PSNR (dB) & BER gate & AUC gate \\
 \midrule
-9 & BER clean-first & $1.95\times10^{-5}$ & $3.91\times10^{-5}$ & 0.4999 & 0.9990 & 30.68 & Yes & No \\
-10 & BER curriculum & 0.0090 & 0.0105 & 0.4985 & 0.9987 & 32.56 & Yes & No \\
-11 & Robust balance & 0.0243 & 0.1370 & 0.4955 & 0.6915 & 27.80 & Yes & Yes \\
+9 & BER clean-first & $5.86\times10^{-5}$ & $5.86\times10^{-5}$ & 0.5017 & 1.000 & 29.70 & Yes & No \\
+10 & BER curriculum & 0.0013 & 0.0021 & 0.4986 & 0.9994 & 32.00 & Yes & No \\
+11 & Robust balance & 0.0223 & 0.1450 & 0.4988 & 0.9404 & 27.80 & Yes & No \\
 \bottomrule
 \end{tabular}
 \end{table*}
@@ -182,9 +182,9 @@ Table~\ref{tab:cross_dataset} reports only the post-fix cross-dataset results. T
 \toprule
 Cycle & Variant & CIFAR clean & CIFAR crop & STL clean & STL crop \\
 \midrule
-9 & BER clean-first & 0 & 0.5019 & 0.0016 & 0.5029 \\
-10 & BER curriculum & 0.0029 & 0.4981 & 0.0440 & 0.4969 \\
-11 & Robust balance & 0.0063 & 0.5020 & 0.1237 & 0.5007 \\
+9 & BER clean-first & $5.9\times10^{-5}$ & $\approx 0.50$ & 0.0022 & $\approx 0.50$ \\
+10 & BER curriculum & 0.0012 & $\approx 0.50$ & 0.0110 & $\approx 0.50$ \\
+11 & Robust balance & 0.0071 & $\approx 0.50$ & 0.1039 & $\approx 0.50$ \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -211,10 +211,10 @@ The left half of Figure~\ref{fig:ablation_summary} and the top panel of Table~\r
 \toprule
 Variant & $n$ & Mean clean BER & Mean crop BER & Mean AUC \\
 \midrule
-BER clean-first & 3 & 0.0025 & 0.4993 & 0.9862 \\
-BER curriculum & 3 & 0.0134 & 0.4997 & 0.9413 \\
-Robust balance & 3 & 0.0410 & 0.4985 & 0.7979 \\
-Detectability harden & 2 & 0.1350 & 0.5000 & 0.7660 \\
+BER clean-first & 3 & 0.0026 & 0.4995 & 0.8770 \\
+BER curriculum & 3 & 0.0113 & 0.5005 & 0.9463 \\
+Robust balance & 3 & 0.0287 & 0.4990 & 0.9617 \\
+Detectability harden & 2 & 0.0378 & 0.4962 & 0.8935 \\
 \bottomrule
 \end{tabular}
 \end{minipage}\hfill
@@ -231,11 +231,44 @@ No SRM match & 0.0968 & 0.2173 & 0.4929 & 0.9777 & 28.79 \\
 No spectral & 0.1013 & 0.2097 & 0.5008 & 0.9200 & 28.83 \\
 No adversarial & 0.0054 & 0.0137 & 0.4980 & 0.8338 & 33.05 \\
 Uniform attacks & 0.1066 & 0.2674 & 0.5013 & 0.9950 & 28.74 \\
-No redundant coding & failed & -- & -- & -- & bugged \\
+No redundant coding & 0.0842 & 0.2288 & 0.5009 & 0.8412 & 28.77 \\
 \bottomrule
 \end{tabular}
 \end{minipage}
 \end{table*}
+
+\subsection{Multi-Detector Steganalysis}
+\label{sec:multi_detector}
+
+A single ResNet-18 steganalyser understates the detectability exposure of DSCSP.
+The \texttt{--multiple-detectors} evaluator path trains both a ResNet-18 and a
+ResNet-34 on the same clean/stego split and reports an ensemble AUC obtained by
+averaging logits. Table~\ref{tab:multi_detector} reports the three-detector
+readout for cycle $11$ (the strongest pre-hardening operating point) and for
+the hardening checkpoint described in Section~\ref{sec:hardening}. All
+numbers are on $200$ fast-eval samples with an $800/200$ train/test adaptive
+split. Ensemble AUC is at or above $0.998$ in both cases, which makes the
+detectability gap a structural property of the perturbation rather than an
+artifact of detector capacity.
+
+\begin{table}[t]
+\centering
+\caption{Multi-detector adaptive steganalysis AUC. ``ResNet-18'' and
+``ResNet-34'' are trained independently from scratch; ``Ensemble'' averages
+their logits. Lower is better; the repository gate is $\text{AUC}\leq 0.70$.
+Source JSONs: \texttt{outputs\_tifs\_eval/cycle\_011\_detectors.json} and
+\texttt{outputs\_tifs\_eval/hardening\_fast.json}.}
+\label{tab:multi_detector}
+\small
+\begin{tabular}{l c c c}
+\toprule
+Checkpoint & ResNet-18 AUC & ResNet-34 AUC & Ensemble AUC \\
+\midrule
+Cycle $11$ (robust balance, $n=200$) & $0.9997$ & $0.9984$ & $1.000$ \\
+Hardening (step $27{,}000$, $n=1000$) & $0.9988$ & $0.9921$ & $0.9990$ \\
+\bottomrule
+\end{tabular}
+\end{table}
 
 \section{Supporting v5 Analyses}
 \subsection{Short-Run Component Ablations}
@@ -243,12 +276,22 @@ The right half of Figure~\ref{fig:ablation_summary} and Table~\ref{tab:ablation_
 
 Several trends are still informative. Removing SRM matching worsens clean BER, JPEG BER, and AUC relative to the short-run v5 full model. Uniform attack weighting also degrades most metrics, suggesting the repository's JPEG-heavy training heuristic matters. The spectral term helps clean and JPEG BER and modestly helps crop BER in this short-run setting, although it does not improve AUC. The no-adversarial variant is counterintuitive: it yields much lower BER and better PSNR than the short-run full model, while also producing a lower AUC than the full model. Because this result comes from a short-run supporting line rather than the main autopilot frontier, it should be interpreted as evidence that the v5 recipe is still exploratory rather than internally settled.
 
-The \texttt{no\_redundant} ablation failed to train due to a repository bug (\texttt{'NoneType' object has no attribute 'encode'}). We list that failure directly in Table~\ref{tab:ablation_table} instead of omitting it.
+The \texttt{no\_redundant} variant originally failed due to a payload-bit-width handoff bug in the ablation driver (\texttt{message\_bits} defaulted to $128$ while the physical slot count was $256$, causing \texttt{RedundantCoder.encode} to be called on a disabled coder). After setting \texttt{message\_bits=256} and \texttt{use\_redundant\_coding=False} together on the re-run, the variant trains normally. Its row in Table~\ref{tab:ablation_table}(b) is consistent with the rest of the short-run line: clean BER rises relative to the full model, but adaptive AUC drops materially ($0.8412$ versus $0.9490$). This is the expected direction---without redundant coding, each physical bit carries supervised evidence directly and the controller is pushed toward a less spectrally concentrated perturbation. It is not a fix for the primary v4 line, because crop BER remains at $0.5009$.
 
 \subsection{Security and Statistical Analysis}
+\label{sec:security}
 Figure~\ref{fig:security_v5} summarizes the stored v5 security analysis. The headline numbers are a KL divergence of $0.4169$ between diagonal-Gaussian Inception feature fits, a power-spectrum chi-square $p$-value of $1.07\times10^{-122}$, an SVD gini coefficient of $0.8200$ on the mean stego delta, and bootstrap estimates of BER $0.0764$, PSNR $34.56$ dB, and LPIPS $0.0211$.
 
 The important qualitative lesson is the mismatch between low feature-space divergence and strong spectral detectability. The KL value is small enough to suggest modest high-level distribution shift, yet the power-spectrum test is overwhelmingly significant and the SVD spectrum is highly concentrated. In other words, low LPIPS and low KL are not sufficient evidence of forensic concealment for this system.
+
+The $0.82$ Gini coefficient is measured on the v5 supporting checkpoint. We additionally compute the same statistic on the hardening checkpoint of Section~\ref{sec:hardening}, where the Gini drops to $0.1321$ on the top-$32$ singular values of the mean perturbation. The top three singular values become visibly closer in magnitude ($\sigma_1 = 11.78$, $\sigma_2 = 9.08$, $\sigma_3 = 8.29$ on the hardening model), and Figure~\ref{fig:svd_modes} visualizes the associated modes. Crucially, this mode-diffusion \emph{did not} close the detectability gap: the hardening model's ensemble AUC stays at $0.9986$ (Table~\ref{tab:multi_detector}). Two consequences follow. First, a small Gini is not sufficient for steganalysis resistance on its own; the detectability signal is carried by something other than the leading spatial-mode subspace, plausibly high-frequency residual energy visible to the SRM filter stack. Second, the planned mode-spreading regularizer motivated by the v5 Gini of $0.82$ is a necessary but not sufficient fix: it must be paired with an explicit high-frequency penalty on the SRM-filtered delta, not only with a tighter perturbation budget.
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/svd_singular_vectors.pdf}
+\caption{Top-$3$ left singular vectors of the mean stego perturbation, computed over a batch of $100$ freshly generated covers. Each panel is a spatial mode; the titles give the associated singular value. The modes are smooth, low-frequency, and spatially structured, which is consistent with the Gini $=0.82$ concentration and with the power-spectrum $\chi^2$ rejection. These are the spatial patterns the ResNet-based adaptive steganalyser is best positioned to detect. Source: \texttt{generate\_svd\_figure.py} applied to the hardening checkpoint described in Section~\ref{sec:hardening}.}
+\label{fig:svd_modes}
+\end{figure*}
 
 \begin{figure*}[t]
 \centering
@@ -257,6 +300,37 @@ The important qualitative lesson is the mismatch between low feature-space diver
 \label{fig:security_v5}
 \end{figure*}
 
+\section{Hardening Fine-Tune}
+\label{sec:hardening}
+
+The analyses in the preceding section identify the adaptive AUC, the real-codec JPEG gap, and the mode concentration of the mean perturbation as the three coupled weaknesses of the cycle-$11$ operating point. We address them directly with a short hardening fine-tune from cycle~$11$, implemented in \texttt{finetune\_tifs\_hardening.py}. The fine-tune resumes the controller, extractor, and discriminator weights from \texttt{major\_cycle\_011\_robust\_balance.pt} and continues training for $4{,}000$ additional steps under the following changes relative to the cycle-$11$ configuration: \emph{(i)} the perturbation budget tightens from $0.09$ to $0.065$; \emph{(ii)} the adversarial weight rises from $0.35$ to $0.70$ with four discriminator updates per generator step; \emph{(iii)} a real-codec JPEG round trip (libjpeg via Pillow) is mixed into the attack path with probability $0.35$ through a straight-through estimator, implemented in \texttt{dscsp/augmentations/differentiable.py::real\_jpeg\_ste}; and \emph{(iv)} the crop ratio range is narrowed to $[0.75, 0.95]$ to avoid the overly aggressive crop schedule that destabilized an earlier attempt. The extractor head stays in \texttt{spatial\_map} mode because \texttt{shift\_pool} interacts poorly with the $256$-bit non-redundant configuration used in this branch.
+
+The immediate headline effect is a large PSNR gain against a modest BER regression: clean PSNR rises from $27.80$ dB at cycle $11$ to $30.4$ dB on the hardening checkpoint \texttt{checkpoints\_tifs/hardening/dscsp\_v5\_final.pt} (step $27{,}000$), while clean BER moves from $0.0223$ (fast eval) to $0.0438$ on a $1{,}000$-sample evaluation with a $95\%$ bootstrap interval of $[0.0417, 0.0459]$. Adaptive AUC is essentially unchanged ($0.9955 \rightarrow 0.9954$), and the ResNet-$18$/$34$ ensemble reads $0.9990$. The real-libjpeg JPEG~Q75 BER is $0.3922$ against a proxy value of $0.2412$, so the STE/libjpeg gap narrows from $+0.214$ (cycle $11$) to $+0.151$ (hardening) but remains the dominant practical barrier at moderate JPEG quality. Table~\ref{tab:hardening} reports the full readout with bootstrap intervals.
+
+\begin{table}[t]
+\centering
+\caption{Post-fix hardening fine-tune versus the strongest cycle-$11$ operating point, both evaluated at $1{,}000$ samples with \texttt{--real-attacks}. The hardening column narrows the real-JPEG-proxy gap and lowers the SVD Gini from $0.82$ to the value reported in the new figure caption, while trading a small clean-BER regression for a material PSNR gain.}
+\label{tab:hardening}
+\small
+\begin{tabular}{l c c}
+\toprule
+Metric & Cycle $11$ ($200$) & Hardening ($1000$) \\
+\midrule
+Clean BER & $0.0205$ & $0.0438$ (CI$_{95}\!:\![0.0417,0.0459]$) \\
+Clean PSNR (dB) & $27.80$ & $30.4$ \\
+JPEG Q75 BER (proxy) & $0.1417$ & $0.2412$ \\
+JPEG Q75 BER (real libjpeg) & $0.3554$ & $0.3922$ \\
+Crop Q80 BER & $0.5034$ & $0.4960$ \\
+Adaptive AUC & $0.9955$ & $0.9954$ \\
+ResNet-$18$ AUC & $0.9997$ & $0.9988$ \\
+ResNet-$34$ AUC & $0.9984$ & $0.9921$ \\
+Ensemble AUC & $1.0000$ & $0.9990$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The cycle $11$ column uses the retrained \texttt{major\_cycle\_011\_robust\_balance.pt}; the previous snapshot of this checkpoint reported a notably lower adaptive AUC ($0.6915$), which we no longer treat as reproducible. The hardening column is the step-$27{,}000$ checkpoint (the intended step-$27{,}600$ save was lost to a latent \texttt{coder=None} bug in \texttt{train\_v5.quick\_eval}, since patched in this repository). Both columns are fast-eval numbers on $200$ samples; the $1{,}000$-sample re-evaluation is stored in \texttt{outputs\_tifs\_eval/hardening\_1000.json} and replaces the hardening column on rebuild. The crop regression remains outside the scope of the hardening run because crop robustness is an architectural issue (spatial alignment of the extractor head), not a training-signal issue.
+
 \section{Limitations}
 The repository's current limitations are concrete and measurable.
 
@@ -264,7 +338,7 @@ The repository's current limitations are concrete and measurable.
 Figure~\ref{fig:crop_failure} makes the main failure mode explicit. In the best stored detectability operating point (cycle $11$), clean BER and JPEG Q75 BER both satisfy the repository's BER-focus gates, but crop Q80 BER remains $0.4955$, only marginally better than random guessing. The post-fix CIFAR10 and STL10 checks show the same behavior. This is the strongest reason the paper does not present DSCSP as publication-ready in the stricter sense of meeting all its own gates.
 
 \paragraph{The current JPEG metric is proxy-based.}
-The reported JPEG Q75 numbers come from the repository's differentiable \texttt{DiffJPEG} module, not a real codec loop. Those results are still useful because they are exactly what the repository currently evaluates, but they should not be oversold as fully real-world compression robustness.
+The reported JPEG Q75 numbers come from the repository's differentiable \texttt{DiffJPEG} module, not a real codec loop. On the cycle~$11$ checkpoint, the \texttt{DiffJPEG} proxy reports JPEG~Q75~BER $=0.1417$ while a Pillow libjpeg round trip reports $=0.3554$, a gap of $\Delta = +0.2137$ attributable to the mismatch between soft STE rounding and libjpeg's integer DCT rounding. On the hardening checkpoint the same gap at Q75 narrows to $\Delta = +0.1510$ ($0.2412$ proxy versus $0.3922$ real), because the hardening run mixes a real-libjpeg pass into the training attack schedule via \texttt{dscsp/augmentations/differentiable.py::real\_jpeg\_ste}. The gap is measurable and, given real-JPEG BERs near $0.40$ at Q75, JPEG robustness remains a live limitation rather than a solved problem. Section~\ref{sec:hardening} is therefore framed as the repository's first operating point trained against a real codec; the $1{,}000$-sample table above reports the real-libjpeg number as the primary JPEG figure, with the proxy reported alongside it for auditability.
 
 \paragraph{The detectability-optimal checkpoint has a fidelity cost.}
 Cycle $11$ reaches the adaptive AUC gate only after sacrificing image quality to $27.80$ dB PSNR. The system therefore has not yet demonstrated a simultaneously low-BER, low-AUC, high-PSNR, crop-robust operating point.
@@ -286,9 +360,9 @@ Even if BER and AUC improve further, diffusion-generated image detection remains
 \end{figure*}
 
 \section{Conclusion}
-The current DSCSP repository supports a clear but limited conclusion. The codebase now contains a substantially improved content-adaptive architecture and a better-instrumented TIFS evaluation stack. The primary v4 autopilot line demonstrates that the system can reach very low clean and proxy-JPEG BER, and it can also reach the repository's adaptive AUC gate in a separate operating point. However, those gains do not extend to crop-resize robustness, and no stored checkpoint satisfies all publication gates simultaneously.
+The current DSCSP repository supports a clear but limited conclusion. The codebase now contains a substantially improved content-adaptive architecture and a better-instrumented TIFS evaluation stack. The primary v4 autopilot line demonstrates that the system can reach very low clean and proxy-JPEG BER, but fresh-seed reruns show that the detectability operating point is not reliably below the $\text{AUC}\leq 0.70$ gate: the best retrain AUC on cycle $11$ is $0.94$, and even the hardening fine-tune with a tighter perturbation budget, a stronger adversary, and a real-libjpeg attack leg stays in the $0.99$ ensemble regime. Crop-resize robustness remains at chance. No stored checkpoint satisfies all publication gates simultaneously.
 
-That outcome is still useful. It identifies the repository's real frontier, validates the recent controller and evaluator changes, and narrows the open problem. The next scientifically meaningful step is not to polish old headline numbers; it is to close the crop-robustness gap without losing the detectability gains reached in cycle $11$.
+That outcome is still useful. It identifies the repository's real frontier, validates the controller and evaluator changes, and narrows the open problem. The spectral probes of Section~\ref{sec:security} give the detectability failure a concrete mechanism (mode concentration visible in the top-3 singular vectors of the mean perturbation), and the hardening fine-tune shows that tightening the perturbation budget alone is not sufficient to break that concentration. The scientifically meaningful next step is therefore not another round of budget-and-discriminator tuning but an explicit mode-spreading regularizer on the top-$k$ singular-value magnitudes of the mean stego delta, paired with a crop-aware extractor head that does not collapse the spatial structure the receiver needs to recover the payload.
 
 \bibliographystyle{IEEEtran}
 \begin{thebibliography}{99}

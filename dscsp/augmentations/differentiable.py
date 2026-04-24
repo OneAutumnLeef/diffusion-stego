@@ -10,13 +10,37 @@ Attacks:
   - Brightness/contrast adjustment
   - Crop + resize (bilinear interpolation)
   - JPEG compression (STE-based differentiable proxy)
+  - Real libjpeg JPEG round-trip with straight-through gradient
 """
 
+import io
 import random
 import math
+import numpy as np
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
+from PIL import Image
+
+
+def real_jpeg_ste(x: torch.Tensor, quality: int) -> torch.Tensor:
+    """Real libjpeg JPEG round-trip with straight-through gradient.
+
+    Forward: PIL.Image encode at ``quality``, decode back. Range-in/range-out [-1, 1].
+    Backward: identity (STE) — gradient flows through ``x`` unchanged.
+    """
+    with torch.no_grad():
+        imgs = ((x.detach().clamp(-1, 1) + 1.0) * 127.5).round().clamp(0, 255).to(torch.uint8)
+        imgs = imgs.permute(0, 2, 3, 1).cpu().numpy()  # (B, H, W, 3)
+        out = np.empty_like(imgs)
+        for i, arr in enumerate(imgs):
+            buf = io.BytesIO()
+            Image.fromarray(arr).save(buf, format="JPEG", quality=int(quality))
+            buf.seek(0)
+            out[i] = np.array(Image.open(buf).convert("RGB"))
+        y = torch.from_numpy(out).to(x.device).permute(0, 3, 1, 2).float()
+        y = (y / 127.5) - 1.0
+    return x + (y - x).detach()
 
 
 # ─── Individual Attacks ──────────────────────────────────────────────────────
@@ -253,6 +277,7 @@ class AttackLayer(nn.Module):
 
         # Attack parameter ranges (can be overridden via config)
         cfg = config or {}
+        self.config = cfg
         self.jpeg_quality_range = cfg.get('jpeg_quality_range', (50, 95))
         self.blur_kernel_size = cfg.get('blur_kernel_size', 5)
         self.blur_sigma_range = cfg.get('blur_sigma_range', (0.5, 2.0))
@@ -260,10 +285,15 @@ class AttackLayer(nn.Module):
         self.crop_ratio_range = cfg.get('crop_ratio_range', (0.7, 0.95))
         self.brightness_range = cfg.get('brightness_range', (-0.1, 0.1))
         self.contrast_range = cfg.get('contrast_range', (0.8, 1.2))
+        self.real_jpeg_prob = float(cfg.get('real_jpeg_prob', 0.0) or 0.0)
 
     def _apply_single(self, x, attack_name):
         """Apply a single named attack. Returns attacked tensor."""
         if attack_name == 'jpeg':
+            if self.real_jpeg_prob > 0.0 and self.training and torch.rand(1).item() < self.real_jpeg_prob:
+                q = int(torch.randint(int(self.jpeg_quality_range[0]),
+                                      int(self.jpeg_quality_range[1]) + 1, (1,)).item())
+                return real_jpeg_ste(x, q)
             quality = random.randint(*self.jpeg_quality_range)
             return self.diff_jpeg(x, quality)
         elif attack_name == 'blur':
