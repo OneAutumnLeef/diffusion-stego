@@ -1,0 +1,66 @@
+[gates] checkpoint=checkpoints_tifs/hidden_baseline/hidden_final.pt  model_type=hidden
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading pipeline components...:   0%|          | 0/2 [00:00<?, ?it/s]An error occurred while trying to fetch /workspace/.cache/huggingface/hub/models--google--ddpm-celebahq-256/snapshots/cd5c944777ea2668051904ead6cc120739b86c4d: Error no file named diffusion_pytorch_model.safetensors found in directory /workspace/.cache/huggingface/hub/models--google--ddpm-celebahq-256/snapshots/cd5c944777ea2668051904ead6cc120739b86c4d.
+Defaulting to unsafe serialization. Pass `allow_pickle=False` to raise an error instead.
+Loading pipeline components...: 100%|██████████| 2/2 [00:00<00:00,  3.01it/s]Loading pipeline components...: 100%|██████████| 2/2 [00:00<00:00,  3.01it/s]
+/workspace/diffusion-stego/dscsp/models/diffusion_wrapper.py:37: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.detach().clone() or sourceTensor.detach().clone().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  self.final_alpha_cumprod = torch.tensor(
+[gates] generating 800 cover images via DDIM
+    Generated 20/800
+    Generated 40/800
+    Generated 60/800
+    Generated 80/800
+    Generated 100/800
+    Generated 120/800
+    Generated 140/800
+    Generated 160/800
+    Generated 180/800
+    Generated 200/800
+    Generated 220/800
+    Generated 240/800
+    Generated 260/800
+    Generated 280/800
+    Generated 300/800
+    Generated 320/800
+    Generated 340/800
+    Generated 360/800
+    Generated 380/800
+    Generated 400/800
+    Generated 420/800
+    Generated 440/800
+    Generated 460/800
+    Generated 480/800
+    Generated 500/800
+    Generated 520/800
+    Generated 540/800
+    Generated 560/800
+    Generated 580/800
+    Generated 600/800
+    Generated 620/800
+    Generated 640/800
+    Generated 660/800
+    Generated 680/800
+    Generated 700/800
+    Generated 720/800
+    Generated 740/800
+    Generated 760/800
+    Generated 780/800
+    Generated 800/800
+[gates] RedundantCoder active: 128 msg -> 256 phys (R=2)
+[gates] building stego pool (800 images)
+[gates] Clean BER ...
+[gates] JPEG Q75 (real libjpeg) BER ...
+[gates] Crop Q80 BER ...
+[gates] Adaptive AUC (ResNet-18 + ResNet-34 ensemble, train=600 test=200) ...
+
+========================================================================
+4-Gate Evaluation Summary
+========================================================================
+  Checkpoint: checkpoints_tifs/hidden_baseline/hidden_final.pt
+  clean_ber                  0.4421  (CI95 0.4388, 0.4453)  [max 0.01]  FAIL
+  jpeg_q75_real_ber          0.4520  (CI95 0.4490, 0.4551)  [max 0.1]  FAIL
+  crop_q80_ber               0.4407  (CI95 0.4376, 0.4440)  [max 0.2]  FAIL
+  adaptive_auc_ens           0.5446  (CI95 0.4884, 0.5990)  [max 0.7]  PASS
+------------------------------------------------------------------------
+  ALL GATES: FAIL
+  Saved: outputs_tifs_eval/gates_hidden.json

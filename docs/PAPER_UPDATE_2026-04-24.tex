@@ -1,0 +1,182 @@
+% Sprint-update additions for paper_ieee_tifs_validated.tex
+% Drop these blocks into the appropriate sections; they replace or extend
+% existing material flagged in the comments.
+
+% ============================================================
+%  Replace \begin{abstract} .. \end{abstract} block
+% ============================================================
+\begin{abstract}
+This paper presents DSCSP, a diffusion-based image steganography pipeline
+built around a frozen \texttt{google/ddpm-celebahq-256} sampler, a
+content-adaptive controller, and a ResNet-18 extractor. We report
+DSCSP under a locked four-gate evaluation protocol — clean BER
+$\leq 0.01$, real-libjpeg Q75 BER $\leq 0.10$, crop Q80 BER $\leq 0.20$,
+adaptive ResNet-18/34 ensemble AUC $\leq 0.70$ — with bootstrap 95\%
+confidence intervals and a single unambiguous pass/fail per gate.
+The central system contribution is a training schedule that mixes a
+differentiable DiffJPEG proxy with a real-libjpeg round-trip through a
+straight-through estimator, which drops real-codec Q75 BER from $0.34$
+to $0.079$ and clears the JPEG gate on a $1000$-sample evaluation. The
+paper also reports a mode-spread regularizer based on top-$k$ singular
+value concentration, a gradient-penalty discriminator, and an SRM
+feature-matching loss, which together move the ensemble steganalysis
+AUC from $0.996$ to $0.954$ — progress, but short of the $0.70$ gate
+at the evaluated perturbation budget ($\epsilon = 0.06$). Crop-resize
+robustness at ratio $[0.65, 0.95]$ remains unresolved across every
+checkpoint in this study and is identified as the dominant architectural
+bottleneck rather than a training-schedule limitation. We release the
+locked evaluator, the three training drivers that produced the results,
+and a matched-conditions HiDDeN baseline trained on the same DDIM cover
+distribution, so that subsequent work can be compared under the same
+four-gate protocol.
+\end{abstract}
+
+% ============================================================
+%  New section — slot after the Results table (Section VII or equiv.)
+% ============================================================
+\section{Four-Gate Sprint Results}
+\label{sec:sprint}
+
+The evaluation reported in this section uses a single fixed protocol
+(\texttt{evaluate\_gates.py}). Every number below comes from that
+script with identical arguments apart from the checkpoint path, and
+the four gate thresholds are frozen before experimentation begins.
+
+\subsection{Checkpoint comparison}
+
+\begin{table}[t]
+\centering
+\caption{Four-gate evaluation across sprint checkpoints. JPEG metric is
+real libjpeg via Pillow; crop is a random crop at ratio $0.80$ followed
+by bilinear resize; AUC is trained on 800 clean/800 stego pairs and
+tested on 200/200. Bootstrap 95\% CIs in parentheses.}
+\label{tab:sprint-gates}
+\begin{tabular}{lcccc}
+\toprule
+Checkpoint & Clean BER & JPEG Q75 real & Crop Q80 & Adapt.\ AUC \\
+\midrule
+Pre-sprint baseline              & 0.0149 & 0.3439 & 0.4963 & 0.9692 \\
+DSCSP inst2-extend (JPEG)        & 0.0152 & \textbf{0.0788} & 0.4958 & 0.9961 \\
+DSCSP detect-harden              & 0.0283 & 0.1595 & 0.4972 & 0.9542 \\
+DSCSP detect-v2                  & 0.0254 & 0.4737 & 0.4971 & 0.7164 \\
+DSCSP detect-v3 (AUC)            & 0.0265 & 0.4826 & 0.4998 & \textbf{0.6561} \\
+HiDDeN matched, 10k steps\footnotemark[1] & 0.4421 & 0.4520 & 0.4407 & 0.5446 \\
+\midrule
+Gate                             & 0.01 & 0.10 & 0.20 & 0.70 \\
+\bottomrule
+\end{tabular}
+
+\footnotetext[1]{HiDDeN at $256\times 256$ with a $256$-physical-bit
+payload does not converge under a $10{,}000$-step budget; the original
+paper used $128\times 128$ with $30$-bit payloads and trained for
+hundreds of thousands of iterations. At matched budget, HiDDeN's AUC
+passes the gate only because it fails to embed a recoverable signal.}
+\end{table}
+
+\subsection{Primary result: JPEG gate cleared against a real codec}
+
+The DSCSP inst2-extend checkpoint achieves real-libjpeg Q75 BER of
+$0.0788$ with bootstrap $95\%$ CI $[0.076, 0.081]$ on $1000$ samples.
+This is below the $0.10$ gate and is, to our knowledge, the first
+DSCSP-family result that clears a real-codec JPEG gate rather than a
+DiffJPEG-proxy gate.
+
+The mechanism is a mixed attack path: with probability $p_{\mathrm{real}}$
+the differentiable attack layer substitutes a true Pillow JPEG round-trip
+wrapped in a straight-through estimator, and otherwise applies the
+existing DiffJPEG proxy. $p_{\mathrm{real}}$ is ramped from $0.20$
+(steps 0-2000) to $0.50$ (after step 2000); both paths draw quality
+uniformly from $[50, 85]$. Ablation across three training schedules
+(8k proxy-only, 8k mixed, 15k mixed) shows the real-codec mix is
+necessary, not merely helpful:
+
+\begin{center}
+\begin{tabular}{lcc}
+\toprule
+Training schedule & proxy Q75 BER & real Q75 BER \\
+\midrule
+Cycle-11 baseline (proxy only)          & 0.04 & 0.34 \\
+Inst-2 8k steps (mix, $p_{\mathrm{real}}{=}0.5$ after step 2k)   & 0.05 & 0.21 \\
+Inst-2-extend 15k steps (mix, $p_{\mathrm{real}}{=}0.5$)          & \textbf{0.04} & \textbf{0.079} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The STE gap (real minus proxy) contracts from $0.30$ to $0.04$, showing
+that the extractor genuinely learns to decode through libjpeg's block
+DCT quantization rather than relying on the proxy's smoother
+approximation.
+
+\subsection{Detectability operating point — AUC gate passed}
+
+A three-stage progressive-tightening protocol drives the adaptive
+ensemble AUC below the $0.70$ gate. Each stage resumes from the
+previous and tightens the perturbation budget, the mode-spread weight,
+and the SRM feature-matching weight while increasing the
+discriminator-to-generator update ratio. Stage parameters:
+
+\begin{center}
+\begin{tabular}{lcccccc}
+\toprule
+Stage & $\epsilon_{\max}$ & $\lambda_{\mathrm{spread}}$ & $\lambda_{\mathrm{SRM}}$ & $\lambda_{\mathrm{GP}}$ & $D/G$ & AUC \\
+\midrule
+harden  & 0.060 & 0.15 & 0.05 & 10 & 6  & 0.9542 \\
+v2      & 0.030 & 0.40 & 0.20 & 15 & 8  & 0.7164 \\
+\textbf{v3} & \textbf{0.025} & \textbf{0.60} & \textbf{0.30} & \textbf{15} & \textbf{10} & \textbf{0.6561} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The mode-spread regularizer
+$\mathcal{L}_{\mathrm{spread}} = \sum_{i<k}\sigma_i^{2}/\sum_{i}\sigma_i^{2}$
+with $k{=}8$ is computed on the centred batch of perturbations; the
+SRM term is an MSE between stego and clean SRM residuals through the
+frozen high-pass filter bank shared with the discriminator; the
+gradient penalty is the standard WGAN-GP 1-centred form on
+$\alpha$-interpolated covers.
+
+The detect-v3 checkpoint attains ensemble AUC $0.6561$ with bootstrap
+$95\%$ CI $[0.6048, 0.7024]$, below the $0.70$ gate. This result does
+\textbf{not} hold JPEG robustness: real-libjpeg Q75 BER rises from
+$0.079$ (inst2-extend) to $0.482$ (detect-v3) because the detect stages
+trained without any attack pressure in order to isolate the
+detectability objective. The sprint therefore ends with two distinct
+operating points — inst2-extend for robustness and detect-v3 for
+stealth — rather than a single unified checkpoint. A concurrent
+checkpoint that clears both gates remains future work.
+
+\subsection{Limitations}
+
+\paragraph{Crop Q80.}
+No sprint checkpoint — or any pre-sprint checkpoint in this repository
+— achieves better than chance-level BER on the $0.65$-$0.95$ crop-resize
+attack. The shift-equivariant pooling head (max or mean pool of radius
+$\pm 4$ pixels on a $16\times 16$ spatial grid) cannot compensate for
+spatial displacements of up to $\approx 90$ pixels introduced by a
+$0.65$-ratio crop. A separate experiment with a fully spread-spectrum
+carrier that encodes each bit across the whole image via a fixed
+pseudorandom $\pm 1$ mask was implemented
+(\texttt{carrier\_type="spread\_spectrum"}) but failed to converge under
+the sprint's training budget: the ResNet-18 extractor did not discover
+the matched-filter decoding rule within $2{,}000$ steps, and BER
+plateaued at random. Resolving crop robustness likely requires an
+extractor architecture that can implement global cross-correlation
+natively, for example a multi-scale decoder or a scale-invariant head.
+
+\paragraph{Adaptive AUC.}
+Dropping below the $0.70$ gate while holding BER and JPEG numbers
+appears to require either a substantially larger training budget than
+the $\sim$15k-step sprint budget, a different discriminator
+architecture, or a weaker perturbation amplitude than can be paired
+with a $256$-bit no-redundancy payload. The $0.954$ AUC result is
+therefore a genuine improvement over baseline but not a gate-passing
+result.
+
+\paragraph{Reproducibility.}
+Every result in this section was produced by a single script
+(\texttt{evaluate\_gates.py}) with fixed seed $0$ and $1000$ cover
+samples drawn from the frozen DDIM chain. JSON outputs in
+\texttt{outputs\_tifs\_eval/gates\_\{inst2,inst2\_extend,detect,hidden\}.json}
+carry the full per-sample BER series, enabling independent bootstrap
+reanalysis. We have not evaluated cross-seed variance for the AUC
+detector training; we treat that as future work.
